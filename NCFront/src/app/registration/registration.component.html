@@ -1,1 +1,27 @@
-<p>registration works!</p>
+<div class="container">
+    <h4 class="mt-4">Registracija</h4>
+    <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
+        <div *ngFor="let field of formFields" >
+            <label for={{field.id}}>{{field.label}}</label>
+      
+            <input type="text" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='string'" >
+            <input type="checkbox" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='boolean'">
+            <input type="number" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='long'">
+            <select name="field.id" class="form-control" *ngIf="field.type.name=='enum'">
+              <option *ngFor="let val of enumValues" value={{val}}>
+                {{field.type.values[val]}}
+              </option>
+            </select>
+        </div>
+        
+        <input type="submit" class="btn btn-primary posalji">
+    </form>
+
+    <button (click)="getTasks()">Get tasks</button>
+    
+    <table>
+      <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td>{{task.assignee}}</td><td><button (click)="claim(task.taskId)">Claim</button></td> <td><button (click)="complete(task.taskId)">Complete</button></td></tr>
+    
+    </table>
+
+</div>
