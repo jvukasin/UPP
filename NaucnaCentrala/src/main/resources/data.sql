@@ -1,13 +1,10 @@
 INSERT INTO naucna_oblast (sifra, naziv) values
-(1,'bioloske_nauke'),
+(1,'biologija'),
 (2,'fizika'),
-(3,'geoloske_nauke'),
-(4,'hemija'),
-(5,'matematika'),
-(6,'arhitektura'),
-(7,'brodogradnja'),
-(8,'elektrotehnika'),
-(9,'geodezija'),
-(10,'gradjevinarstvo'),
-(11,'racunarstvo'),
-(12,'medicina');
+(3,'hemija'),
+(4,'matematika'),
+(5,'arhitektura'),
+(6,'elektrotehnika'),
+(7,'geodezija'),
+(8,'racunarstvo'),
+(9,'medicina');

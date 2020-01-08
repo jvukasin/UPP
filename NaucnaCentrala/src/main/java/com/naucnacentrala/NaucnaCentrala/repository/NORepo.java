@@ -1,0 +1,11 @@
+package com.naucnacentrala.NaucnaCentrala.repository;
+
+import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface NORepo extends JpaRepository<NaucnaOblast, String>
+{
+    List<NaucnaOblast> findAll();
+}

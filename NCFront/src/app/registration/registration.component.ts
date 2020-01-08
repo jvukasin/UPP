@@ -17,6 +17,7 @@ export class RegistrationComponent implements OnInit {
   private processInstance = "";
   private enumValues = [];
   private tasks = [];
+  showNaucneOblasti: boolean = false;
 
   constructor(private userService : UserService, private repositoryService : RepositoryService) {
 
@@ -49,7 +50,11 @@ export class RegistrationComponent implements OnInit {
     for (var property in value) {
       console.log(property);
       console.log(value[property]);
-      o.push({fieldId : property, fieldValue : value[property]});
+      if(property == "naucna_oblast") {
+        o.push({fieldId : property, fieldValue : value[property]}); //OVDE IZMENI DA IZ LISTE CUPA PO JEDNOG
+      } else {
+        o.push({fieldId : property, fieldValue : value[property]});
+      }
     }
 
     console.log(o);
@@ -59,7 +64,7 @@ export class RegistrationComponent implements OnInit {
       res => {
         console.log(res);
         
-        alert("You registered successfully!")
+        alert("Verify your email address!")
       },
       err => {
         console.log("Error occured");
