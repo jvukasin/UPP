@@ -50,8 +50,11 @@ export class RegistrationComponent implements OnInit {
     for (var property in value) {
       console.log(property);
       console.log(value[property]);
-      if(property == "naucna_oblast") {
-        o.push({fieldId : property, fieldValue : value[property]}); //OVDE IZMENI DA IZ LISTE CUPA PO JEDNOG
+      if(property === "nauc_oblasti") {
+        var niz = value[property];
+        for (let i=0; i<niz.length; i++) {
+          o.push({fieldId : property, fieldValue : niz[i]});
+        }
       } else {
         o.push({fieldId : property, fieldValue : value[property]});
       }

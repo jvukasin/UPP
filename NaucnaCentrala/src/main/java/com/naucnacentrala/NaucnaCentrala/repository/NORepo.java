@@ -8,4 +8,8 @@ import java.util.List;
 public interface NORepo extends JpaRepository<NaucnaOblast, String>
 {
     List<NaucnaOblast> findAll();
+
+    NaucnaOblast findOneBySifra(Long sifra);
+
+    void deleteBySifra(Long sifra);
 }

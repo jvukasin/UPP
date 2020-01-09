@@ -45,7 +45,7 @@
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="recenzent" label="Recenzent?" type="boolean" />
-          <camunda:formField id="nauc_obasti" label="Naucne oblasti (min 1)" type="enum">
+          <camunda:formField id="nauc_oblasti" label="Naučne oblasti (min. 1)" type="enum">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
