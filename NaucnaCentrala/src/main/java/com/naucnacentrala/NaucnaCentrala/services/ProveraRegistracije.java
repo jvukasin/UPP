@@ -19,7 +19,7 @@ public class ProveraRegistracije implements JavaDelegate {
 
     private String username;
     private String email;
-    private String recenzent;
+    private boolean recenzent = false;
     private boolean postoji = false;
 
     @Override
@@ -38,8 +38,11 @@ public class ProveraRegistracije implements JavaDelegate {
                 email = formField.getFieldValue();
             }
             if(formField.getFieldId().equals("recenzent")) {
-                recenzent = formField.getFieldValue();
-                System.out.println("\n\nRECENZENT HOCE NECE STRING: " + recenzent + "\n\n");
+                if(formField.getFieldValue() == "") {
+                    recenzent = false;
+                } else {
+                    recenzent = true;
+                }
             }
         }
 
@@ -54,7 +57,7 @@ public class ProveraRegistracije implements JavaDelegate {
             execution.setVariable("dalje", false);
         } else {
             execution.setVariable("dalje", true);
-            execution.setVariable("recenzent", false);
+            execution.setVariable("recenzent", recenzent);
         }
     }
 }
