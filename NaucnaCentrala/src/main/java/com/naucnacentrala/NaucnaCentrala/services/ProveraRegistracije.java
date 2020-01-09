@@ -33,6 +33,7 @@ public class ProveraRegistracije implements JavaDelegate {
         for (FormSubmissionDTO formField : registration) {
             if(formField.getFieldId().equals("username")) {
                 username = formField.getFieldValue();
+                execution.setVariable("korisnik", username);
             }
             if(formField.getFieldId().equals("email")) {
                 email = formField.getFieldValue();

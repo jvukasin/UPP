@@ -8,12 +8,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { VerifyEmailComponent } from './registration/verify-email/verify-email.component';
+import { VerificationDoneComponent } from './verification-done/verification-done.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    VerifyEmailComponent,
+    VerificationDoneComponent
   ],
   imports: [
     BrowserModule,

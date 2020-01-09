@@ -62,12 +62,10 @@ export class RegistrationComponent implements OnInit {
 
     console.log(o);
     let x = this.userService.registerUser(o, this.formFieldsDto.taskId);
-
+    window.location.href="http://localhost:4200/verify";
     x.subscribe(
       res => {
         console.log(res);
-        
-        alert("Verify your email address!")
       },
       err => {
         console.log("Error occured");

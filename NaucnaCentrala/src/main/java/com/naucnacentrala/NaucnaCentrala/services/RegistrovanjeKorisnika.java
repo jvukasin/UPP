@@ -24,14 +24,22 @@ public class RegistrovanjeKorisnika implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<FormSubmissionDTO> registration = (List<FormSubmissionDTO>)execution.getVariable("registration");
-        System.out.println(registration);
-        User user = identityService.newUser("");
+        User user = identityService.newUser("t");
         for (FormSubmissionDTO formField : registration) {
             if(formField.getFieldId().equals("username")) {
                 user.setId(formField.getFieldValue());
             }
             if(formField.getFieldId().equals("password")) {
                 user.setPassword(formField.getFieldValue());
+            }
+            if(formField.getFieldId().equals("email")) {
+                user.setEmail(formField.getFieldValue());
+            }
+            if(formField.getFieldId().equals("ime")) {
+                user.setFirstName(formField.getFieldValue());
+            }
+            if(formField.getFieldId().equals("prezime")) {
+                user.setLastName(formField.getFieldValue());
             }
         }
         identityService.saveUser(user);

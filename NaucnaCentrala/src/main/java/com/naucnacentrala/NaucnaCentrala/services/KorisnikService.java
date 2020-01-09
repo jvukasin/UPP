@@ -42,15 +42,16 @@ public class KorisnikService {
         korRepo.deleteById(username);
     }
 
-    public void sendNotificationSync(Korisnik user ) throws MailException, InterruptedException {
+    public void sendNotificationSync(String procesId, Korisnik user) throws MailException, InterruptedException {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
         mail.setSubject("Verifikacija naloga");
 
-        String enkodovano = Base64.getEncoder().encodeToString(user.getUsername().getBytes());
+        String encUser = Base64.getEncoder().encodeToString(user.getUsername().getBytes());
+        String encProces = Base64.getEncoder().encodeToString(procesId.getBytes());
 
-        String path = "http://localhost:8080/registration/verify/".concat(enkodovano);
+        String path = "http://localhost:4200/verified/" + encProces + "/" + encUser;
 
         mail.setText("Zdravo " + user.getIme() + ",\n\n Molimo vas da kliknete na sledeći link kako biste verifikovali vaš nalog: "+ path);
 

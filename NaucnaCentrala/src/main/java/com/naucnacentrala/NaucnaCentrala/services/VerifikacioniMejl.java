@@ -72,6 +72,6 @@ public class VerifikacioniMejl implements JavaDelegate {
 
             execution.setVariable("potvrdio", false);
 
-            servis.sendNotificationSync(k);
+            servis.sendNotificationSync(execution.getProcessInstanceId() ,k);
     }
 }

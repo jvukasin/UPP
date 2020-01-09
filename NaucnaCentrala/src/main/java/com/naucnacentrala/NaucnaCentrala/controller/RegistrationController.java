@@ -73,8 +73,6 @@ public class RegistrationController {
 
 //			Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
 
-
-
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
         runtimeService.setVariable(processInstanceId, "registration", dto);
@@ -82,14 +80,16 @@ public class RegistrationController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/verify/{username}", method = RequestMethod.GET)
-    public void verifyMail(@PathVariable String username) {
+    @RequestMapping(value = "/verify/{processId}/{username}", method = RequestMethod.GET)
+    public void verifyMail(@PathVariable String processId, @PathVariable String username) {
         Korisnik k = new Korisnik();
 
-        byte[] actualByte = Base64.getDecoder().decode(username);
-        String praviUsername = new String(actualByte);
+        byte[] actualByte1 = Base64.getDecoder().decode(username);
+        byte[] actualByte2 = Base64.getDecoder().decode(processId);
+        String praviUsername = new String(actualByte1);
+        String praviProces = new String(actualByte2);
 
-        runtimeService.setVariable("", "potvrdio", true);
+        runtimeService.setVariable(praviProces, "potvrdio", true);
 
         k = korRepo.findOneByUsername(praviUsername);
         k.setAktivan(true);
