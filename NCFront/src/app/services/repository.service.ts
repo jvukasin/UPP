@@ -21,8 +21,11 @@ export class RepositoryService {
   }
 
   getTasks(processInstance : string){
-
     return this.http.get('http://localhost:8080/registration/get/tasks/'.concat(processInstance)) as Observable<any>
+  }
+
+  getAdminTasks(){
+    return this.http.get('http://localhost:8080/admin/get/tasks') as Observable<any>
   }
 
   claimTask(taskId){

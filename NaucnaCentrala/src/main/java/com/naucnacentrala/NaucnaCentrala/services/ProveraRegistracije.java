@@ -28,7 +28,6 @@ public class ProveraRegistracije implements JavaDelegate {
             execution.setVariable("dalje", false);
         }
         List<FormSubmissionDTO> registration = (List<FormSubmissionDTO>)execution.getVariable("registration");
-        System.out.println(registration);
         ArrayList<Korisnik> korisnici = (ArrayList) korisnikRepo.findAll();
         for (FormSubmissionDTO formField : registration) {
             if(formField.getFieldId().equals("username")) {

@@ -1,0 +1,6 @@
+<div class="container">
+    <h4>Vaši zadaci:</h4>
+    <table>
+        <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td>{{task.assignee}}</td><td><button class="btn btn-primary" routerLink="/admin/potvrda">Go to task</button></td></tr>
+      </table>
+</div>

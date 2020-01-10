@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { VerifyEmailComponent } from './registration/verify-email/verify-email.component';
 import { VerificationDoneComponent } from './verification-done/verification-done.component';
+import { AdminComponent } from './admin/admin.component';
+import { PotvrdiRecenzentaComponent } from './admin/potvrdi-recenzenta/potvrdi-recenzenta.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { VerificationDoneComponent } from './verification-done/verification-done
     HomeComponent,
     RegistrationComponent,
     VerifyEmailComponent,
-    VerificationDoneComponent
+    VerificationDoneComponent,
+    AdminComponent,
+    PotvrdiRecenzentaComponent
   ],
   imports: [
     BrowserModule,

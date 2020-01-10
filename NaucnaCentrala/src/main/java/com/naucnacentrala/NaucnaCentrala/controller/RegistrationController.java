@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
@@ -52,9 +53,6 @@ public class RegistrationController {
 
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
-        for(FormField fp : properties) {
-            System.out.println(fp.getId() + fp.getType());
-        }
 
         return new FormFieldsDTO(task.getId(), pi.getId(), properties);
     }
@@ -63,7 +61,6 @@ public class RegistrationController {
     public @ResponseBody
     ResponseEntity post(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
         HashMap<String, Object> map = this.mapListToDto(dto);
-
         // list all running/unsuspended instances of the process
 //		    ProcessInstance processInstance =
 //		        runtimeService.createProcessInstanceQuery()
@@ -72,6 +69,12 @@ public class RegistrationController {
 //		            .list().get(0);
 
 //			Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
+
+        try {
+            validateData(dto);
+        } catch(Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
+        }
 
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
@@ -104,5 +107,40 @@ public class RegistrationController {
         }
 
         return map;
+    }
+
+    private void validateData(List<FormSubmissionDTO> data) throws Exception {
+        ArrayList<Korisnik> korisnici = (ArrayList) korRepo.findAll();
+        for (FormSubmissionDTO f : data) {
+            if(f.getFieldId().equals("email")) {
+                if(!mailOk(f.getFieldValue(), korisnici)) throw new Exception("Nevalidan email");
+            } else if (f.getFieldId().equals("username")) {
+                if(!userOk(f.getFieldValue(), korisnici)) throw new Exception("Nevalidan username");
+            } else if (f.getFieldId().equals("password")) {
+                if(!passOk(f.getFieldValue(), korisnici)) throw new Exception("Nevalidan password");
+            }
+        }
+    }
+
+    private boolean mailOk(String mail, ArrayList<Korisnik> korisnici) {
+        for(Korisnik k : korisnici) {
+            if(k.getEmail().equals(mail)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean userOk(String username, ArrayList<Korisnik> korisnici) {
+        for(Korisnik k : korisnici) {
+            if(k.getUsername().equals(username)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean passOk(String pass, ArrayList<Korisnik> korisnici) {
+        return true;
     }
 }

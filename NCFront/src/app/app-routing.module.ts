@@ -4,6 +4,8 @@ import { HomeComponent } from './home/home.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { VerifyEmailComponent } from './registration/verify-email/verify-email.component';
 import { VerificationDoneComponent } from './verification-done/verification-done.component';
+import { AdminComponent } from './admin/admin.component';
+import { PotvrdiRecenzentaComponent } from './admin/potvrdi-recenzenta/potvrdi-recenzenta.component';
 
 
 const appRoutes: Routes = [
@@ -12,6 +14,8 @@ const appRoutes: Routes = [
 	{ path: 'registration', component: RegistrationComponent},
 	{ path: 'verify', component: VerifyEmailComponent},
 	{ path: 'verified/:pcs/:usr', component: VerificationDoneComponent},
+	{path: 'admin', component: AdminComponent},
+	{path: 'admin/potvrda', component: PotvrdiRecenzentaComponent}
 ]
 
 @NgModule({

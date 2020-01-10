@@ -1,15 +1,10 @@
 <div class="container">
-    <h4 class="mt-4">Registracija</h4>
+    <h4 class="mt-4">Potvrda recenzenta</h4>
     <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
         <div *ngFor="let field of formFields">
             <label for={{field.id}}>{{field.label}}</label>
       
-            <span *ngIf="field.id=='password'">
-              <input type="password" class="form-control"  name={{field.id}} ngModel *ngIf="field.type.name=='string'">
-            </span>
-            <span *ngIf="field.id!='password'">
-              <input type="text" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='string'" >
-            </span>
+              <input type="text" class="form-control"  name={{field.id}} ngModel *ngIf="field.type.name=='string'">
             <input type="checkbox" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='boolean'">
             <input type="number" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='long'">
             <select multiple name={{field.id}} class="form-control" ngModel *ngIf="field.type.name=='enum'">

@@ -17,7 +17,6 @@ export class RegistrationComponent implements OnInit {
   private processInstance = "";
   private enumValues = [];
   private tasks = [];
-  showNaucneOblasti: boolean = false;
 
   constructor(private userService : UserService, private repositoryService : RepositoryService) {
 
@@ -62,13 +61,13 @@ export class RegistrationComponent implements OnInit {
 
     console.log(o);
     let x = this.userService.registerUser(o, this.formFieldsDto.taskId);
-    window.location.href="http://localhost:4200/verify";
     x.subscribe(
       res => {
-        console.log(res);
+        alert(res);
+        window.location.href="http://localhost:4200/verify";
       },
       err => {
-        console.log("Error occured");
+          alert("Error occured");
       }
     );
   }
