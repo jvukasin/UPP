@@ -28,6 +28,14 @@ export class RepositoryService {
     return this.http.get('http://localhost:8080/admin/get/tasks') as Observable<any>
   }
 
+  getAdminForm(){
+    return this.http.get('http://localhost:8080/admin/get/form') as Observable<any>
+  }
+
+  potvrdaRecenzenta(taskId, obj) {
+    return this.http.post("http://localhost:8080/admin/potvrdaRecenzenta/".concat(taskId), obj) as Observable<any>;
+  }
+
   claimTask(taskId){
     return this.http.post('http://localhost:8080/registration/tasks/claim/'.concat(taskId), null) as Observable<any>
   }
