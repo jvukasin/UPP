@@ -10,15 +10,15 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  fetchUsers() {
-    return this.http.get("http://localhost:8080/user/fetch") as Observable<any>;
-  }
-
   registerUser(user, taskId) {
-    return this.http.post("http://localhost:8080/registration/post/".concat(taskId), user) as Observable<any>;
+    return this.http.post("/api/users/post/".concat(taskId), user) as Observable<any>;
   }
 
   verifyUser(pcs, usr) {
-    return this.http.get("http://localhost:8080/registration/verify/".concat(pcs).concat("/").concat(usr));
+    return this.http.get("/api/users/verify/".concat(pcs).concat("/").concat(usr));
+  }
+
+  getUser(){
+    return this.http.get('/api/users/getUser');  
   }
 }

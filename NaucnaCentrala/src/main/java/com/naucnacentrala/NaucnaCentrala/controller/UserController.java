@@ -2,9 +2,8 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
-import com.naucnacentrala.NaucnaCentrala.model.Korisnik;
-import com.naucnacentrala.NaucnaCentrala.repository.KorisnikRepository;
-import com.naucnacentrala.NaucnaCentrala.repository.NORepo;
+import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
@@ -41,7 +40,7 @@ public class RegistrationController {
     FormService formService;
 
     @Autowired
-    KorisnikRepository korRepo;
+    UserRepository korRepo;
 
     @GetMapping(path = "/get", produces = "application/json")
     public @ResponseBody FormFieldsDTO get() {
@@ -85,7 +84,7 @@ public class RegistrationController {
 
     @RequestMapping(value = "/verify/{processId}/{username}", method = RequestMethod.GET)
     public void verifyMail(@PathVariable String processId, @PathVariable String username) {
-        Korisnik k = new Korisnik();
+        User k = new User();
 
         byte[] actualByte1 = Base64.getDecoder().decode(username);
         byte[] actualByte2 = Base64.getDecoder().decode(processId);
@@ -110,7 +109,7 @@ public class RegistrationController {
     }
 
     private void validateData(List<FormSubmissionDTO> data) throws Exception {
-        ArrayList<Korisnik> korisnici = (ArrayList) korRepo.findAll();
+        ArrayList<User> korisnici = (ArrayList) korRepo.findAll();
         for (FormSubmissionDTO f : data) {
             if(f.getFieldId().equals("email")) {
                 if(!mailOk(f.getFieldValue(), korisnici)) throw new Exception("Nevalidan email");
@@ -122,8 +121,8 @@ public class RegistrationController {
         }
     }
 
-    private boolean mailOk(String mail, ArrayList<Korisnik> korisnici) {
-        for(Korisnik k : korisnici) {
+    private boolean mailOk(String mail, ArrayList<User> korisnici) {
+        for(User k : korisnici) {
             if(k.getEmail().equals(mail)) {
                 return false;
             }
@@ -131,8 +130,8 @@ public class RegistrationController {
         return true;
     }
 
-    private boolean userOk(String username, ArrayList<Korisnik> korisnici) {
-        for(Korisnik k : korisnici) {
+    private boolean userOk(String username, ArrayList<User> korisnici) {
+        for(User k : korisnici) {
             if(k.getUsername().equals(username)) {
                 return false;
             }
@@ -140,7 +139,7 @@ public class RegistrationController {
         return true;
     }
 
-    private boolean passOk(String pass, ArrayList<Korisnik> korisnici) {
+    private boolean passOk(String pass, ArrayList<User> korisnici) {
         return true;
     }
 }

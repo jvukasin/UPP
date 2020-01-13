@@ -6,12 +6,14 @@ import { VerifyEmailComponent } from './registration/verify-email/verify-email.c
 import { VerificationDoneComponent } from './verification-done/verification-done.component';
 import { AdminComponent } from './admin/admin.component';
 import { PotvrdiRecenzentaComponent } from './admin/potvrdi-recenzenta/potvrdi-recenzenta.component';
+import { LoginComponent } from './login/login.component';
 
 
 const appRoutes: Routes = [
 	{ path: '', redirectTo: '/home', pathMatch: 'full'},
     { path: 'home', component: HomeComponent },
 	{ path: 'registration', component: RegistrationComponent},
+	{ path: 'login', component: LoginComponent},
 	{ path: 'verify', component: VerifyEmailComponent},
 	{ path: 'verified/:pcs/:usr', component: VerificationDoneComponent},
 	{path: 'admin', component: AdminComponent},

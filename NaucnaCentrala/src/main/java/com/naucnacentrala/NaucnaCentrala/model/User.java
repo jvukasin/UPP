@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Korisnik {
+public class User {
 
     @Id
     private String username;
@@ -42,7 +42,7 @@ public class Korisnik {
             inverseJoinColumns = @JoinColumn(name = "nau_obl_id", referencedColumnName = "sifra"))
     private List<NaucnaOblast> naucneOblasti;
 
-    public Korisnik() {
+    public User() {
 
     }
 

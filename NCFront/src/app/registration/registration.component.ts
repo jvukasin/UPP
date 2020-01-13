@@ -63,7 +63,7 @@ export class RegistrationComponent implements OnInit {
     let x = this.userService.registerUser(o, this.formFieldsDto.taskId);
     x.subscribe(
       res => {
-        alert(res);
+        console.log(res);
         window.location.href="http://localhost:4200/verify";
       },
       err => {
