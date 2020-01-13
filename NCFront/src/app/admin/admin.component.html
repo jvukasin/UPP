@@ -1,6 +1,16 @@
+<nav class="navbar navbar-expand">
+  <a class="navbar-brand" [routerLink]="['/home']">Naucna centrala</a>
+    <ul class="navbar-nav mr-auto">
+    </ul>
+  <div class="d-flex flex-row-reverse">
+    <button class="btn" [routerLink]="['/registration']" *ngIf="!isLoggedIn">Register</button>
+    <button class="btn" [routerLink]="['/login']" *ngIf="!isLoggedIn">Login</button>
+    <button class="btn" (click)="logOut()" *ngIf="isLoggedIn">Logout</button>
+  </div>
+</nav>
 <div class="container">
     <h4>Vaši zadaci:</h4>
     <table>
-        <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td>{{task.assignee}}</td><td><button class="btn btn-primary" routerLink="/admin/potvrda">Go to task</button></td></tr>
+        <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td>{{task.assignee}}</td><td><button class="btn btn-primary" (click)="onClick(task.taskId)">Go to task</button></td></tr>
       </table>
 </div>

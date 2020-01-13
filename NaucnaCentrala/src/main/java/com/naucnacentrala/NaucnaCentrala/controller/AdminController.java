@@ -3,7 +3,8 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.TaskDTO;
-import com.naucnacentrala.NaucnaCentrala.repository.KorisnikRepository;
+import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
+import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,29 +32,18 @@ public class AdminController {
     private RuntimeService runtimeService;
 
     @Autowired
-    private RepositoryService repositoryService;
-
-    @Autowired
     TaskService taskService;
 
     @Autowired
     FormService formService;
 
     @Autowired
-    KorisnikRepository korRepo;
+    KorisnikService korisnikService;
 
     @GetMapping(path = "/get/tasks", produces = "application/json")
-    public @ResponseBody
-    ResponseEntity<List<TaskDTO>> get() {
+    public @ResponseBody ResponseEntity<List<TaskDTO>> get() {
 
-        ProcessInstance processInstance =
-		        runtimeService.createProcessInstanceQuery()
-		            .processDefinitionKey("registracija")
-		            .active() // we only want the unsuspended process instances
-		            .list().get(0);
-
-//        Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
-        List<Task> tasks = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list();
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("admin").list();
         List<TaskDTO> dtos = new ArrayList<TaskDTO>();
         for (Task task : tasks) {
             TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
@@ -62,30 +53,20 @@ public class AdminController {
         return new ResponseEntity(dtos,  HttpStatus.OK);
     }
 
-    @GetMapping(path = "/get/form", produces = "application/json")
-    public @ResponseBody
-    FormFieldsDTO getForm() {
-        //provera da li korisnik sa id-jem pera postoji
-        //List<User> users = identityService.createUserQuery().userId("pera").list();
-        ProcessInstance pi =
-                runtimeService.createProcessInstanceQuery()
-                        .processDefinitionKey("registracija")
-                        .active() // we only want the unsuspended process instances
-                        .list().get(0);
-
-        Task task = taskService.createTaskQuery().processInstanceId(pi.getId()).list().get(0);
-
-        //UZMI TASK ZA ADMINA
-
+    @GetMapping(path = "/task/claim/{taskId}", produces = "application/json")
+    public @ResponseBody FormFieldsDTO getForm(@PathVariable String taskId, HttpServletRequest request) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        String username = korisnikService.getUsernameFromRequest(request);
+        taskService.claim(taskId, username);
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
 
-        return new FormFieldsDTO(task.getId(), pi.getId(), properties);
+        return new FormFieldsDTO(task.getId(), processInstanceId, properties);
     }
 
     @PostMapping(path = "/potvrdaRecenzenta/{taskId}", produces = "application/json")
-    public @ResponseBody
-    ResponseEntity post(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+    public @ResponseBody ResponseEntity post(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
         HashMap<String, Object> map = this.mapListToDto(dto);
 
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
@@ -94,7 +75,7 @@ public class AdminController {
         for (FormSubmissionDTO formField : dto) {
             if(formField.getFieldId().equals("prihvatiRec")) {
                 prihvati = formField.getFieldValue();
-                if(prihvati == "asd") {
+                if(prihvati == "true") {
                     runtimeService.setVariable(processInstanceId, "prihvatiRec", true);
                 } else {
                     runtimeService.setVariable(processInstanceId, "prihvatiRec", false);

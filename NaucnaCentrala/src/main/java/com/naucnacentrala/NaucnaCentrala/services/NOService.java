@@ -1,9 +1,8 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
 
-import com.naucnacentrala.NaucnaCentrala.model.Korisnik;
 import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
-import com.naucnacentrala.NaucnaCentrala.repository.NORepo;
+import com.naucnacentrala.NaucnaCentrala.repository.NORepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class NOService {
 
     @Autowired
-    NORepo repo;
+    NORepository repo;
 
     public List<NaucnaOblast> findAll() {
         return repo.findAll();

@@ -1,6 +1,6 @@
-package com.upp.naucnacentrala.security;
+package com.naucnacentrala.NaucnaCentrala.security;
 
-import com.upp.naucnacentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,7 +16,7 @@ import java.util.Date;
 @Component
 public class TokenUtils {
 
-	@Value("mega-travel")
+	@Value("naucna-centrala")
 	private String APP_NAME;
 
 	@Value("somesecret")

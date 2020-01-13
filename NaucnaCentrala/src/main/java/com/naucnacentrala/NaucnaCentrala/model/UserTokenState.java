@@ -1,4 +1,4 @@
-package com.upp.naucnacentrala.model;
+package com.naucnacentrala.NaucnaCentrala.model;
 
 public class UserTokenState {
 

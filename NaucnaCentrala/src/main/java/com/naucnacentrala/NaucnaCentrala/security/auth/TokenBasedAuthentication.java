@@ -1,4 +1,4 @@
-package com.upp.naucnacentrala.security.auth;
+package com.naucnacentrala.NaucnaCentrala.security.auth;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;

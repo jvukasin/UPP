@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RepositoryService } from 'src/app/services/repository.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-potvrdi-recenzenta',
@@ -14,9 +15,17 @@ export class PotvrdiRecenzentaComponent implements OnInit {
   private processInstance = "";
   private enumValues = [];
   private tasks = [];
+  private taskId;
+  controls: any = [];
 
-  constructor(private repositoryService : RepositoryService) {
-    this.repositoryService.getAdminForm().subscribe(
+  constructor(private repositoryService : RepositoryService, private route: ActivatedRoute, private router: Router) {
+    // getting route params, params is observable that unsubscribes automatically
+    this.route.params.subscribe(
+      (params: Params) => {
+        this.taskId = params['id'];
+      }
+    );
+    this.repositoryService.getAdminForm(this.taskId).subscribe(
       res => {
         this.formFieldsDto = res;
         this.formFields = res.formFields;
@@ -40,10 +49,9 @@ export class PotvrdiRecenzentaComponent implements OnInit {
   onSubmit(value, form){
     
     let o = new Array();
-    for (var property in value) {
-      console.log(property);
-      console.log(value[property]);
-        o.push({fieldId : property, fieldValue : value[property]});
+    this.controls = form.controls;
+    for(var control in this.controls){
+      o.push({fieldId: control, fieldValue: this.controls[control].value});
     }
 
     console.log(o);
@@ -51,6 +59,7 @@ export class PotvrdiRecenzentaComponent implements OnInit {
     x.subscribe(
       res => {
         console.log(res);
+        this.router.navigate(["/admin"]);
       },
       err => {
         alert("Error occured");

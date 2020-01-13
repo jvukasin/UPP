@@ -1,4 +1,4 @@
-package com.upp.naucnacentrala.model;
+package com.naucnacentrala.NaucnaCentrala.model;
 
 import javax.persistence.*;
 import java.util.Collection;

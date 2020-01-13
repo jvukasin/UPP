@@ -1,7 +1,7 @@
-package com.upp.naucnacentrala.security;
+package com.naucnacentrala.NaucnaCentrala.security;
 
-import com.upp.naucnacentrala.model.User;
-import com.upp.naucnacentrala.repository.UserRepository;
+import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

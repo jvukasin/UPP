@@ -1,9 +1,9 @@
-package com.upp.naucnacentrala.security.config;
+package com.naucnacentrala.NaucnaCentrala.security.config;
 
-import com.upp.naucnacentrala.security.CustomUserDetailsService;
-import com.upp.naucnacentrala.security.TokenUtils;
-import com.upp.naucnacentrala.security.auth.RestAuthenticationEntryPoint;
-import com.upp.naucnacentrala.security.auth.TokenAuthenticationFilter;
+import com.naucnacentrala.NaucnaCentrala.security.CustomUserDetailsService;
+import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
+import com.naucnacentrala.NaucnaCentrala.security.auth.RestAuthenticationEntryPoint;
+import com.naucnacentrala.NaucnaCentrala.security.auth.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -80,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 					.antMatchers("/users/**").permitAll()
 					.antMatchers("/auth/**").permitAll()
 					.antMatchers("/admin/**").permitAll()
+					.antMatchers("/casopis/**").permitAll()
 					// svaki zahtev mora biti autorizovan
 					.anyRequest().authenticated().and()
 				// presretni svaki zahtev filterom

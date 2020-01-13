@@ -1,7 +1,7 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
-import com.naucnacentrala.NaucnaCentrala.model.Korisnik;
-import com.naucnacentrala.NaucnaCentrala.repository.KorisnikRepository;
+import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -15,7 +15,7 @@ import java.util.List;
 public class ProveraRegistracije implements JavaDelegate {
 
     @Autowired
-    KorisnikRepository korisnikRepo;
+    UserRepository korisnikRepo;
 
     private String username;
     private String email;
@@ -28,7 +28,7 @@ public class ProveraRegistracije implements JavaDelegate {
             execution.setVariable("dalje", false);
         }
         List<FormSubmissionDTO> registration = (List<FormSubmissionDTO>)execution.getVariable("registration");
-        ArrayList<Korisnik> korisnici = (ArrayList) korisnikRepo.findAll();
+        ArrayList<User> korisnici = (ArrayList) korisnikRepo.findAll();
         for (FormSubmissionDTO formField : registration) {
             if(formField.getFieldId().equals("username")) {
                 username = formField.getFieldValue();
@@ -46,7 +46,7 @@ public class ProveraRegistracije implements JavaDelegate {
             }
         }
 
-        for(Korisnik k : korisnici) {
+        for(User k : korisnici) {
             if(k.getEmail().equals(email) || k.getUsername().equals(username)) {
                 postoji = true;
                 break;

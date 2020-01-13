@@ -28,8 +28,8 @@ export class RepositoryService {
     return this.http.get('/api/admin/get/tasks') as Observable<any>
   }
 
-  getAdminForm(){
-    return this.http.get('/api/admin/get/form') as Observable<any>
+  getAdminForm(taskId){
+    return this.http.get('/api/admin/task/claim/'.concat(taskId)) as Observable<any>
   }
 
   potvrdaRecenzenta(taskId, obj) {

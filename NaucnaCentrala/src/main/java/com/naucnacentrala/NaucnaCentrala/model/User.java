@@ -1,10 +1,17 @@
 package com.naucnacentrala.NaucnaCentrala.model;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
-public class User {
+@Inheritance(strategy= InheritanceType.SINGLE_TABLE) //ovom anotacijom se naglasava tip mapiranja "jedna tabela po hijerarhiji"
+@DiscriminatorColumn(name="type", discriminatorType= DiscriminatorType.STRING) //ovom anotacijom se navodi diskriminatorska kolona
+public class User implements UserDetails {
 
     @Id
     private String username;
@@ -27,24 +34,60 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "uloga", nullable = false)
-    private String uloga;
-
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "active", nullable = false)
     private boolean aktivan;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "korisnik_nobl",
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_nobl",
             joinColumns = @JoinColumn(name = "korisnik_id", referencedColumnName = "username"),
             inverseJoinColumns = @JoinColumn(name = "nau_obl_id", referencedColumnName = "sifra"))
     private List<NaucnaOblast> naucneOblasti;
 
+    @ManyToMany(cascade =  {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "username"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    protected List<Role> roles;
+
+
     public User() {
 
     }
+
+    public User(String username, String password, String ime, String prezime, String grad, String drzava, String titula, String email,List<NaucnaOblast> naucneOblasti) {
+        this.username = username;
+        this.password = password;
+        this.ime = ime;
+        this.prezime = prezime;
+        this.email = email;
+        this.grad = grad;
+        this.drzava = drzava;
+        this.titula = titula;
+        this.naucneOblasti = naucneOblasti;
+    }
+
+    public User(User user){
+        this(user.getUsername(), user.getPassword(), user.getIme(), user.getPrezime(),
+                user.getEmail(), user.getGrad(), user.getDrzava(), user.getTitula(), user.getNaucneOblasti());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // uvek ima samo jednu rolu - uzmi privilegije i vrati
+        if(!this.roles.isEmpty()){
+            Role r = roles.iterator().next();
+            List<Privilege> privileges = new ArrayList<Privilege>();
+            for(Privilege p : r.getPrivileges()){
+                privileges.add(p);
+            }
+            return privileges;
+        }
+        return null;
+    }
+
 
     public String getIme() {
         return ime;
@@ -94,16 +137,28 @@ public class User {
         this.naucneOblasti = naucneOblasti;
     }
 
-    public String getUloga() {
-        return uloga;
-    }
-
-    public void setUloga(String uloga) {
-        this.uloga = uloga;
-    }
-
     public String getUsername() {
         return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public String getPassword() {

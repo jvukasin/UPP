@@ -1,12 +1,10 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
-import com.naucnacentrala.NaucnaCentrala.model.Korisnik;
+import com.naucnacentrala.NaucnaCentrala.model.User;
 import org.springframework.stereotype.Service;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.form.FormField;
-import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
 
@@ -24,7 +22,7 @@ public class RegistrovanjeKorisnika implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<FormSubmissionDTO> registration = (List<FormSubmissionDTO>)execution.getVariable("registration");
-        User user = identityService.newUser("t");
+        org.camunda.bpm.engine.identity.User user = identityService.newUser("t");
         for (FormSubmissionDTO formField : registration) {
             if(formField.getFieldId().equals("username")) {
                 user.setId(formField.getFieldValue());
@@ -44,7 +42,7 @@ public class RegistrovanjeKorisnika implements JavaDelegate {
         }
         identityService.saveUser(user);
 
-        Korisnik k = korServis.findOneByUsername(user.getId());
+        User k = korServis.findOneByUsername(user.getId());
         k.setAktivan(true);
         k = korServis.save(k);
     }

@@ -26,7 +26,6 @@ export class VerificationDoneComponent implements OnInit {
     this.usrService.verifyUser(this.pcs, this.usr).subscribe(
       res => {
         console.log(res);
-        // window.location.href="http://localhost:4200/verify";
       },
       err => {
         console.log("Error occured");

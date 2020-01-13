@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface KorisnikRepository extends JpaRepository<User, String>
+public interface UserRepository extends JpaRepository<User, String>
 {
     List<User> findAll();
     User findOneByUsername(String username);

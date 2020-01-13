@@ -1,7 +1,7 @@
-package com.upp.naucnacentrala.security.auth;
+package com.naucnacentrala.NaucnaCentrala.security.auth;
 
-import com.upp.naucnacentrala.security.CustomUserDetailsService;
-import com.upp.naucnacentrala.security.TokenUtils;
+import com.naucnacentrala.NaucnaCentrala.security.CustomUserDetailsService;
+import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,8 +25,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		this.tokenUtils = tokenHelper;
 		this.userDetailsService = userDetailsService;
 	}
-	
-	@Override
+
+    @Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		String username;

@@ -2,8 +2,13 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
+import com.naucnacentrala.NaucnaCentrala.dto.UserInfoDTO;
+import com.naucnacentrala.NaucnaCentrala.model.Admin;
+import com.naucnacentrala.NaucnaCentrala.model.Autor;
+import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
 import com.naucnacentrala.NaucnaCentrala.model.User;
-import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
+import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
+import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
@@ -11,18 +16,20 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
 @Controller
-@RequestMapping("/registration")
-public class RegistrationController {
+@RequestMapping("/users")
+public class UserController {
 
     @Autowired
     IdentityService identityService;
@@ -40,7 +47,10 @@ public class RegistrationController {
     FormService formService;
 
     @Autowired
-    UserRepository korRepo;
+    private TokenUtils tokenUtils;
+
+    @Autowired
+    KorisnikService korisnikService;
 
     @GetMapping(path = "/get", produces = "application/json")
     public @ResponseBody FormFieldsDTO get() {
@@ -84,19 +94,36 @@ public class RegistrationController {
 
     @RequestMapping(value = "/verify/{processId}/{username}", method = RequestMethod.GET)
     public void verifyMail(@PathVariable String processId, @PathVariable String username) {
-        User k = new User();
-
         byte[] actualByte1 = Base64.getDecoder().decode(username);
         byte[] actualByte2 = Base64.getDecoder().decode(processId);
         String praviUsername = new String(actualByte1);
         String praviProces = new String(actualByte2);
 
         runtimeService.setVariable(praviProces, "potvrdio", true);
-
-        k = korRepo.findOneByUsername(praviUsername);
-        k.setAktivan(true);
-        k = korRepo.save(k);
+        runtimeService.setVariable(praviProces, "korisnik", praviUsername);
     }
+
+    @RequestMapping(value = "/getUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserInfoDTO> getUser(HttpServletRequest request){
+        String username = korisnikService.getUsernameFromRequest(request);
+        UserInfoDTO ui = new UserInfoDTO();
+        if(username != "" && username != null) {
+            User u = (User) korisnikService.findOneByUsername(username);
+            if(u instanceof Admin){
+                u = (Admin) u;
+                ui.setRole("Admin");
+            } else if (u instanceof Autor) {
+                ui.setRole("Autor");
+            } else if (u instanceof Recenzent) {
+                ui.setRole("Recenzent");
+            }
+            ui.setUsername(u.getUsername());
+            return new ResponseEntity<UserInfoDTO>(ui, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     private HashMap<String, Object> mapListToDto(List<FormSubmissionDTO> list)
     {
@@ -108,8 +135,9 @@ public class RegistrationController {
         return map;
     }
 
+
     private void validateData(List<FormSubmissionDTO> data) throws Exception {
-        ArrayList<User> korisnici = (ArrayList) korRepo.findAll();
+        ArrayList<User> korisnici = (ArrayList) korisnikService.findAll();
         for (FormSubmissionDTO f : data) {
             if(f.getFieldId().equals("email")) {
                 if(!mailOk(f.getFieldValue(), korisnici)) throw new Exception("Nevalidan email");

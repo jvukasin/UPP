@@ -1,18 +1,15 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
-import com.naucnacentrala.NaucnaCentrala.model.Korisnik;
+import com.naucnacentrala.NaucnaCentrala.model.User;
 import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
-import com.naucnacentrala.NaucnaCentrala.repository.NORepo;
-import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
-import org.camunda.bpm.engine.identity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -27,7 +24,7 @@ public class VerifikacioniMejl implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<FormSubmissionDTO> registration = (List<FormSubmissionDTO>)execution.getVariable("registration");
-        Korisnik k = new Korisnik();
+        User k = new User();
         ArrayList<NaucnaOblast> no = new ArrayList<>();
         ArrayList<NaucnaOblast> oblastiIzBaze = (ArrayList) naucServis.findAll();
         for (FormSubmissionDTO formField : registration) {
@@ -53,7 +50,10 @@ public class VerifikacioniMejl implements JavaDelegate {
                 k.setEmail(formField.getFieldValue());
             }
             if (formField.getFieldId().equals("password")) {
-                k.setPassword(formField.getFieldValue());
+                String salt = BCrypt.gensalt();
+                String pass = formField.getFieldValue();
+                String hashedPass = BCrypt.hashpw(pass, salt);
+                k.setPassword(hashedPass);
             }
             if (formField.getFieldId().equals("nauc_oblasti")) {
                 for(NaucnaOblast n : oblastiIzBaze) {
@@ -65,7 +65,6 @@ public class VerifikacioniMejl implements JavaDelegate {
             }
         }
 
-            k.setUloga("korisnik");
             k.setAktivan(false);
             k.setNaucneOblasti(no);
             servis.save(k);

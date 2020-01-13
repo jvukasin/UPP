@@ -14,6 +14,7 @@ import { VerificationDoneComponent } from './verification-done/verification-done
 import { AdminComponent } from './admin/admin.component';
 import { PotvrdiRecenzentaComponent } from './admin/potvrdi-recenzenta/potvrdi-recenzenta.component';
 import { LoginComponent } from './login/login.component';
+import { CasopisComponent } from './casopis/casopis.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { LoginComponent } from './login/login.component';
     VerificationDoneComponent,
     AdminComponent,
     PotvrdiRecenzentaComponent,
-    LoginComponent
+    LoginComponent,
+    CasopisComponent
   ],
   imports: [
     BrowserModule,

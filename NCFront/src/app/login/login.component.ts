@@ -33,12 +33,14 @@ export class LoginComponent implements OnInit {
       alert("succes");
       this.userService.getUser().subscribe(
         (user: any) => {
-          if(user.role == "ADMIN"){
+          if(user.role == "Admin"){
             this.router.navigate(["/admin"]);
+          } else if (user.role == "Autor") {
+            this.router.navigate(["/casopis"]);
           }
         }
-      )
-      this.router.navigate(["/homepage"]);
+      );
+      this.router.navigate(["/home"]);
     }, 
     (error) => {
       alert(error);

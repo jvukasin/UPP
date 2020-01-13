@@ -1,7 +1,8 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
-import com.naucnacentrala.NaucnaCentrala.model.Korisnik;
-import com.naucnacentrala.NaucnaCentrala.repository.KorisnikRepository;
+import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
+import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class PromeniURecenzenta implements JavaDelegate {
 
     @Autowired
-    KorisnikRepository korisnikRepo;
+    KorisnikService korisnikService;
 
     @Autowired
     IdentityService identityService;
@@ -22,8 +23,9 @@ public class PromeniURecenzenta implements JavaDelegate {
         String korisnik = (String) execution.getVariable("korisnik");
         identityService.createMembership(korisnik, "recenzenti");
 
-        Korisnik k = korisnikRepo.findOneByUsername(korisnik);
-        k.setUloga("recenzent");
-        k = korisnikRepo.save(k);
+        User k = korisnikService.findOneByUsername(korisnik);
+        Recenzent r = new Recenzent(k);
+        korisnikService.remove(k.getUsername());
+        r = (Recenzent) korisnikService.save(r);
     }
 }

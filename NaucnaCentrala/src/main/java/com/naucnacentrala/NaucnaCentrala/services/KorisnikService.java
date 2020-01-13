@@ -1,11 +1,13 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
-import com.naucnacentrala.NaucnaCentrala.model.Korisnik;
-import com.naucnacentrala.NaucnaCentrala.repository.KorisnikRepository;
+import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
+import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.core.env.Environment;
 
@@ -19,22 +21,25 @@ public class KorisnikService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Autowired
+    private TokenUtils tokenUtils;
+
     //klasa Environment ocitava vrednosti iz application.properties fajla
     @Autowired
     private Environment env;
 
     @Autowired
-    KorisnikRepository korRepo;
+    UserRepository korRepo;
 
-    public List<Korisnik> findAll() {
+    public List<User> findAll() {
         return korRepo.findAll();
     }
 
-    public Korisnik findOneByUsername(String username) {
+    public User findOneByUsername(String username) {
         return korRepo.findOneByUsername(username);
     }
 
-    public Korisnik save(Korisnik user) {
+    public User save(User user) {
         return korRepo.save(user);
     }
 
@@ -42,7 +47,7 @@ public class KorisnikService {
         korRepo.deleteById(username);
     }
 
-    public void sendNotificationSync(String procesId, Korisnik user) throws MailException, InterruptedException {
+    public void sendNotificationSync(String procesId, User user) throws MailException, InterruptedException {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(user.getEmail());
         mail.setFrom(env.getProperty("spring.mail.username"));
@@ -58,5 +63,13 @@ public class KorisnikService {
         javaMailSender.send(mail);
     }
 
+    public String getUsernameFromRequest(HttpServletRequest request) {
+        String authToken = tokenUtils.getToken(request);
+        if (authToken == null) {
+            return null;
+        }
+        String username = tokenUtils.getUsernameFromToken(authToken);
+        return username;
+    }
 
 }

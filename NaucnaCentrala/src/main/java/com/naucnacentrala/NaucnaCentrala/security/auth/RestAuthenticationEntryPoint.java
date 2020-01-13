@@ -1,4 +1,4 @@
-package com.upp.naucnacentrala.security.auth;
+package com.naucnacentrala.NaucnaCentrala.security.auth;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

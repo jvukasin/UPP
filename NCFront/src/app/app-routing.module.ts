@@ -7,17 +7,20 @@ import { VerificationDoneComponent } from './verification-done/verification-done
 import { AdminComponent } from './admin/admin.component';
 import { PotvrdiRecenzentaComponent } from './admin/potvrdi-recenzenta/potvrdi-recenzenta.component';
 import { LoginComponent } from './login/login.component';
+import { CasopisComponent } from './casopis/casopis.component';
 
 
 const appRoutes: Routes = [
-	{ path: '', redirectTo: '/home', pathMatch: 'full'},
+	{ path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'home', component: HomeComponent },
-	{ path: 'registration', component: RegistrationComponent},
-	{ path: 'login', component: LoginComponent},
-	{ path: 'verify', component: VerifyEmailComponent},
-	{ path: 'verified/:pcs/:usr', component: VerificationDoneComponent},
-	{path: 'admin', component: AdminComponent},
-	{path: 'admin/potvrda', component: PotvrdiRecenzentaComponent}
+	{ path: 'registration', component: RegistrationComponent },
+	{ path: 'login', component: LoginComponent },
+	{ path: 'verify', component: VerifyEmailComponent },
+	{ path: 'verified/:pcs/:usr', component: VerificationDoneComponent },
+	{ path: 'admin', component: AdminComponent },
+	{ path: 'admin/:id', component: PotvrdiRecenzentaComponent },
+	{ path: 'casopis', component: CasopisComponent},
+
 ]
 
 @NgModule({

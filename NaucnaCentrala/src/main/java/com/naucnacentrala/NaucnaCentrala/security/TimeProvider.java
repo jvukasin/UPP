@@ -1,4 +1,4 @@
-package com.upp.naucnacentrala.security;
+package com.naucnacentrala.NaucnaCentrala.security;
 
 import org.springframework.stereotype.Component;
 

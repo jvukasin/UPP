@@ -1,4 +1,10 @@
-<nav class="navbar navbar-light bg-light"> 
-  
-  <a class="navbar-brand" [routerLink]="['/registration']" >Registrate</a>
+<nav class="navbar navbar-expand">
+  <a class="navbar-brand" [routerLink]="['/home']">Naucna centrala</a>
+    <ul class="navbar-nav mr-auto">
+    </ul>
+  <div class="d-flex flex-row-reverse">
+    <button class="btn" [routerLink]="['/registration']" *ngIf="!isLoggedIn">Register</button>
+    <button class="btn" [routerLink]="['/login']" *ngIf="!isLoggedIn">Login</button>
+    <button class="btn" (click)="logOut()" *ngIf="isLoggedIn">Logout</button>
+  </div>
 </nav>
