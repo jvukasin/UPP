@@ -46,7 +46,7 @@ export class CasopisComponent implements OnInit {
     for (var property in value) {
       console.log(property);
       console.log(value[property]);
-      if(property === "nauc_oblasti") {
+      if(property === "nauc_oblasti" || property === "nacin_placanja") {
         var niz = value[property];
         for (let i=0; i<niz.length; i++) {
           o.push({fieldId : property, fieldValue : niz[i]});

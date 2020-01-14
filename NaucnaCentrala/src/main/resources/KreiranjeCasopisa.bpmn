@@ -58,7 +58,7 @@
       <bpmn:outgoing>SequenceFlow_05st8eh</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0fpwc7r" sourceRef="Task_0pfm373" targetRef="Task_1milmbu" />
-    <bpmn:serviceTask id="Task_0pfm373" name="postvari GU i snimi" camunda:expression="{true}">
+    <bpmn:serviceTask id="Task_0pfm373" name="postvari GU i snimi" camunda:class="com.naucnacentrala.NaucnaCentrala.services.SnimiCasopis">
       <bpmn:documentation>GU = glavni urednik</bpmn:documentation>
       <bpmn:incoming>SequenceFlow_05st8eh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0fpwc7r</bpmn:outgoing>
@@ -89,7 +89,6 @@
         <camunda:formData>
           <camunda:formField id="nazivPrikaz" label="Naziv časopisa" type="string" defaultValue="${naziv}" />
           <camunda:formField id="issnPrikaz" label="ISSN broj" type="string" defaultValue="${issn}" />
-          <camunda:formField id="nacinPlacanjaPrikaz" label="Način plaćanja" type="string" defaultValue="${nacin_placanja}" />
           <camunda:formField id="clanarinaPrikaz" label="Naplata članarine" type="string" defaultValue="${naplata_clanarine}" />
           <camunda:formField id="aktiviraj_casopis" label="Aktiviraj časopis u sistemu?" type="boolean" defaultValue="false" />
         </camunda:formData>
@@ -98,7 +97,7 @@
       <bpmn:outgoing>SequenceFlow_186to0v</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0p7r3xg" sourceRef="Task_0jt5aur" targetRef="EndEvent_05dm8fb" />
-    <bpmn:serviceTask id="Task_0jt5aur" name="Aktiviraj casopis" camunda:expression="${execution.setVariable(&#34;vidljiv&#34;, true)}" camunda:resultVariable="rez">
+    <bpmn:serviceTask id="Task_0jt5aur" name="Aktiviraj casopis" camunda:class="com.naucnacentrala.NaucnaCentrala.services.AktivirajCasopis">
       <bpmn:incoming>SequenceFlow_021lc0h</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0p7r3xg</bpmn:outgoing>
     </bpmn:serviceTask>

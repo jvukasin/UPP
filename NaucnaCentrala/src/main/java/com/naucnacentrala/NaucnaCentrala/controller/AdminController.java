@@ -13,6 +13,7 @@ import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,7 @@ public class AdminController {
     KorisnikService korisnikService;
 
     @GetMapping(path = "/get/tasks", produces = "application/json")
+    @PreAuthorize("hasAuthority('RECENZENTI_TASK')")
     public @ResponseBody ResponseEntity<List<TaskDTO>> get() {
 
         List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("admin").list();
@@ -57,8 +59,10 @@ public class AdminController {
     public @ResponseBody FormFieldsDTO getForm(@PathVariable String taskId, HttpServletRequest request) {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
-        String username = korisnikService.getUsernameFromRequest(request);
-        taskService.claim(taskId, username);
+        if(task.getAssignee() == null) {
+            String username = korisnikService.getUsernameFromRequest(request);
+            taskService.claim(taskId, username);
+        }
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
 

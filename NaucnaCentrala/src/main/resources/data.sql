@@ -20,8 +20,13 @@ insert into user (type, username, active, drzava, email, grad, ime, password, pr
 insert into user (type, username, active, drzava, email, grad, ime, password, prezime, titula) values
 ('User','vule', 1, 'Srbija', 'jovic.vukasin@gmail.com', 'Novi Sad', 'Vukasin', '$2a$10$SAQescpnqhTxAVN6i1h2ROsoNYrR8KnEbZtylPUSEfqOrL8c9KIxy', 'Jovic', '');
 insert into user (type, username, active, drzava, email, grad, ime, password, prezime, titula) values
-('Autor','djo', 1, 'Srbija', 'flylivedrive@gmail.com', 'Novi Sad', 'Nikola', '$2a$10$I4xaV2Eyy.k2NwRLMkBqBe2xbF1oTTtEpUZwMjOzZV3m6l47IaBjS', 'Djordjevic', '');
+('Urednik','djo', 1, 'Srbija', 'flylivedrive@gmail.com', 'Novi Sad', 'Nikola', '$2a$10$I4xaV2Eyy.k2NwRLMkBqBe2xbF1oTTtEpUZwMjOzZV3m6l47IaBjS', 'Djordjevic', '');
 
 insert into user_roles values ('vlada', 2);
 insert into user_roles values ('vule', 1);
 insert into user_roles values ('djo', 5);
+
+insert into privilege values (1, 'RECENZENTI_TASK');
+insert into roles_privileges values (2,1);
+
+insert into nacin_placanja values (1, 'kartica'), (2, 'paypal'), (3, 'bitcoin');

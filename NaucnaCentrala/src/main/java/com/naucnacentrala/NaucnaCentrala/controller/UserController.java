@@ -3,10 +3,7 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.UserInfoDTO;
-import com.naucnacentrala.NaucnaCentrala.model.Admin;
-import com.naucnacentrala.NaucnaCentrala.model.Autor;
-import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
-import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.model.*;
 import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import org.camunda.bpm.engine.*;
@@ -116,6 +113,8 @@ public class UserController {
                 ui.setRole("Autor");
             } else if (u instanceof Recenzent) {
                 ui.setRole("Recenzent");
+            } else if (u instanceof Urednik) {
+                ui.setRole("Urednik");
             }
             ui.setUsername(u.getUsername());
             return new ResponseEntity<UserInfoDTO>(ui, HttpStatus.OK);
