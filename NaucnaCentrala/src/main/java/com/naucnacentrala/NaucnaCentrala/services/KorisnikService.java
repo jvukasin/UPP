@@ -1,5 +1,7 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
+import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
+import com.naucnacentrala.NaucnaCentrala.model.Urednik;
 import com.naucnacentrala.NaucnaCentrala.model.User;
 import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
 import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
@@ -7,11 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.core.env.Environment;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
@@ -70,6 +73,28 @@ public class KorisnikService {
         }
         String username = tokenUtils.getUsernameFromToken(authToken);
         return username;
+    }
+
+    public ArrayList<User> findRecenzente() {
+        ArrayList<User> recenzenti = new ArrayList<>();
+        ArrayList<User> users = (ArrayList) korRepo.findAll();
+        for(User u : users) {
+            if(u instanceof Recenzent) {
+                recenzenti.add((Recenzent) u);
+            }
+        }
+        return recenzenti;
+    }
+
+    public ArrayList<User> findUrednike() {
+        ArrayList<User> urednici = new ArrayList<>();
+        ArrayList<User> users = (ArrayList) korRepo.findAll();
+        for(User u : users) {
+            if(u instanceof Urednik) {
+                urednici.add((Urednik) u);
+            }
+        }
+        return urednici;
     }
 
 }

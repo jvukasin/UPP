@@ -9,14 +9,13 @@ import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class SnimiCasopis  implements JavaDelegate {
-
-    @Autowired
-    IdentityService identityService;
 
     @Autowired
     CasopisService casopisService;
@@ -25,19 +24,16 @@ public class SnimiCasopis  implements JavaDelegate {
     NOService naucService;
 
     @Autowired
-    PlacanjaService placanjaService;
-
-    @Autowired
     KorisnikService korisnikService;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         List<FormSubmissionDTO> casopisi = (List<FormSubmissionDTO>)execution.getVariable("casopis");
         Casopis casopis = new Casopis();
-        ArrayList<NaucnaOblast> oblastiIzBaze = (ArrayList) naucService.findAll();
-        ArrayList<NacinPlacanja> placanjaIzBaze = (ArrayList) placanjaService.findAll();
+
+        List<NaucnaOblast> oblastiIzBaze = naucService.findAll();
+
         ArrayList<NaucnaOblast> no = new ArrayList<>();
-        ArrayList<NacinPlacanja> np = new ArrayList<>();
 
         for (FormSubmissionDTO formField : casopisi) {
             if(formField.getFieldId().equals("naziv")) {
@@ -57,14 +53,6 @@ public class SnimiCasopis  implements JavaDelegate {
                     }
                 }
             }
-            if (formField.getFieldId().equals("nacin_placanja")) {
-                for(NacinPlacanja n : placanjaIzBaze) {
-                    if(n.getNaziv().equalsIgnoreCase(formField.getFieldValue())) {
-                        np.add(n);
-                        break;
-                    }
-                }
-            }
         }
 
         String usrname = (String) execution.getVariable("glavniUrednik");
@@ -72,8 +60,8 @@ public class SnimiCasopis  implements JavaDelegate {
 
         casopis.setAktivan(false);
         casopis.setNaucneOblasti(no);
-        casopis.setNaciniPlacanja(np);
         casopis.setGlavniUrednik(u);
         casopis = casopisService.save(casopis);
+        execution.setVariable("casopisID", casopis.getId());
     }
 }

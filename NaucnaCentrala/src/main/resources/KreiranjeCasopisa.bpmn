@@ -19,7 +19,6 @@
           <camunda:formField id="nauc_oblasti" label="Naučne oblasti (min 1)" type="enum">
             <camunda:validation>
               <camunda:constraint name="required" />
-              <camunda:constraint name="min" config="1" />
             </camunda:validation>
             <camunda:value id="biologija" name="Biologija" />
             <camunda:value id="fizika" name="Fizika" />
@@ -30,14 +29,6 @@
             <camunda:value id="geodezija" name="Geodezija" />
             <camunda:value id="racunarstvo" name="Računarstvo" />
             <camunda:value id="medicina" name="Medicina" />
-          </camunda:formField>
-          <camunda:formField id="nacin_placanja" label="Način plaćanja *" type="enum">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-            <camunda:value id="kartica" name="Kartica" />
-            <camunda:value id="paypal" name="PayPal" />
-            <camunda:value id="bitcoin" name="Bitcoin" />
           </camunda:formField>
           <camunda:formField id="issn" label="ISSN broj *" type="string">
             <camunda:validation>
@@ -66,14 +57,8 @@
     <bpmn:userTask id="Task_1milmbu" name="Dodaj urednike i recenzente" camunda:assignee="${pokretac}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="urednik1" label="Urednik 1" type="string" />
-          <camunda:formField id="urednik2" label="Urednik 2" type="string" />
-          <camunda:formField id="recenzent1" label="Recenzent 1 *" type="string">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
-          </camunda:formField>
-          <camunda:formField id="recenzent2" label="Recenzent 2 *" type="string">
+          <camunda:formField id="urednici" label="Urednici" type="enum" />
+          <camunda:formField id="recenzenti" label="Recenzenti (min 2)" type="enum">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
@@ -101,7 +86,7 @@
       <bpmn:incoming>SequenceFlow_021lc0h</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0p7r3xg</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_09jpq5w" name="Snimi urednike i recenzente" camunda:expression="{true}">
+    <bpmn:serviceTask id="Task_09jpq5w" name="Snimi urednike i recenzente" camunda:class="com.naucnacentrala.NaucnaCentrala.services.DodajOdbor">
       <bpmn:incoming>SequenceFlow_1yn919r</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0go7i6k</bpmn:outgoing>
     </bpmn:serviceTask>

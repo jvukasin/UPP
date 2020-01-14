@@ -1,33 +1,39 @@
 import { Component, OnInit } from '@angular/core';
-import { CasopisService } from '../services/casopis.service';
+import { ActivatedRoute, Params } from '@angular/router';
+import { CasopisService } from 'src/app/services/casopis.service';
 
 @Component({
-  selector: 'app-casopis',
-  templateUrl: './casopis.component.html',
-  styleUrls: ['./casopis.component.css']
+  selector: 'app-dodaj-odbor',
+  templateUrl: './dodaj-odbor.component.html',
+  styleUrls: ['./dodaj-odbor.component.css']
 })
-export class CasopisComponent implements OnInit {
-
+export class DodajOdborComponent implements OnInit {
+  
+  pid: any;
   private formFieldsDto = null;
   private formFields = [];
-  private processInstance = "";
   private enumValues1 = [];
-  private enumValues = [];
+  private enumValues2 = [];
   private tasks = [];
 
-  constructor(private casopisService: CasopisService) {
-    casopisService.startCasopisProcess().subscribe(
+  constructor(private route: ActivatedRoute, private casopisService: CasopisService) {
+    this.route.params.subscribe(
+      (params: Params) => {
+        this.pid = params['id'];
+      }
+    );
+
+    casopisService.getOdborForma(this.pid).subscribe(
       res => {
         console.log(res);
         this.formFieldsDto = res;
         this.formFields = res.formFields;
-        this.processInstance = res.processInstanceId;
-        this.formFields.forEach( (field) => {
+        this.formFields.forEach( (field) =>{
           
-          if( field.type.name=='enum' && field.id=='nauc_oblasti'){
+          if( field.type.name=='enum' && field.id=='urednici'){
             this.enumValues1 = Object.keys(field.type.values);
-          } else if (field.type.name=='enum' && field.id=='naplata_clanarine') {
-            this.enumValues = Object.keys(field.type.values);
+          } else if (field.type.name=='enum' && field.id=='recenzenti') {
+            this.enumValues2 = Object.keys(field.type.values);
           }
         });
       },
@@ -46,7 +52,7 @@ export class CasopisComponent implements OnInit {
     for (var property in value) {
       console.log(property);
       console.log(value[property]);
-      if(property === "nauc_oblasti" || property === "nacin_placanja") {
+      if(property === "urednici" || property === "recenzenti") {
         var niz = value[property];
         for (let i=0; i<niz.length; i++) {
           o.push({fieldId : property, fieldValue : niz[i]});
@@ -61,11 +67,12 @@ export class CasopisComponent implements OnInit {
     x.subscribe(
       res => {
         console.log(res);
-        window.location.href="http://localhost:4200/casopis/" + this.processInstance;
+        window.location.href="http://localhost:4200/home";
       },
       err => {
           alert("Error occured");
       }
     );
   }
+
 }

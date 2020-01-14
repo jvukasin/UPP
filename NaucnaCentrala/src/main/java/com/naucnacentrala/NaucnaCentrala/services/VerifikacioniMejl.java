@@ -64,7 +64,6 @@ public class VerifikacioniMejl implements JavaDelegate {
                 }
             }
         }
-
             k.setAktivan(false);
             k.setNaucneOblasti(no);
             servis.save(k);

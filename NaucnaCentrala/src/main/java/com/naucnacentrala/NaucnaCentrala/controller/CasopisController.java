@@ -2,10 +2,16 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
+import com.naucnacentrala.NaucnaCentrala.model.Casopis;
+import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
+import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
+import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.services.CasopisService;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.impl.form.type.EnumFormType;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +43,9 @@ public class CasopisController {
 
     @Autowired
     KorisnikService korisnikService;
+
+    @Autowired
+    CasopisService casopisService;
 
     @GetMapping(path = "/get", produces = "application/json")
     public @ResponseBody
@@ -69,6 +79,60 @@ public class CasopisController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping(path = "/get/UredRec/{procesId}", produces = "application/json")
+    public @ResponseBody
+    FormFieldsDTO getUredRecForm(@PathVariable String procesId) {
+        Task task = taskService.createTaskQuery().processInstanceId(procesId).singleResult();
+
+        String pid = task.getProcessInstanceId();
+        TaskFormData tfd = formService.getTaskFormData(task.getId());
+        List<FormField> properties = tfd.getFormFields();
+
+        ArrayList<User> recenzentiBaza = korisnikService.findRecenzente();
+        ArrayList<User> uredniciBaza = korisnikService.findUrednike();
+
+        Long casopisID = (Long) runtimeService.getVariable(pid, "casopisID");
+        Casopis c = casopisService.findOneById(casopisID);
+
+        List<NaucnaOblast> nauc_obl = c.getNaucneOblasti();
+
+        ArrayList<User> recenzenti = pronadjiIh(recenzentiBaza, nauc_obl);
+        ArrayList<User> urednici = pronadjiIh(uredniciBaza, nauc_obl);
+
+        for(FormField field : properties) {
+            if(field.getId().equals("urednici")){
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(User urednik: urednici){
+                    String prikaz = urednik.getIme() + " " + urednik.getPrezime() + "(" + urednik.getUsername() + ")";
+                    enumType.getValues().put(urednik.getUsername(), prikaz);
+                }
+            }
+            if(field.getId().equals("recenzenti")){
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(User recenzent: recenzenti){
+                    String prikaz = recenzent.getIme() + " " + recenzent.getPrezime() + "(" + recenzent.getUsername() + ")";
+                    enumType.getValues().put(recenzent.getUsername(), prikaz);
+                }
+            }
+        }
+
+        return new FormFieldsDTO(task.getId(), pid, properties);
+    }
+
+    @PostMapping(path = "/post/UredRec/{taskId}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity postUredRec(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        runtimeService.setVariable(processInstanceId, "odbor", dto);
+
+        formService.submitTaskForm(taskId, map);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     private HashMap<String, Object> mapListToDto(List<FormSubmissionDTO> list)
     {
         HashMap<String, Object> map = new HashMap<String, Object>();
@@ -77,6 +141,25 @@ public class CasopisController {
         }
 
         return map;
+    }
+
+    private ArrayList<User> pronadjiIh(ArrayList<User> useri, List<NaucnaOblast> oblasti) {
+        ArrayList<User> ret = new ArrayList<>();
+
+        for(User rec : useri) {
+            for(NaucnaOblast nRec : rec.getNaucneOblasti()) {
+                for(NaucnaOblast n : oblasti) {
+                    if(nRec.getNaziv().equals(n.getNaziv())) {
+                        if(!ret.contains(rec)) {
+                            ret.add(rec);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return ret;
     }
 
 }

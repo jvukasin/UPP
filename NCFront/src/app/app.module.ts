@@ -15,6 +15,7 @@ import { AdminComponent } from './admin/admin.component';
 import { PotvrdiRecenzentaComponent } from './admin/potvrdi-recenzenta/potvrdi-recenzenta.component';
 import { LoginComponent } from './login/login.component';
 import { CasopisComponent } from './casopis/casopis.component';
+import { DodajOdborComponent } from './casopis/dodaj-odbor/dodaj-odbor.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { CasopisComponent } from './casopis/casopis.component';
     AdminComponent,
     PotvrdiRecenzentaComponent,
     LoginComponent,
-    CasopisComponent
+    CasopisComponent,
+    DodajOdborComponent
   ],
   imports: [
     BrowserModule,

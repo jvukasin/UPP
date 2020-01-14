@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/users")
@@ -143,7 +145,7 @@ public class UserController {
             } else if (f.getFieldId().equals("username")) {
                 if(!userOk(f.getFieldValue(), korisnici)) throw new Exception("Nevalidan username");
             } else if (f.getFieldId().equals("password")) {
-                if(!passOk(f.getFieldValue(), korisnici)) throw new Exception("Nevalidan password");
+                if(!passOk(f.getFieldValue())) throw new Exception("Nevalidan password");
             }
         }
     }
@@ -154,7 +156,14 @@ public class UserController {
                 return false;
             }
         }
-        return true;
+        if(mail.isEmpty()) {
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$");
+        Matcher matcher = pattern.matcher(mail);
+
+        return matcher.matches();
     }
 
     private boolean userOk(String username, ArrayList<User> korisnici) {
@@ -163,10 +172,27 @@ public class UserController {
                 return false;
             }
         }
+        if(username.isEmpty()) {
+            return false;
+        }
+        if(username.contains(";") || username.contains(">") || username.contains("<")) {
+            return false;
+        }
+        for(Character c : username.toCharArray()) {
+            if (Character.isWhitespace(c)) {
+                return false;
+            }
+        }
         return true;
     }
 
-    private boolean passOk(String pass, ArrayList<User> korisnici) {
-        return true;
+    private boolean passOk(String pass) {
+        if(pass.isEmpty()) {
+            return false;
+        }
+        Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
+        Matcher matcher = pattern.matcher(pass);
+
+        return matcher.matches();
     }
 }

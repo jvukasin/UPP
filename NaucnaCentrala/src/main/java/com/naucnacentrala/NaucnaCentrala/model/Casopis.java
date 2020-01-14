@@ -29,12 +29,6 @@ public class Casopis {
     private String clanarina;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "casopis_placanje",
-            joinColumns = @JoinColumn(name = "casopis_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "placanje_id", referencedColumnName = "id"))
-    private List<NacinPlacanja> naciniPlacanja;
-
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "casopis_recenzenti",
             joinColumns = @JoinColumn(name = "casopis_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "recenzent", referencedColumnName = "username"))
@@ -122,11 +116,4 @@ public class Casopis {
         this.aktivan = aktivan;
     }
 
-    public List<NacinPlacanja> getNaciniPlacanja() {
-        return naciniPlacanja;
-    }
-
-    public void setNaciniPlacanja(List<NacinPlacanja> naciniPlacanja) {
-        this.naciniPlacanja = naciniPlacanja;
-    }
 }
