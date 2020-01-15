@@ -24,11 +24,15 @@ export class RepositoryService {
     return this.http.get('/api/users/get/tasks/'.concat(processInstance)) as Observable<any>
   }
 
-  getAdminTasks(){
-    return this.http.get('/api/admin/get/tasks') as Observable<any>
+  getAdminRecTasks(){
+    return this.http.get('/api/admin/get/recTasks') as Observable<any>
   }
 
-  getAdminForm(taskId){
+  getAdminUrdTasks(){
+    return this.http.get('/api/admin/get/urdTasks') as Observable<any>
+  }
+
+  getAdminRecForm(taskId){
     return this.http.get('/api/admin/task/claim/'.concat(taskId)) as Observable<any>
   }
 

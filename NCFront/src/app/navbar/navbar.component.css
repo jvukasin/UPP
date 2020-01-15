@@ -1,0 +1,18 @@
+.navbar {
+    background-color: rgb(50,205,50);
+}
+
+.navbar-brand {
+    color: black;
+    margin-left: 5px;
+}
+
+.razmak {
+    margin-right: 50%;
+}
+
+.btn:hover {
+    border-bottom: 2px solid rgb(28, 119, 28);
+    transition: 0.3s;
+    transform: scale(1.12, 1.12);
+}

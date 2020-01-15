@@ -38,7 +38,7 @@ public class Casopis {
     @JoinColumn(name = "urednik_id", nullable = false)
     private Urednik glavniUrednik;
 
-    @OneToMany(mappedBy = "casopis", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "casopis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Urednik> uredniciNO;
 
     @Column(name = "aktivan")

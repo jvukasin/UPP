@@ -41,15 +41,31 @@ public class AdminController {
     @Autowired
     KorisnikService korisnikService;
 
-    @GetMapping(path = "/get/tasks", produces = "application/json")
+    @GetMapping(path = "/get/recTasks", produces = "application/json")
     @PreAuthorize("hasAuthority('RECENZENTI_TASK')")
-    public @ResponseBody ResponseEntity<List<TaskDTO>> get() {
-
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getRecTasks() {
         List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("admin").list();
         List<TaskDTO> dtos = new ArrayList<TaskDTO>();
         for (Task task : tasks) {
-            TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
-            dtos.add(t);
+            if(task.getName().equals("Potvrda recenzenta")) {
+                TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+                dtos.add(t);
+            }
+        }
+
+        return new ResponseEntity(dtos,  HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get/urdTasks", produces = "application/json")
+//    @PreAuthorize("hasAuthority('RECENZENTI_TASK')")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrTasks() {
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("admin").list();
+        List<TaskDTO> dtos = new ArrayList<TaskDTO>();
+        for (Task task : tasks) {
+            if(task.getName().equals("Admin provera")) {
+                TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+                dtos.add(t);
+            }
         }
 
         return new ResponseEntity(dtos,  HttpStatus.OK);

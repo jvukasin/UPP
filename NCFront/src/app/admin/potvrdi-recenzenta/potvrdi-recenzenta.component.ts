@@ -25,7 +25,7 @@ export class PotvrdiRecenzentaComponent implements OnInit {
         this.taskId = params['id'];
       }
     );
-    this.repositoryService.getAdminForm(this.taskId).subscribe(
+    this.repositoryService.getAdminRecForm(this.taskId).subscribe(
       res => {
         this.formFieldsDto = res;
         this.formFields = res.formFields;

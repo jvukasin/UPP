@@ -33,14 +33,16 @@ export class LoginComponent implements OnInit {
       alert("succes");
       this.userService.getUser().subscribe(
         (user: any) => {
-          if(user.role == "Admin"){
-            this.router.navigate(["/admin"]);
-          } else if (user.role == "Urednik") {
-            this.router.navigate(["/casopis"]);
-          }
-        }
+          // if(user.role == "Admin"){
+          //   this.router.navigate(["/admin"]);
+          // } else if (user.role == "Urednik") {
+          //   this.router.navigate(["/casopis"]);
+          // }
+          localStorage.setItem('rola', user.role);
+          this.router.navigate(["/home"]);
+        },
+        err => { alert("Error loging in"); }
       );
-      this.router.navigate(["/home"]);
     }, 
     (error) => {
       alert(error);

@@ -7,8 +7,12 @@ import { VerificationDoneComponent } from './verification-done/verification-done
 import { AdminComponent } from './admin/admin.component';
 import { PotvrdiRecenzentaComponent } from './admin/potvrdi-recenzenta/potvrdi-recenzenta.component';
 import { LoginComponent } from './login/login.component';
-import { CasopisComponent } from './casopis/casopis.component';
-import { DodajOdborComponent } from './casopis/dodaj-odbor/dodaj-odbor.component';
+import { CasopisComponent } from './casopis/urednik.component';
+import { DodajOdborComponent } from './casopis/dodaj-odbor-form/dodaj-odbor.component';
+import { DodajCasopisComponent } from './casopis/dodaj-casopis-form/dodaj-casopis.component';
+import { AdminRecenzentiComponent } from './admin/admin-recenzenti/admin-recenzenti.component';
+import { AdminUredniciComponent } from './admin/admin-urednici/admin-urednici.component';
+import { UrednikCasopisComponent } from './casopis/urednik-casopis/urednik-casopis.component';
 
 
 const appRoutes: Routes = [
@@ -18,9 +22,17 @@ const appRoutes: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'verify', component: VerifyEmailComponent },
 	{ path: 'verified/:pcs/:usr', component: VerificationDoneComponent },
-	{ path: 'admin', component: AdminComponent },
+	{ path: 'admin', component: AdminComponent, children: [
+		{ path: '', redirectTo: 'recenzenti', pathMatch: 'full'},
+		{ path: 'recenzenti', component: AdminRecenzentiComponent},
+		{ path: 'urednici', component: AdminUredniciComponent},
+	]},
 	{ path: 'admin/:id', component: PotvrdiRecenzentaComponent },
-	{ path: 'casopis', component: CasopisComponent},
+	{ path: 'urednik', component: CasopisComponent, children: [
+		{ path: '', redirectTo: 'casopisi', pathMatch: 'full'},
+		{ path: 'casopisi', component: UrednikCasopisComponent},
+	]},
+	{ path: 'casopis/dodaj', component: DodajCasopisComponent},
 	{ path: 'casopis/:id', component: DodajOdborComponent},
 
 ]

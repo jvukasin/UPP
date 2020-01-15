@@ -12,7 +12,7 @@ export class CasopisService {
   constructor(private http: HttpClient) { }
 
   startCasopisProcess() {
-    return this.http.get("/api/casopis/get") as Observable<any>
+    return this.http.get("/api/casopis/get") as Observable<any>;
   }
 
   postCasopis(casopis, taskId) {
@@ -20,11 +20,15 @@ export class CasopisService {
   }
 
   getOdborForma(id) {
-    return this.http.get("/api/casopis/get/UredRec/".concat(id)) as Observable<any>
+    return this.http.get("/api/casopis/get/UredRec/".concat(id)) as Observable<any>;
   }
 
   postOdbor(odbor, taskId) {
     return this.http.post("/api/casopis/post/UredRec".concat(taskId), odbor) as Observable<any>;
+  }
+
+  getUrednikTasks(){
+    return this.http.get('/api/casopis/get/tasks') as Observable<any>;
   }
 
 }

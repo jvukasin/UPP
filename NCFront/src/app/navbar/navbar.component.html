@@ -1,0 +1,14 @@
+<nav class="navbar navbar-expand">
+    <div class="container">
+        <a class="navbar-brand" [routerLink]="['/home']">Naucna centrala</a>
+        <ul class="navbar-nav mr-auto">
+        </ul>
+      <div class="d-flex flex-row-reverse">
+        <button class="btn" [routerLink]="['/registration']" *ngIf="!isLoggedIn">Register</button>
+        <button class="btn" [routerLink]="['/login']" *ngIf="!isLoggedIn">Login</button>
+        <button class="btn" (click)="logOut()" *ngIf="isLoggedIn">Logout</button>
+        <button class="btn razmak" [routerLink]="['/admin']" *ngIf="isAdmin">Admin</button>
+        <button class="btn razmak" [routerLink]="['/urednik']" *ngIf="isUrednik">Urednik</button>
+      </div>
+    </div>
+  </nav>

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { CasopisService } from '../services/casopis.service';
+import { CasopisService } from 'src/app/services/casopis.service';
 
 @Component({
-  selector: 'app-casopis',
-  templateUrl: './casopis.component.html',
-  styleUrls: ['./casopis.component.css']
+  selector: 'app-dodaj-casopis',
+  templateUrl: './dodaj-casopis.component.html',
+  styleUrls: ['./dodaj-casopis.component.css']
 })
-export class CasopisComponent implements OnInit {
-
+export class DodajCasopisComponent implements OnInit {
+  
   private formFieldsDto = null;
   private formFields = [];
   private processInstance = "";
