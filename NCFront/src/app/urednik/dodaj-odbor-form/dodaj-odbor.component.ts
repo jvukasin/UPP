@@ -63,11 +63,11 @@ export class DodajOdborComponent implements OnInit {
     }
 
     console.log(o);
-    let x = this.casopisService.postCasopis(o, this.formFieldsDto.taskId);
+    let x = this.casopisService.postOdbor(o, this.formFieldsDto.taskId);
     x.subscribe(
       res => {
         console.log(res);
-        window.location.href="http://localhost:4200/home";
+        window.location.href="http://localhost:4200/urednik";
       },
       err => {
           alert("Error occured");

@@ -2,6 +2,7 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
+import com.naucnacentrala.NaucnaCentrala.dto.TaskDTO;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
 import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
 import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
@@ -60,6 +61,21 @@ public class CasopisController {
         List<FormField> properties = tfd.getFormFields();
 
         return new FormFieldsDTO(task.getId(), pi.getId(), properties);
+    }
+
+    @GetMapping(path = "/get/casopisTasks", produces = "application/json")
+//    @PreAuthorize("hasAuthority('RECENZENTI_TASK')")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrTasks() {
+//        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("admin").list();
+        List<TaskDTO> dtos = new ArrayList<TaskDTO>();
+//        for (Task task : tasks) {
+//            if(task.getName().equals("Ispravka podnetog casopis")) {
+//                TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+//                dtos.add(t);
+//            }
+//        }
+
+        return new ResponseEntity(dtos,  HttpStatus.OK);
     }
 
     @PostMapping(path = "/post/{taskId}", produces = "application/json")

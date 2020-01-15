@@ -21,8 +21,8 @@ public class Casopis {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "casopis_nobl",
-            joinColumns = @JoinColumn(name = "casopis_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "nau_obl_id", referencedColumnName = "sifra"))
+            joinColumns = @JoinColumn(name = "casopisi_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "naucna_oblast_sifra", referencedColumnName = "sifra"))
     private List<NaucnaOblast> naucneOblasti;
 
     @Column(name = "clanarina", nullable = false)
@@ -30,8 +30,8 @@ public class Casopis {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "casopis_recenzenti",
-            joinColumns = @JoinColumn(name = "casopis_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "recenzent", referencedColumnName = "username"))
+            joinColumns = @JoinColumn(name = "casopisi_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "recenzent_username", referencedColumnName = "username"))
     private List<Recenzent> recenzenti;
 
     @OneToOne(fetch = FetchType.LAZY)

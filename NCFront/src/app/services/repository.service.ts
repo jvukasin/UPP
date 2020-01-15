@@ -31,13 +31,17 @@ export class RepositoryService {
   getAdminUrdTasks(){
     return this.http.get('/api/admin/get/urdTasks') as Observable<any>
   }
-
-  getAdminRecForm(taskId){
+  
+  getAdminForm(taskId){
     return this.http.get('/api/admin/task/claim/'.concat(taskId)) as Observable<any>
   }
 
   potvrdaRecenzenta(taskId, obj) {
     return this.http.post("/api/admin/potvrdaRecenzenta/".concat(taskId), obj) as Observable<any>;
+  }
+
+  potvrdaCasopisa(taskId, obj) {
+    return this.http.post("/api/admin/potvrdaCasopisa/".concat(taskId), obj) as Observable<any>;
   }
 
   claimTask(taskId){

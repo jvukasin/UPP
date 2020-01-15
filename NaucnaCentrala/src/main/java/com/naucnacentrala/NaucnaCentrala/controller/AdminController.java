@@ -58,11 +58,11 @@ public class AdminController {
 
     @GetMapping(path = "/get/urdTasks", produces = "application/json")
 //    @PreAuthorize("hasAuthority('RECENZENTI_TASK')")
-    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrTasks() {
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrdTasks() {
         List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("admin").list();
         List<TaskDTO> dtos = new ArrayList<TaskDTO>();
         for (Task task : tasks) {
-            if(task.getName().equals("Admin provera")) {
+            if(task.getName().equals("Admin provera") && task.getAssignee() == null) {
                 TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
                 dtos.add(t);
             }
@@ -72,7 +72,7 @@ public class AdminController {
     }
 
     @GetMapping(path = "/task/claim/{taskId}", produces = "application/json")
-    public @ResponseBody FormFieldsDTO getForm(@PathVariable String taskId, HttpServletRequest request) {
+    public @ResponseBody FormFieldsDTO getRecForm(@PathVariable String taskId, HttpServletRequest request) {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
         if(task.getAssignee() == null) {
@@ -99,6 +99,28 @@ public class AdminController {
                     runtimeService.setVariable(processInstanceId, "prihvatiRec", true);
                 } else {
                     runtimeService.setVariable(processInstanceId, "prihvatiRec", false);
+                }
+                break;
+            }
+        }
+        formService.submitTaskForm(taskId, map);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/potvrdaCasopisa/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity postCasopis(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        String potvrdio;
+        for (FormSubmissionDTO formField : dto) {
+            if(formField.getFieldId().equals("aktiviraj_casopis")) {
+                potvrdio = formField.getFieldValue();
+                if(potvrdio == "true") {
+                    runtimeService.setVariable(processInstanceId, "aktiviraj_casopis", true);
+                } else {
+                    runtimeService.setVariable(processInstanceId, "aktiviraj_casopis", false);
                 }
                 break;
             }

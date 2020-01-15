@@ -1,6 +1,7 @@
 package com.naucnacentrala.NaucnaCentrala.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class NaucnaOblast {
@@ -10,6 +11,10 @@ public class NaucnaOblast {
 
     @Column(name = "naziv", nullable = false)
     private String naziv;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "casopis_nobl")
+    private List<Casopis> casopisi;
 
     public Long getSifra() {
         return sifra;
@@ -25,5 +30,13 @@ public class NaucnaOblast {
 
     public void setNaziv(String naziv) {
         this.naziv = naziv;
+    }
+
+    public List<Casopis> getCasopisi() {
+        return casopisi;
+    }
+
+    public void setCasopisi(List<Casopis> casopisi) {
+        this.casopisi = casopisi;
     }
 }

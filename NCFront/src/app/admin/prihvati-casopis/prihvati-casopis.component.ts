@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { RepositoryService } from 'src/app/services/repository.service';
-import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-potvrdi-recenzenta',
-  templateUrl: './potvrdi-recenzenta.component.html',
-  styleUrls: ['./potvrdi-recenzenta.component.css']
+  selector: 'app-prihvati-casopis',
+  templateUrl: './prihvati-casopis.component.html',
+  styleUrls: ['./prihvati-casopis.component.css']
 })
-export class PotvrdiRecenzentaComponent implements OnInit {
+export class PrihvatiCasopisComponent implements OnInit {
 
   private formFieldsDto = null;
   private formFields = [];
@@ -17,13 +17,14 @@ export class PotvrdiRecenzentaComponent implements OnInit {
   private taskId;
   controls: any = [];
 
-  constructor(private repositoryService : RepositoryService, private route: ActivatedRoute, private router: Router) {
+  constructor(private repositoryService : RepositoryService, private router: Router, private route: ActivatedRoute) {
     // getting route params, params is observable that unsubscribes automatically
     this.route.params.subscribe(
       (params: Params) => {
         this.taskId = params['id'];
       }
     );
+
     this.repositoryService.getAdminForm(this.taskId).subscribe(
       res => {
         this.formFieldsDto = res;
@@ -54,7 +55,7 @@ export class PotvrdiRecenzentaComponent implements OnInit {
     }
 
     console.log(o);
-    let x = this.repositoryService.potvrdaRecenzenta(this.formFieldsDto.taskId, o);
+    let x = this.repositoryService.potvrdaCasopisa(this.formFieldsDto.taskId, o);
     x.subscribe(
       res => {
         console.log(res);
@@ -65,5 +66,4 @@ export class PotvrdiRecenzentaComponent implements OnInit {
       }
     );
   }
-
 }

@@ -24,11 +24,11 @@ export class CasopisService {
   }
 
   postOdbor(odbor, taskId) {
-    return this.http.post("/api/casopis/post/UredRec".concat(taskId), odbor) as Observable<any>;
+    return this.http.post("/api/casopis/post/UredRec/".concat(taskId), odbor) as Observable<any>;
   }
 
-  getUrednikTasks(){
-    return this.http.get('/api/casopis/get/tasks') as Observable<any>;
+  getUrednikCasopisTasks(){
+    return this.http.get('/api/casopis/get/casopisTasks') as Observable<any>;
   }
 
 }

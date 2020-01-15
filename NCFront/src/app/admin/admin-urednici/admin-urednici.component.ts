@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RepositoryService } from 'src/app/services/repository.service';
 
 @Component({
   selector: 'app-admin-urednici',
@@ -7,9 +8,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminUredniciComponent implements OnInit {
 
-  constructor() { }
+  private tasks = [];
+
+  constructor(private repositoryService: RepositoryService) { }
 
   ngOnInit() {
+    let x = this.repositoryService.getAdminUrdTasks();
+  
+    x.subscribe(
+      res => {
+        console.log(res);
+        this.tasks = res;
+      },
+      err => {
+        console.log("Error occured");
+      }
+    );
+  }
+
+  onClick(id) {
+    window.location.href = "http://localhost:4200/admin/casopis/" + id;
   }
 
 }

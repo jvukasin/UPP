@@ -1,5 +1,6 @@
 <div class="container">
-    <h3>urednike:</h3>
+    <h3>Zadaci:</h3>
+    <button class="btn btn-primary dodaj" routerLink="/casopis/dodaj">Dodaj casopis</button>
     <table>
         <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td>{{task.assignee}}</td><td><button class="btn btn-primary" (click)="onClick(task.taskId)">Go to task</button></td></tr>
     </table>

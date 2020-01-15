@@ -16,7 +16,14 @@ public class Recenzent extends User {
     }
 
     public Recenzent() {
-
+        super();
     }
 
+    public List<Casopis> getCasopisi() {
+        return casopisi;
+    }
+
+    public void setCasopisi(List<Casopis> casopisi) {
+        this.casopisi = casopisi;
+    }
 }

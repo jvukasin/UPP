@@ -42,5 +42,3 @@ insert into user_nobl values ('mace', 1), ('mace', 2), ('mace', 3), ('mace', 4),
 
 insert into privilege values (1, 'RECENZENTI_TASK');
 insert into roles_privileges values (2,1);
-
-insert into nacin_placanja values (1, 'kartica'), (2, 'paypal'), (3, 'bitcoin');
