@@ -22,6 +22,7 @@ import { AdminRecenzentiComponent } from './admin/admin-recenzenti/admin-recenze
 import { AdminUredniciComponent } from './admin/admin-urednici/admin-urednici.component';
 import { UrednikCasopisComponent } from './urednik/urednik-casopis/urednik-casopis.component';
 import { PrihvatiCasopisComponent } from './admin/prihvati-casopis/prihvati-casopis.component';
+import { IspraviCasopisComponent } from './urednik/ispravi-casopis-form/ispravi-casopis.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { PrihvatiCasopisComponent } from './admin/prihvati-casopis/prihvati-caso
     AdminRecenzentiComponent,
     AdminUredniciComponent,
     UrednikCasopisComponent,
-    PrihvatiCasopisComponent
+    PrihvatiCasopisComponent,
+    IspraviCasopisComponent
   ],
   imports: [
     BrowserModule,

@@ -31,4 +31,12 @@ export class CasopisService {
     return this.http.get('/api/casopis/get/casopisTasks') as Observable<any>;
   }
 
+  getIspravkaForm(taskId){
+    return this.http.get('/api/casopis/get/ispravkaForm/'.concat(taskId)) as Observable<any>
+  }
+
+  posaljiIspravljeniCasopis(taskId, obj) {
+    return this.http.post("/api/casopis/posaljiIspravljeniCasopis/".concat(taskId), obj) as Observable<any>;
+  }
+
 }

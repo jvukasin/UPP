@@ -26,4 +26,8 @@ export class UrednikCasopisComponent implements OnInit {
     );
   }
 
+  onClick(id) {
+    window.location.href = "http://localhost:4200/casopis/promeni/" + id;
+  }
+
 }

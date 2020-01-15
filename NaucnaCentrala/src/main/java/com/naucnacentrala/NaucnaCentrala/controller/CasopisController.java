@@ -65,17 +65,41 @@ public class CasopisController {
 
     @GetMapping(path = "/get/casopisTasks", produces = "application/json")
 //    @PreAuthorize("hasAuthority('RECENZENTI_TASK')")
-    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrTasks() {
-//        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("admin").list();
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrTasks(HttpServletRequest request) {
+
+        String username = korisnikService.getUsernameFromRequest(request);
+        List<Task> tasks = taskService.createTaskQuery().taskName("Ispravka podnetog casopis").taskAssignee(username).list();
         List<TaskDTO> dtos = new ArrayList<TaskDTO>();
-//        for (Task task : tasks) {
-//            if(task.getName().equals("Ispravka podnetog casopis")) {
-//                TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
-//                dtos.add(t);
-//            }
-//        }
+        for (Task task : tasks) {
+            TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+            dtos.add(t);
+        }
 
         return new ResponseEntity(dtos,  HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/get/ispravkaForm/{taskId}", produces = "application/json")
+    public @ResponseBody FormFieldsDTO getIspravkaForm(@PathVariable String taskId) {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        TaskFormData tfd = formService.getTaskFormData(task.getId());
+        List<FormField> properties = tfd.getFormFields();
+
+        return new FormFieldsDTO(task.getId(), processInstanceId, properties);
+    }
+
+    @PostMapping(path = "/posaljiIspravljeniCasopis/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity postEditCasopis(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        runtimeService.setVariable(processInstanceId, "ispravka", dto);
+
+        formService.submitTaskForm(taskId, map);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(path = "/post/{taskId}", produces = "application/json")

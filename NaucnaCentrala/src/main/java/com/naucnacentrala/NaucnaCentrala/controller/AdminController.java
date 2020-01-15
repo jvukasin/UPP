@@ -113,7 +113,7 @@ public class AdminController {
 
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
-        String potvrdio;
+        String potvrdio = "";
         for (FormSubmissionDTO formField : dto) {
             if(formField.getFieldId().equals("aktiviraj_casopis")) {
                 potvrdio = formField.getFieldValue();
@@ -126,6 +126,14 @@ public class AdminController {
             }
         }
         formService.submitTaskForm(taskId, map);
+
+        if(potvrdio != "true") {
+            Task ispravkaTask = taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+            String glUrednik = (String) runtimeService.getVariable(processInstanceId, "glavniUrednik");
+            ispravkaTask.setAssignee(glUrednik);
+            taskService.saveTask(ispravkaTask);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

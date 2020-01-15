@@ -44,12 +44,4 @@ export class RepositoryService {
     return this.http.post("/api/admin/potvrdaCasopisa/".concat(taskId), obj) as Observable<any>;
   }
 
-  claimTask(taskId){
-    return this.http.post('/api/registration/tasks/claim/'.concat(taskId), null) as Observable<any>
-  }
-
-  completeTask(taskId){
-    return this.http.post('/api/users/tasks/complete/'.concat(taskId), null) as Observable<any>
-  }
-
 }
