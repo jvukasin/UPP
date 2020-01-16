@@ -1,5 +1,12 @@
 <div class="container">
     <h4 class="mt-4">Registracija</h4>
+    <span class="error" *ngIf="errFirst">Ime može sadržati samo slova bez razmaka.</span>
+    <span class="error" *ngIf="errLast">Prezime može sadržati samo slova bez razmaka.</span>
+    <span class="error" *ngIf="errUsr">Username ne može sadržati karaktere > < ; kao ni razmak.</span>
+    <span class="error" *ngIf="errMail">Nevalidan format email-a.</span>
+    <span class="error" *ngIf="errPass">Password mora biti dugačak bar 8 karaktera i mora sadržati bar jedan broj, jedno malo i jedno veliko slovo i jedan specijalan karakter(#?!@$%^&*-).</span>
+    <span class="error" *ngIf="errNaucne">Izbor minimum jedne naučne oblasti je obavezan.</span>
+    <ngx-spinner></ngx-spinner>
     <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
         <div *ngFor="let field of formFields">
             <label for={{field.id}}>{{field.label}}</label>

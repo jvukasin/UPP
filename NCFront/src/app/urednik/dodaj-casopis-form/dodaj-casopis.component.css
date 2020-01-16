@@ -11,3 +11,7 @@ h4 {
     margin-left: 35%;
     width: 30%;
 }
+
+.error {
+    color: red;
+}

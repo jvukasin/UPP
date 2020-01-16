@@ -62,6 +62,8 @@ public class SnimiCasopis  implements JavaDelegate {
         casopis.setNaucneOblasti(no);
         casopis.setGlavniUrednik(u);
         casopis = casopisService.save(casopis);
+        u.setCasopis(casopis);
+        korisnikService.save(u);
         execution.setVariable("casopisID", casopis.getId());
     }
 }

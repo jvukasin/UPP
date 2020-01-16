@@ -69,14 +69,6 @@ public class UserController {
     public @ResponseBody
     ResponseEntity post(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
         HashMap<String, Object> map = this.mapListToDto(dto);
-        // list all running/unsuspended instances of the process
-//		    ProcessInstance processInstance =
-//		        runtimeService.createProcessInstanceQuery()
-//		            .processDefinitionKey("registracija")
-//		            .active() // we only want the unsuspended process instances
-//		            .list().get(0);
-
-//			Task task = taskService.createTaskQuery().processInstanceId(processInstance.getId()).list().get(0);
 
         try {
             validateData(dto);
@@ -190,7 +182,7 @@ public class UserController {
         if(pass.isEmpty()) {
             return false;
         }
-        Pattern pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
+        Pattern pattern = Pattern.compile("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
         Matcher matcher = pattern.matcher(pass);
 
         return matcher.matches();

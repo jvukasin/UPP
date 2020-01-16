@@ -1,5 +1,6 @@
 <div class="container">
     <h4 class="mt-4">Kreiranje časopisa</h4>
+    <span class="error" *ngIf="errRec">Izbor minimum 2 recenzenta je obavezan.</span>
     <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
         <div *ngFor="let field of formFields">
             <label for={{field.id}}>{{field.label}}</label>

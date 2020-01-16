@@ -16,6 +16,8 @@ export class DodajOdborComponent implements OnInit {
   private enumValues2 = [];
   private tasks = [];
 
+  errRec: boolean = false;
+
   constructor(private route: ActivatedRoute, private casopisService: CasopisService) {
     this.route.params.subscribe(
       (params: Params) => {
@@ -63,16 +65,33 @@ export class DodajOdborComponent implements OnInit {
     }
 
     console.log(o);
-    let x = this.casopisService.postOdbor(o, this.formFieldsDto.taskId);
-    x.subscribe(
-      res => {
-        console.log(res);
-        window.location.href="http://localhost:4200/urednik";
-      },
-      err => {
-          alert("Error occured");
+    var countR = 0;
+    for (let i=0; i<o.length; i++) {
+      if(o[i].fieldId === "recenzenti") {
+        countR = countR + 1;
       }
-    );
+    }
+    if(this.checkRec(countR)) {
+      let x = this.casopisService.postOdbor(o, this.formFieldsDto.taskId);
+      x.subscribe(
+        res => {
+          console.log(res);
+          window.location.href="http://localhost:4200/urednik";
+        },
+        err => {
+            alert("Error occured");
+        }
+      );
+    }
+  }
+
+  checkRec(count) {
+    if(count < 2) {
+      this.errRec = true;
+      return false;
+    }
+    this.errRec = false;
+    return true;
   }
 
 }

@@ -23,6 +23,8 @@ import { AdminUredniciComponent } from './admin/admin-urednici/admin-urednici.co
 import { UrednikCasopisComponent } from './urednik/urednik-casopis/urednik-casopis.component';
 import { PrihvatiCasopisComponent } from './admin/prihvati-casopis/prihvati-casopis.component';
 import { IspraviCasopisComponent } from './urednik/ispravi-casopis-form/ispravi-casopis.component';
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { IspraviCasopisComponent } from './urednik/ispravi-casopis-form/ispravi-
     AngularFontAwesomeModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule
   ],
   providers: [ { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }, ],
   bootstrap: [AppComponent]

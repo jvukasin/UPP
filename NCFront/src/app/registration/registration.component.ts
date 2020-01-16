@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RepositoryService } from '../services/repository.service';
 import { UserService } from '../services/user.service';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-registration',
@@ -18,7 +19,14 @@ export class RegistrationComponent implements OnInit {
   private enumValues = [];
   private tasks = [];
 
-  constructor(private userService : UserService, private repositoryService : RepositoryService) {
+  errFirst: boolean = false;
+  errLast: boolean = false;
+  errUsr: boolean = false;
+  errMail: boolean = false;
+  errPass: boolean = false;
+  errNaucne: boolean = false;
+
+  constructor(private userService : UserService, private repositoryService : RepositoryService, private spinner: NgxSpinnerService) {
 
     repositoryService.startProcess().subscribe(
       res => {
@@ -43,7 +51,7 @@ export class RegistrationComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(value, form){
+  onSubmit(value, form) {
     
     let o = new Array();
     for (var property in value) {
@@ -60,16 +68,94 @@ export class RegistrationComponent implements OnInit {
     }
 
     console.log(o);
-    let x = this.userService.registerUser(o, this.formFieldsDto.taskId);
-    x.subscribe(
-      res => {
-        console.log(res);
-        window.location.href="http://localhost:4200/verify";
-      },
-      err => {
-          alert("Error occured");
+    var ime = "";
+    var prezime = "";
+    var email = "";
+    var username = "";
+    var password = "";
+    var countNO = 0;
+    for (let i=0; i<o.length; i++) {
+      if(o[i].fieldId === "ime") {
+        ime = o[i].fieldValue;
+      } else if (o[i].fieldId === "prezime") {
+        prezime = o[i].fieldValue;
+      } else if (o[i].fieldId === "email") {
+        email = o[i].fieldValue;
+      } else if (o[i].fieldId === "username") {
+        username = o[i].fieldValue;
+      } else if (o[i].fieldId === "password") {
+        password = o[i].fieldValue;
+      } else if (o[i].fieldId === "nauc_oblasti") {
+        countNO = countNO + 1;
       }
-    );
+    }
+    if(this.checkNames(ime, prezime) && this.checkUsername(username) && this.checkMail(email) && this.checkPass(password) && this.checkNaucne(countNO)) {
+      let x = this.userService.registerUser(o, this.formFieldsDto.taskId);
+      this.spinner.show();
+      x.subscribe(
+        res => {
+          console.log(res);
+          window.location.href="http://localhost:4200/verify";
+        },
+        err => {
+          alert(err.message);
+        }
+      );
+    }
   }
 
+  /* VALIDATORS */
+
+  checkNames(first, last) : boolean {
+    const patt = /^[a-zA-Z]+$/;
+    if(!patt.test(first)) {
+      this.errFirst = true;
+      return false;
+    }
+    this.errFirst = false;
+    if(!patt.test(last)) {
+      this.errLast = true;
+      return false;
+    }
+    this.errLast = false;
+    return true;
+  }
+
+  checkNaucne(count) {
+    if(count < 1) {
+      this.errNaucne = true;
+      return false;
+    }
+    this.errNaucne = false;
+    return true;
+  }
+
+  checkUsername(text) : boolean {
+    if(text.includes('<') || text.includes(' ') || text.includes('>') || text.includes(';')) {
+      this.errUsr = true;
+      return false;
+    }
+    this.errUsr = false;
+    return true;
+  }
+
+  checkPass(text) : boolean {
+    const mailPatter = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+    if(!mailPatter.test(text)) {
+      this.errPass = true;
+      return false;
+    }
+    this.errPass = false;
+    return true;
+  }
+
+  checkMail(text) : boolean {
+    const mailPatter = /^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$/;
+    if(!mailPatter.test(text)) {
+      this.errMail = true;
+      return false;
+    }
+    this.errMail = false;
+    return true;
+  }
 }

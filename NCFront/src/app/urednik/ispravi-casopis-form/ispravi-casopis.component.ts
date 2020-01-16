@@ -17,6 +17,10 @@ export class IspraviCasopisComponent implements OnInit {
   private taskId;
   controls: any = [];
 
+  errNaziv: boolean = false;
+  errIssn: boolean = false;
+  errNaplata: boolean = false;
+
   constructor(private router: Router, private casopisService: CasopisService, private route: ActivatedRoute) {
     // getting route params, params is observable that unsubscribes automatically
     this.route.params.subscribe(
@@ -55,16 +59,48 @@ export class IspraviCasopisComponent implements OnInit {
     }
 
     console.log(o);
-    let x = this.casopisService.posaljiIspravljeniCasopis(this.formFieldsDto.taskId, o);
-    x.subscribe(
-      res => {
-        console.log(res);
-        this.router.navigate(["/urednik"]);
-      },
-      err => {
-        alert("Error occured");
+    var naziv = "";
+    var issn = "";
+    var naplata = "";
+    for (let i=0; i<o.length; i++) {
+      if(o[i].fieldId === "nazivIzmena") {
+        naziv = o[i].fieldValue;
+      } else if (o[i].fieldId === "issnIzmena") {
+        issn = o[i].fieldValue;
+      } else if (o[i].fieldId === "naplata_clanarineIzmena") {
+        naplata = o[i].fieldValue;
       }
-    );
+    }
+    if(this.checkEmpty(naziv, issn, naplata)) {
+      let x = this.casopisService.posaljiIspravljeniCasopis(this.formFieldsDto.taskId, o);
+      x.subscribe(
+        res => {
+          console.log(res);
+          this.router.navigate(["/urednik"]);
+        },
+        err => {
+          alert("Error occured");
+        }
+      );
+    }
   }
 
+  checkEmpty(naziv, issn, naplata) : boolean {
+    if(naziv === "") {
+      this.errNaziv = true;
+      return false;
+    }
+    this.errNaziv = false;
+    if(issn === "") {
+      this.errIssn = true;
+      return false;
+    }
+    this.errIssn = false;
+    if(naplata === "") {
+      this.errNaplata = true;
+      return false;
+    }
+    this.errNaplata = false;
+    return true;
+  }
 }

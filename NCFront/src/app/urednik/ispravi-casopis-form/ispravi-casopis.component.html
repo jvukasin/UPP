@@ -1,5 +1,8 @@
 <div class="container">
     <h4 class="mt-4">Izmena casopisa</h4>
+    <span class="error" *ngIf="errNaziv">Naziv časopisa je obavezan.</span>
+    <span class="error" *ngIf="errIssn">ISSN broj je obavezan.</span>
+    <span class="error" *ngIf="errNaplata">Izbor naplate članarine je obavezan.</span>
     <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
         <div *ngFor="let field of formFields">
             <label for={{field.id}}>{{field.label}}</label>
