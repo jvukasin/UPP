@@ -25,6 +25,7 @@ import { PrihvatiCasopisComponent } from './admin/prihvati-casopis/prihvati-caso
 import { IspraviCasopisComponent } from './urednik/ispravi-casopis-form/ispravi-casopis.component';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { IspraviOdborComponent } from './urednik/ispravi-odbor-form/ispravi-odbor.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AdminUredniciComponent,
     UrednikCasopisComponent,
     PrihvatiCasopisComponent,
-    IspraviCasopisComponent
+    IspraviCasopisComponent,
+    IspraviOdborComponent
   ],
   imports: [
     BrowserModule,

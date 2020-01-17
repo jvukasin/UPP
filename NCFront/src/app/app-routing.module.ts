@@ -15,6 +15,7 @@ import { AdminUredniciComponent } from './admin/admin-urednici/admin-urednici.co
 import { UrednikCasopisComponent } from './urednik/urednik-casopis/urednik-casopis.component';
 import { PrihvatiCasopisComponent } from './admin/prihvati-casopis/prihvati-casopis.component';
 import { IspraviCasopisComponent } from './urednik/ispravi-casopis-form/ispravi-casopis.component';
+import { IspraviOdborComponent } from './urednik/ispravi-odbor-form/ispravi-odbor.component';
 
 
 const appRoutes: Routes = [
@@ -23,7 +24,7 @@ const appRoutes: Routes = [
 	{ path: 'registration', component: RegistrationComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'verify', component: VerifyEmailComponent },
-	{ path: 'verified/:pcs/:usr', component: VerificationDoneComponent },
+	{ path: 'verified', component: VerificationDoneComponent },
 	{ path: 'admin', component: AdminComponent, children: [
 		{ path: '', redirectTo: 'recenzenti', pathMatch: 'full'},
 		{ path: 'recenzenti', component: AdminRecenzentiComponent},
@@ -38,6 +39,8 @@ const appRoutes: Routes = [
 	{ path: 'casopis/dodaj', component: DodajCasopisComponent },
 	{ path: 'casopis/:id', component: DodajOdborComponent },
 	{ path: 'casopis/promeni/:id', component: IspraviCasopisComponent },
+	{ path: 'casopis/promeniOdbor/:id', component: IspraviOdborComponent }
+	
 
 ]
 

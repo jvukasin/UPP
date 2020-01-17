@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/verify/{processId}/{username}", method = RequestMethod.GET)
-    public void verifyMail(@PathVariable String processId, @PathVariable String username) {
+    public RedirectView  verifyMail(@PathVariable String processId, @PathVariable String username) {
         byte[] actualByte1 = Base64.getDecoder().decode(username);
         byte[] actualByte2 = Base64.getDecoder().decode(processId);
         String praviUsername = new String(actualByte1);
@@ -92,6 +93,10 @@ public class UserController {
 
         runtimeService.setVariable(praviProces, "potvrdio", true);
         runtimeService.setVariable(praviProces, "korisnik", praviUsername);
+
+        RedirectView rv = new RedirectView();
+        rv.setUrl("http://localhost:4200/verified");
+        return rv;
     }
 
     @RequestMapping(value = "/getUser", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

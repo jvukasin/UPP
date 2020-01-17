@@ -13,6 +13,8 @@ export class IspraviCasopisComponent implements OnInit {
   private formFields = [];
   private processInstance = "";
   private enumValues = [];
+  private enumValues1 = [];
+  private enumValues2 = [];
   private tasks = [];
   private taskId;
   controls: any = [];
@@ -37,7 +39,14 @@ export class IspraviCasopisComponent implements OnInit {
         this.formFields.forEach( (field) =>{
           
           if( field.type.name=='enum'){
-            this.enumValues = Object.keys(field.type.values);
+            if(field.id == 'naplata_clanarineIzmena') {
+              this.enumValues = Object.keys(field.type.values);
+            } else if (field.id == 'naucneIzmena') {
+              this.enumValues1 = Object.keys(field.type.values);
+            } else if (field.id == 'izabrane_naucne') {
+              this.enumValues2 = Object.keys(field.type.values);
+            }
+            
           }
         });
       },
@@ -55,7 +64,14 @@ export class IspraviCasopisComponent implements OnInit {
     let o = new Array();
     this.controls = form.controls;
     for(var control in this.controls){
-      o.push({fieldId: control, fieldValue: this.controls[control].value});
+      if(control === "naucneIzmena") {
+        var niz = this.controls[control].value;
+        for (let i=0; i<niz.length; i++) {
+          o.push({fieldId : control, fieldValue : niz[i]});
+        }
+      } else {
+        o.push({fieldId: control, fieldValue: this.controls[control].value});
+      }
     }
 
     console.log(o);
@@ -76,7 +92,7 @@ export class IspraviCasopisComponent implements OnInit {
       x.subscribe(
         res => {
           console.log(res);
-          this.router.navigate(["/urednik"]);
+          window.location.href="http://localhost:4200/casopis/promeniOdbor/" + this.processInstance;
         },
         err => {
           alert("Error occured");

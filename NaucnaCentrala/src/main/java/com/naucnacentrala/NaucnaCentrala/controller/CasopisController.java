@@ -3,16 +3,14 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.TaskDTO;
-import com.naucnacentrala.NaucnaCentrala.model.Casopis;
-import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
-import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
-import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.model.*;
 import com.naucnacentrala.NaucnaCentrala.services.CasopisService;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.impl.form.type.EnumFormType;
+import org.camunda.bpm.engine.impl.form.type.StringFormType;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +81,22 @@ public class CasopisController {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
 
+        Long casopisID = (Long) runtimeService.getVariable(processInstanceId, "casopisID");
+        Casopis c = casopisService.findOneById(casopisID);
+
+        List<NaucnaOblast> nauc_obl = c.getNaucneOblasti();
+
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
+
+        for(FormField field : properties) {
+            if (field.getId().equals("izabrane_naucne")) {
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for (NaucnaOblast n : nauc_obl) {
+                    enumType.getValues().put(n.getNaziv(), n.getNaziv());
+                }
+            }
+        }
 
         return new FormFieldsDTO(task.getId(), processInstanceId, properties);
     }
@@ -139,21 +151,62 @@ public class CasopisController {
         ArrayList<User> recenzenti = pronadjiIh(recenzentiBaza, nauc_obl);
         ArrayList<User> urednici = pronadjiIh(uredniciBaza, nauc_obl);
 
-        for(FormField field : properties) {
-            if(field.getId().equals("urednici")){
-                EnumFormType enumType = (EnumFormType) field.getType();
-                for(User urednik: urednici){
-                    String prikaz = urednik.getIme() + " " + urednik.getPrezime() + "(" + urednik.getUsername() + ")";
-                    enumType.getValues().put(urednik.getUsername(), prikaz);
+        if(task.getName().equals("Dodaj urednike i recenzente")) {
+            for(FormField field : properties) {
+                if(field.getId().equals("urednici")){
+                    EnumFormType enumType = (EnumFormType) field.getType();
+                    for(User urednik: urednici){
+                        String prikaz = urednik.getIme() + " " + urednik.getPrezime() + "(" + urednik.getUsername() + ")";
+                        enumType.getValues().put(urednik.getUsername(), prikaz);
+                    }
+                }
+                if(field.getId().equals("recenzenti")){
+                    EnumFormType enumType = (EnumFormType) field.getType();
+                    for(User recenzent: recenzenti){
+                        String prikaz = recenzent.getIme() + " " + recenzent.getPrezime() + "(" + recenzent.getUsername() + ")";
+                        enumType.getValues().put(recenzent.getUsername(), prikaz);
+                    }
                 }
             }
-            if(field.getId().equals("recenzenti")){
-                EnumFormType enumType = (EnumFormType) field.getType();
-                for(User recenzent: recenzenti){
-                    String prikaz = recenzent.getIme() + " " + recenzent.getPrezime() + "(" + recenzent.getUsername() + ")";
-                    enumType.getValues().put(recenzent.getUsername(), prikaz);
+        }
+        if(task.getName().equals("Izmeni urednike i recenzente")) {
+            for(FormField field : properties) {
+                if(field.getId().equals("uredniciIzmena")){
+                    EnumFormType enumType = (EnumFormType) field.getType();
+                    for(User urednik: urednici){
+                        String prikaz = urednik.getIme() + " " + urednik.getPrezime() + "(" + urednik.getUsername() + ")";
+                        enumType.getValues().put(urednik.getUsername(), prikaz);
+                    }
+                }
+                if(field.getId().equals("recenzentiIzmena")){
+                    EnumFormType enumType = (EnumFormType) field.getType();
+                    for(User recenzent: recenzenti){
+                        String prikaz = recenzent.getIme() + " " + recenzent.getPrezime() + "(" + recenzent.getUsername() + ")";
+                        enumType.getValues().put(recenzent.getUsername(), prikaz);
+                    }
                 }
             }
+
+            List<Recenzent> izabraniR = c.getRecenzenti();
+            List<Urednik> izabraniU = c.getUredniciNO();
+            String pretRe = c.getRecenzenti().get(0).getUsername();
+            String pretUr = c.getUredniciNO().get(0).getUsername();
+
+            for(Recenzent r : c.getRecenzenti()) {
+                if(!pretRe.equals(r.getUsername())) {
+                    pretRe = pretRe + ", " + r.getUsername();
+                }
+            }
+            for(Urednik u : c.getUredniciNO()) {
+                if(!pretUr.equals(u.getUsername())) {
+                    pretUr = pretUr + ", " + u.getUsername();
+                }
+            }
+            FormField urd = casopisService.prethodniUred(pretUr);
+            FormField rcz = casopisService.prethodniRec(pretRe);
+
+            properties.add(0, urd);
+            properties.add(2, rcz);
         }
 
         return new FormFieldsDTO(task.getId(), pid, properties);
@@ -168,6 +221,20 @@ public class CasopisController {
         String processInstanceId = task.getProcessInstanceId();
 
         runtimeService.setVariable(processInstanceId, "odbor", dto);
+
+        formService.submitTaskForm(taskId, map);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/post/UredRecIzmena/{taskId}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity postUredRecIzmena(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        runtimeService.setVariable(processInstanceId, "odborIzmena", dto);
 
         formService.submitTaskForm(taskId, map);
         return new ResponseEntity<>(HttpStatus.OK);

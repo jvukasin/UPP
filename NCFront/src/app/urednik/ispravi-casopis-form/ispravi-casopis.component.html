@@ -11,8 +11,18 @@
             <input type="text" class="form-control" name={{field.id}} [ngModel]=field.defaultValue *ngIf="field.type.name=='string' && field.id!='komentar_admina'">
             <input type="checkbox" class="form-control" name={{field.id}} [ngModel]=field.defaultValue  *ngIf="field.type.name=='boolean'">
             <input type="number" class="form-control"  name={{field.id}} [ngModel]=field.defaultValue  *ngIf="field.type.name=='long'">
-            <select name={{field.id}} class="form-control" [ngModel]=field.defaultValue *ngIf="field.type.name=='enum'">
+            <select name={{field.id}} class="form-control" [ngModel]=field.defaultValue *ngIf="field.type.name=='enum' && field.id=='naplata_clanarineIzmena'">
               <option *ngFor="let val of enumValues" value={{val}}>
+                {{field.type.values[val]}}
+              </option>
+            </select>
+            <select name={{field.id}} multiple class="form-control" [ngModel] *ngIf="field.type.name=='enum' && field.id=='naucneIzmena'">
+              <option *ngFor="let val of enumValues1" value={{val}}>
+                {{field.type.values[val]}}
+              </option>
+            </select>
+            <select name={{field.id}} multiple class="form-control" readonly [ngModel] *ngIf="field.type.name=='enum' && field.id=='izabrane_naucne'">
+              <option *ngFor="let val of enumValues2" value={{val}}>
                 {{field.type.values[val]}}
               </option>
             </select>

@@ -99,6 +99,7 @@ export class RegistrationComponent implements OnInit {
         },
         err => {
           alert(err.message);
+          this.spinner.hide();
         }
       );
     }

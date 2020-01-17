@@ -30,14 +30,8 @@ export class LoginComponent implements OnInit {
 
   this.authService.login(userDTO).subscribe(
     (success) => {
-      alert("succes");
       this.userService.getUser().subscribe(
         (user: any) => {
-          // if(user.role == "Admin"){
-          //   this.router.navigate(["/admin"]);
-          // } else if (user.role == "Urednik") {
-          //   this.router.navigate(["/casopis"]);
-          // }
           localStorage.setItem('rola', user.role);
           this.router.navigate(["/home"]);
         },

@@ -30,7 +30,7 @@
             <camunda:value id="racunarstvo" name="Računarstvo" />
             <camunda:value id="medicina" name="Medicina" />
           </camunda:formField>
-          <camunda:formField id="issn" label="ISSN broj *" type="string">
+          <camunda:formField id="issn" label="ISSN *" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
@@ -71,15 +71,15 @@
     <bpmn:userTask id="Task_1iauwv1" name="Admin provera" camunda:candidateGroups="admin">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="nazivPrikaz" label="Naziv časopisa" type="string" defaultValue="${naziv}" />
-          <camunda:formField id="issnPrikaz" label="ISSN broj" type="string" defaultValue="${issn}" />
-          <camunda:formField id="clanarinaPrikaz" label="Naplata članarine" type="string" defaultValue="${naplata_clanarine}" />
           <camunda:formField id="komentar_uredniku" label="Komentar uredniku ukoliko se casopis vraca na dopunu" type="string" />
+          <camunda:formField id="nazivPrikaz" label="Naziv časopisa" type="string" defaultValue="${naziv}" />
+          <camunda:formField id="issnPrikaz" label="ISSN" type="string" defaultValue="${issn}" />
+          <camunda:formField id="clanarinaPrikaz" label="Naplata članarine" type="string" defaultValue="${naplata_clanarine}" />
           <camunda:formField id="aktiviraj_casopis" label="Aktiviraj časopis u sistemu?" type="boolean" defaultValue="false" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0go7i6k</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_0ggmc0d</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_15z0ztg</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_186to0v</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0p7r3xg" sourceRef="Task_0jt5aur" targetRef="EndEvent_05dm8fb" />
@@ -105,20 +105,33 @@
     <bpmn:userTask id="UserTask_1kyus6c" name="Ispravka podnetog casopis" camunda:assignee="${pokretac}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="nazivIzmena" label="Naziv časopisa *" type="string" defaultValue="${naziv}" />
+          <camunda:formField id="komentar_admina" label="Komentar admina" type="string" defaultValue="${komentar_uredniku}" />
+          <camunda:formField id="nazivIzmena" label="Naziv časopisa *" type="string" defaultValue="${naziv}">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
           <camunda:formField id="issnIzmena" label="ISSN broj *" type="string" defaultValue="${issn}">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="naplata_clanarineIzmena" label="Naplata članarine *" type="enum" defaultValue="${naplata_clanarine}">
-            <camunda:validation>
-              <camunda:constraint name="required" />
-            </camunda:validation>
             <camunda:value id="citaoci" name="Čitaoci" />
             <camunda:value id="autori" name="Autori" />
           </camunda:formField>
-          <camunda:formField id="komentar_admina" label="Komentar admina" type="string" defaultValue="${komentar_uredniku}" />
+          <camunda:formField id="izabrane_naucne" label="Prethodno izabrane naučne oblasti" type="enum" />
+          <camunda:formField id="naucneIzmena" label="Naučne oblasti (min 1)" type="enum">
+            <camunda:value id="biologija" name="Biologija" />
+            <camunda:value id="fizika" name="Fizika" />
+            <camunda:value id="hemija" name="Hemija" />
+            <camunda:value id="matematika" name="Matematika" />
+            <camunda:value id="arhitektura" name="Arhitektura" />
+            <camunda:value id="elektrotehnika" name="Elektrotehnika" />
+            <camunda:value id="geodezija" name="Geodezija" />
+            <camunda:value id="racunarstvo" name="Računarstvo" />
+            <camunda:value id="medicina" name="Medicina" />
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0gnvadg</bpmn:incoming>
@@ -130,9 +143,29 @@
     <bpmn:sequenceFlow id="SequenceFlow_0hlx151" sourceRef="UserTask_1kyus6c" targetRef="Task_1bmz55b" />
     <bpmn:serviceTask id="Task_1bmz55b" name="Promeni casopis" camunda:class="com.naucnacentrala.NaucnaCentrala.services.PromeniCasopis">
       <bpmn:incoming>SequenceFlow_0hlx151</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0ggmc0d</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0vj520y</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_0ggmc0d" sourceRef="Task_1bmz55b" targetRef="Task_1iauwv1" />
+    <bpmn:sequenceFlow id="SequenceFlow_0vj520y" sourceRef="Task_1bmz55b" targetRef="UserTask_1k3vq1v" />
+    <bpmn:userTask id="UserTask_1k3vq1v" name="Izmeni urednike i recenzente" camunda:assignee="${pokretac}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="uredniciIzmena" label="Urednici" type="enum" />
+          <camunda:formField id="recenzentiIzmena" label="Recenzenti (min 2)" type="enum">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_0vj520y</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0bc2wdd</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="ServiceTask_09azqi9" name="Snimi novi odbor" camunda:class="com.naucnacentrala.NaucnaCentrala.services.IzmeniOdbor">
+      <bpmn:incoming>SequenceFlow_0bc2wdd</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_15z0ztg</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_15z0ztg" sourceRef="ServiceTask_09azqi9" targetRef="Task_1iauwv1" />
+    <bpmn:sequenceFlow id="SequenceFlow_0bc2wdd" sourceRef="UserTask_1k3vq1v" targetRef="ServiceTask_09azqi9" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="kreiranje_casopisa">
@@ -196,22 +229,36 @@
         <di:waypoint x="460" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_1kyus6c_di" bpmnElement="UserTask_1kyus6c">
-        <dc:Bounds x="1040" y="260" width="100" height="80" />
+        <dc:Bounds x="1040" y="179" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0gnvadg_di" bpmnElement="SequenceFlow_0gnvadg">
         <di:waypoint x="1090" y="142" />
-        <di:waypoint x="1090" y="260" />
+        <di:waypoint x="1090" y="179" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0hlx151_di" bpmnElement="SequenceFlow_0hlx151">
-        <di:waypoint x="1040" y="300" />
-        <di:waypoint x="1010" y="300" />
+        <di:waypoint x="1090" y="259" />
+        <di:waypoint x="1090" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_033az35_di" bpmnElement="Task_1bmz55b">
-        <dc:Bounds x="910" y="260" width="100" height="80" />
+        <dc:Bounds x="1040" y="310" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0ggmc0d_di" bpmnElement="SequenceFlow_0ggmc0d">
-        <di:waypoint x="960" y="260" />
+      <bpmndi:BPMNEdge id="SequenceFlow_0vj520y_di" bpmnElement="SequenceFlow_0vj520y">
+        <di:waypoint x="1040" y="350" />
+        <di:waypoint x="1010" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_1k3vq1v_di" bpmnElement="UserTask_1k3vq1v">
+        <dc:Bounds x="910" y="310" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_09azqi9_di" bpmnElement="ServiceTask_09azqi9">
+        <dc:Bounds x="910" y="190" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_15z0ztg_di" bpmnElement="SequenceFlow_15z0ztg">
+        <di:waypoint x="960" y="190" />
         <di:waypoint x="960" y="157" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0bc2wdd_di" bpmnElement="SequenceFlow_0bc2wdd">
+        <di:waypoint x="960" y="310" />
+        <di:waypoint x="960" y="270" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
