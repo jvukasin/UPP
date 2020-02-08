@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_06qh0ay" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
-  <bpmn:process id="kreiranje_casopisa" isExecutable="true">
+  <bpmn:process id="kreiranje_casopisa" isExecutable="true" camunda:candidateStarterGroups="urednici">
     <bpmn:startEvent id="StartEvent_1" camunda:initiator="pokretac">
       <bpmn:outgoing>SequenceFlow_1mnbr2h</bpmn:outgoing>
     </bpmn:startEvent>
@@ -20,15 +20,6 @@
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
-            <camunda:value id="biologija" name="Biologija" />
-            <camunda:value id="fizika" name="Fizika" />
-            <camunda:value id="hemija" name="Hemija" />
-            <camunda:value id="matematika" name="Matematika" />
-            <camunda:value id="arhitektura" name="Arhitektura" />
-            <camunda:value id="elektrotehnika" name="Elektrotehnika" />
-            <camunda:value id="geodezija" name="Geodezija" />
-            <camunda:value id="racunarstvo" name="Računarstvo" />
-            <camunda:value id="medicina" name="Medicina" />
           </camunda:formField>
           <camunda:formField id="issn" label="ISSN *" type="string">
             <camunda:validation>
@@ -48,7 +39,7 @@
       <bpmn:outgoing>SequenceFlow_05st8eh</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0fpwc7r" sourceRef="Task_0pfm373" targetRef="Task_1milmbu" />
-    <bpmn:serviceTask id="Task_0pfm373" name="postvari GU i snimi" camunda:class="com.naucnacentrala.NaucnaCentrala.services.SnimiCasopis">
+    <bpmn:serviceTask id="Task_0pfm373" name="postvari GU i snimi" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.SnimiCasopis">
       <bpmn:documentation>GU = glavni urednik</bpmn:documentation>
       <bpmn:incoming>SequenceFlow_05st8eh</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0fpwc7r</bpmn:outgoing>
@@ -83,11 +74,11 @@
       <bpmn:outgoing>SequenceFlow_186to0v</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0p7r3xg" sourceRef="Task_0jt5aur" targetRef="EndEvent_05dm8fb" />
-    <bpmn:serviceTask id="Task_0jt5aur" name="Aktiviraj casopis" camunda:class="com.naucnacentrala.NaucnaCentrala.services.AktivirajCasopis">
+    <bpmn:serviceTask id="Task_0jt5aur" name="Aktiviraj casopis" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.AktivirajCasopis">
       <bpmn:incoming>SequenceFlow_021lc0h</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0p7r3xg</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_09jpq5w" name="Snimi urednike i recenzente" camunda:class="com.naucnacentrala.NaucnaCentrala.services.DodajOdbor">
+    <bpmn:serviceTask id="Task_09jpq5w" name="Snimi urednike i recenzente" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.DodajOdbor">
       <bpmn:incoming>SequenceFlow_1yn919r</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0go7i6k</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -121,17 +112,7 @@
             <camunda:value id="autori" name="Autori" />
           </camunda:formField>
           <camunda:formField id="izabrane_naucne" label="Prethodno izabrane naučne oblasti" type="enum" />
-          <camunda:formField id="naucneIzmena" label="Naučne oblasti (min 1)" type="enum">
-            <camunda:value id="biologija" name="Biologija" />
-            <camunda:value id="fizika" name="Fizika" />
-            <camunda:value id="hemija" name="Hemija" />
-            <camunda:value id="matematika" name="Matematika" />
-            <camunda:value id="arhitektura" name="Arhitektura" />
-            <camunda:value id="elektrotehnika" name="Elektrotehnika" />
-            <camunda:value id="geodezija" name="Geodezija" />
-            <camunda:value id="racunarstvo" name="Računarstvo" />
-            <camunda:value id="medicina" name="Medicina" />
-          </camunda:formField>
+          <camunda:formField id="naucneIzmena" label="Naučne oblasti (min 1)" type="enum" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_0gnvadg</bpmn:incoming>
@@ -141,7 +122,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${aktiviraj_casopis!=true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0hlx151" sourceRef="UserTask_1kyus6c" targetRef="Task_1bmz55b" />
-    <bpmn:serviceTask id="Task_1bmz55b" name="Promeni casopis" camunda:class="com.naucnacentrala.NaucnaCentrala.services.PromeniCasopis">
+    <bpmn:serviceTask id="Task_1bmz55b" name="Promeni casopis" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.PromeniCasopis">
       <bpmn:incoming>SequenceFlow_0hlx151</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0vj520y</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -160,7 +141,7 @@
       <bpmn:incoming>SequenceFlow_0vj520y</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0bc2wdd</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="ServiceTask_09azqi9" name="Snimi novi odbor" camunda:class="com.naucnacentrala.NaucnaCentrala.services.IzmeniOdbor">
+    <bpmn:serviceTask id="ServiceTask_09azqi9" name="Snimi novi odbor" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.IzmeniOdbor">
       <bpmn:incoming>SequenceFlow_0bc2wdd</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_15z0ztg</bpmn:outgoing>
     </bpmn:serviceTask>

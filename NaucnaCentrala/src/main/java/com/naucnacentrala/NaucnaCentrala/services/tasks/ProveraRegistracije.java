@@ -1,4 +1,4 @@
-package com.naucnacentrala.NaucnaCentrala.services;
+package com.naucnacentrala.NaucnaCentrala.services.tasks;
 
 import com.naucnacentrala.NaucnaCentrala.model.User;
 import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;

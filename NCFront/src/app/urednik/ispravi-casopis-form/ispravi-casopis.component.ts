@@ -23,6 +23,8 @@ export class IspraviCasopisComponent implements OnInit {
   errIssn: boolean = false;
   errNaplata: boolean = false;
 
+  lclhst: string = "http://localhost:4202";
+
   constructor(private router: Router, private casopisService: CasopisService, private route: ActivatedRoute) {
     // getting route params, params is observable that unsubscribes automatically
     this.route.params.subscribe(
@@ -92,7 +94,7 @@ export class IspraviCasopisComponent implements OnInit {
       x.subscribe(
         res => {
           console.log(res);
-          window.location.href="http://localhost:4200/casopis/promeniOdbor/" + this.processInstance;
+          window.location.href= this.lclhst + "/casopis/promeniOdbor/" + this.processInstance;
         },
         err => {
           alert("Error occured");

@@ -11,6 +11,7 @@ export class NavbarComponent implements OnInit {
   isLoggedIn: boolean = false;
   isAdmin: boolean = false;
   isUrednik: boolean = false;
+  isAutor: boolean = false;
 
   constructor(private authService: AuthService) {
     var rola = localStorage.getItem('rola');
@@ -18,6 +19,8 @@ export class NavbarComponent implements OnInit {
       this.isAdmin = true;
     } else if (rola === "Urednik") {
       this.isUrednik = true;
+    } else if (rola === "Autor") {
+      this.isAutor = true;
     }
     let user = this.authService.getLoggedUser();
     if(user != null){
@@ -33,6 +36,7 @@ export class NavbarComponent implements OnInit {
     this.isLoggedIn = false;
     this.isAdmin = false;
     this.isUrednik = false;
+    this.isAutor = false;
     var rola = localStorage.setItem('rola', '');
   }
 

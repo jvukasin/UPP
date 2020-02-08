@@ -1,10 +1,13 @@
-package com.naucnacentrala.NaucnaCentrala.services;
+package com.naucnacentrala.NaucnaCentrala.services.tasks;
 
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
 import com.naucnacentrala.NaucnaCentrala.model.NacinPlacanja;
 import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
 import com.naucnacentrala.NaucnaCentrala.model.Urednik;
+import com.naucnacentrala.NaucnaCentrala.services.CasopisService;
+import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
+import com.naucnacentrala.NaucnaCentrala.services.NOService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -47,7 +50,7 @@ public class SnimiCasopis  implements JavaDelegate {
             }
             if (formField.getFieldId().equals("nauc_oblasti")) {
                 for(NaucnaOblast n : oblastiIzBaze) {
-                    if(n.getNaziv().equalsIgnoreCase(formField.getFieldValue())) {
+                    if(n.getSifra().equals(Long.parseLong(formField.getFieldValue()))) {
                         no.add(n);
                         break;
                     }

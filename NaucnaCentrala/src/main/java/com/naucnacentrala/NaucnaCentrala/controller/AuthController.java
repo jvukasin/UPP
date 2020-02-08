@@ -5,6 +5,7 @@ import com.naucnacentrala.NaucnaCentrala.model.UserTokenState;
 import com.naucnacentrala.NaucnaCentrala.security.CustomUserDetailsService;
 import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
 import com.naucnacentrala.NaucnaCentrala.security.auth.JwtAuthenticationRequest;
+import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,9 @@ public class AuthController {
     public TokenUtils tokenUtils;
 
     @Autowired
+    IdentityService identityService;
+
+    @Autowired
     public AuthenticationManager manager;
 
     @Autowired
@@ -54,7 +58,6 @@ public class AuthController {
 
         String jwt = tokenUtils.generateToken(user.getUsername(), device);
         int expiresIn = 3600;
-
 
 
         return ResponseEntity.ok(new UserTokenState(jwt,expiresIn));

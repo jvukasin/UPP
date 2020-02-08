@@ -1,8 +1,18 @@
 .dodaj {
     float:right;
+    margin-bottom: 35px;
+    margin-top: 10px;
+}
+
+h2 {
+    display: inline-block;
 }
 
 .container {
     width: 90%;
     margin-top: 15px;
+}
+
+h3 {
+    margin-top: 50px;
 }

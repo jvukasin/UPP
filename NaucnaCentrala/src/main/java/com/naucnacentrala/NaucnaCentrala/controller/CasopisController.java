@@ -1,11 +1,13 @@
 package com.naucnacentrala.NaucnaCentrala.controller;
 
+import com.naucnacentrala.NaucnaCentrala.dto.CasopisDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.TaskDTO;
 import com.naucnacentrala.NaucnaCentrala.model.*;
 import com.naucnacentrala.NaucnaCentrala.services.CasopisService;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
+import com.naucnacentrala.NaucnaCentrala.services.NOService;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
@@ -46,6 +48,19 @@ public class CasopisController {
     @Autowired
     CasopisService casopisService;
 
+    @Autowired
+    NOService noService;
+
+    @RequestMapping(value = "/casopisi/{id}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<CasopisDTO> getSpecificC(@PathVariable("id") long id){
+        return new ResponseEntity<>(casopisService.findOneDto(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/casopisi", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<CasopisDTO>> getAllC(){
+        return new ResponseEntity<>(casopisService.findAllDto(), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/get", produces = "application/json")
     public @ResponseBody
     FormFieldsDTO get() {
@@ -57,6 +72,17 @@ public class CasopisController {
 
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
+
+        List<NaucnaOblast> naucneOblasti = noService.findAll();
+
+        for(FormField field : properties) {
+            if(field.getId().equals("nauc_oblasti")){
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(NaucnaOblast no: naucneOblasti){
+                    enumType.getValues().put(no.getSifra().toString(), no.getNaziv());
+                }
+            }
+        }
 
         return new FormFieldsDTO(task.getId(), pi.getId(), properties);
     }
@@ -85,6 +111,7 @@ public class CasopisController {
         Casopis c = casopisService.findOneById(casopisID);
 
         List<NaucnaOblast> nauc_obl = c.getNaucneOblasti();
+        List<NaucnaOblast> sveNaucne = noService.findAll();
 
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
@@ -93,7 +120,12 @@ public class CasopisController {
             if (field.getId().equals("izabrane_naucne")) {
                 EnumFormType enumType = (EnumFormType) field.getType();
                 for (NaucnaOblast n : nauc_obl) {
-                    enumType.getValues().put(n.getNaziv(), n.getNaziv());
+                    enumType.getValues().put(n.getSifra().toString(), n.getNaziv());
+                }
+            } else if (field.getId().equals("naucneIzmena")) {
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for (NaucnaOblast n : sveNaucne) {
+                    enumType.getValues().put(n.getSifra().toString(), n.getNaziv());
                 }
             }
         }

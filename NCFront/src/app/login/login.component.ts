@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
       this.userService.getUser().subscribe(
         (user: any) => {
           localStorage.setItem('rola', user.role);
-          this.router.navigate(["/home"]);
+          this.router.navigate(["/pocetna"]);
         },
         err => { alert("Error loging in"); }
       );

@@ -11,6 +11,15 @@ export class CasopisService {
 
   constructor(private http: HttpClient) { }
 
+  get(id){
+    return this.http.get('/api/casopis/casopisi/'.concat(id));
+  }
+
+  getAll(){
+    return this.http.get('/api/casopis/casopisi');
+  }
+
+
   startCasopisProcess() {
     return this.http.get("/api/casopis/get") as Observable<any>;
   }

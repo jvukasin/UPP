@@ -18,6 +18,7 @@ export class IspraviOdborComponent implements OnInit {
   controls: any = [];
 
   errRec: boolean = false;
+  lclhst: string = "http://localhost:4202";
 
   constructor(private route: ActivatedRoute, private casopisService: CasopisService) {
     this.route.params.subscribe(
@@ -76,7 +77,7 @@ export class IspraviOdborComponent implements OnInit {
       x.subscribe(
         res => {
           console.log(res);
-          window.location.href="http://localhost:4200/urednik";
+          window.location.href= this.lclhst + "/urednik";
         },
         err => {
             alert("Error occured");

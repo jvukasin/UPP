@@ -1,6 +1,48 @@
 <div class="container">
-    <h3>Zadaci:</h3>
-    <button class="btn btn-primary dodaj" routerLink="/casopis/dodaj">Dodaj casopis</button>
+  <h2>Časopisi:</h2>
+    <button class="btn btn-primary dodaj" routerLink="/dodaj/casopis">Dodaj casopis</button>
+    <div class="table-responsive">
+        <table class="table" id="lista">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Naziv časopisa</th>
+              <th scope="col">ISSN</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let magazine of magazineList">
+                  <th scope="row">{{ magazine.id }}</th>
+                  <td>{{ magazine.name }}</td>
+                  <td>{{ magazine.issn }}</td>
+                  <td style="width:350px" class="text-right">
+                    <ng-container *ngIf="magazine.sellerId != 0">
+                      <button class="btn btn-primary" (click)="onListPlans(magazine.id)" *ngIf="magazine.registered">Pregledaj planove</button>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <ng-container *ngIf="magazine.sellerId != 0">
+                      <button class="btn btn-primary" (click)="onPlan(magazine.id)" *ngIf="magazine.registered">Napravi PayPal plan</button>
+                    </ng-container>
+                  </td>
+                  <td>
+                    <button class="btn btn-link" (click)="onRegisterMagazine(magazine.id)" *ngIf="!magazine.registered && magazine.sellerId == 0">Registruj</button>
+                    <ng-container *ngIf="magazine.sellerId != 0">
+                      <button class="btn btn-link " (click)="onReviewRegistration(magazine.id)" *ngIf="magazine.sellerId != 0">Pregled registracije</button>
+                    </ng-container>
+                  </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+      <div>
+        <h3 *ngIf="emptyMagazineList">U sistemu ne postoje casopisi za koje ste glavni urednik.</h3>
+    </div>
+
+
+    <h3>Vaši zadaci:</h3>
     <table>
         <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td><button class="btn btn-primary" (click)="onClick(task.taskId)">Go to task</button></td></tr>
     </table>

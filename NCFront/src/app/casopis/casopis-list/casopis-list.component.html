@@ -1,0 +1,23 @@
+<div class="container pt-5">
+      <h3 class="mt-5" style="margin-bottom:50px">Naučni časopisi</h3>
+
+   <div class="row" *ngFor="let magazine of magazines">
+        <section>
+            <div class="row" style="width: 100%;">
+            <div class="right-side">
+                <p class="magazine-name">{{magazine.name}}</p>
+                <p class="minor">{{magazine.chiefEditor}}</p>
+                <!-- <div class="fields" *ngFor="let scienceField of magazine.scienceFieldList">
+                    <p>{{scienceField}}</p>
+                </div> -->
+            </div>
+            <div class="middle"><p></p></div>
+            <div class="left-side d-flex align-items-end justify-content-end">
+                <button class="btn btn-primary" (click)="showMagazine(magazine.id)">Pregled sadržaja</button>
+            </div>
+        </div>
+        </section>  
+        
+    </div>
+
+</div>

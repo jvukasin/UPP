@@ -1,0 +1,44 @@
+<div class="container">
+    <h2>Radovi:</h2>
+      <button class="btn btn-primary dodaj" (click)="onDodajRad()">Dodaj rad</button>
+      <div class="table-responsive">
+          <table class="table" id="lista">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Naziv rada</th>
+                <th scope="col">ISSN</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let rad of radList">
+                    <th scope="row">{{ rad.id }}</th>
+                    <td>{{ rad.name }}</td>
+                    <td>{{ rad.issn }}</td>
+                  </tr>
+              </tbody>
+          </table>
+          </div>
+        <div>
+          <h3 *ngIf="emptyRadList">U sistemu nema zabeleženih radova.</h3>
+      </div>
+  
+  
+      <h3>Vaši zadaci:</h3>
+      <table>
+          <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td><button class="btn btn-primary" (click)="onClick(task.taskId)">Go to task</button></td></tr>
+      </table>
+  </div>
+
+  <div class="form-modal" *ngIf="showModal">
+    <div class="modal-content room-content">
+      <div class="modal-body">
+          <button type="button" class="close" (click)="onCloseModal()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        <app-izaberi-casopis-modal (submit)="casopisSubmitted($event)"></app-izaberi-casopis-modal>
+      </div>
+    </div>
+</div>

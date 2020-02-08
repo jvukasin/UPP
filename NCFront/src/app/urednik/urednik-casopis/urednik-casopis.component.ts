@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CasopisService } from 'src/app/services/casopis.service';
+import { KPService } from 'src/app/services/kp.service';
 
 @Component({
   selector: 'app-urednik-casopis',
@@ -8,9 +9,14 @@ import { CasopisService } from 'src/app/services/casopis.service';
 })
 export class UrednikCasopisComponent implements OnInit {
 
-  private tasks = [];
+  tasks = [];
+  magazineList: any = [];
+  emptyMagazineList: boolean = false;
+  retHref: any;
 
-  constructor(private casopisService: CasopisService) { }
+  lclhst: string = "http://localhost:4202";
+
+  constructor(private kpService: KPService,private casopisService: CasopisService) { }
 
   ngOnInit() {
     let x = this.casopisService.getUrednikCasopisTasks();
@@ -27,7 +33,68 @@ export class UrednikCasopisComponent implements OnInit {
   }
 
   onClick(id) {
-    window.location.href = "http://localhost:4200/casopis/promeni/" + id;
+    window.location.href = this.lclhst + "/casopis/promeni/" + id;
+  }
+
+  onRegisterMagazine(id) {
+
+    let dto = {
+      id: id
+    }
+
+    this.kpService.registerMagazinSeller(dto).subscribe(
+      (res: any) => {
+        this.magazineList = this.magazineList.map(m => {
+          if (m.id == dto.id) {
+            m.sellerId = "x";
+          }
+
+          return m;
+        })
+        window.location.href = res.registrationPageRedirectUrl;
+      }, err=> console.log(err.error)
+    )
+  }
+
+  onReviewRegistration(id) {
+    
+    let dto = {
+      id: id
+    }
+
+    this.kpService.reviewRegistration(dto).subscribe(
+      (res: any) => {
+        window.location.href = res.registrationPageRedirectUrl;
+      }, err => console.log(err.error)
+    )
+    
+  }
+
+  onPlan(magazineID) {
+    this.kpService.createPlan(magazineID).subscribe(
+      (response) => {
+        this.retHref = response;
+        if(this.retHref.href === "noPP") {
+          alert("Nije moguce napraviti plan jer PayPal nije registrovan!");
+        } else {
+          window.location.href = this.retHref.href;
+        }
+      },
+      (error) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  onListPlans(magazineID) {
+    this.kpService.getPlans(magazineID).subscribe(
+      (data) => {
+        this.retHref = data;
+        window.location.href = this.retHref;
+      }, (error) => {
+        alert(error.message);
+      }
+    );
   }
 
 }

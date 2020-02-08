@@ -26,6 +26,11 @@ import { IspraviCasopisComponent } from './urednik/ispravi-casopis-form/ispravi-
 import { NgxSpinnerModule } from "ngx-spinner";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IspraviOdborComponent } from './urednik/ispravi-odbor-form/ispravi-odbor.component';
+import { CasopisListComponent } from './casopis/casopis-list/casopis-list.component';
+import { CasopisInfoComponent } from './casopis/casopis-info/casopis-info.component';
+import { AutorComponent } from './autor/autor.component';
+import { AutorRadComponent } from './autor/autor-rad/autor-rad.component';
+import { IzaberiCasopisModalComponent } from './autor/izaberi-casopis-modal/izaberi-casopis-modal.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +51,12 @@ import { IspraviOdborComponent } from './urednik/ispravi-odbor-form/ispravi-odbo
     UrednikCasopisComponent,
     PrihvatiCasopisComponent,
     IspraviCasopisComponent,
-    IspraviOdborComponent
+    IspraviOdborComponent,
+    CasopisListComponent,
+    CasopisInfoComponent,
+    AutorComponent,
+    AutorRadComponent,
+    IzaberiCasopisModalComponent
   ],
   imports: [
     BrowserModule,

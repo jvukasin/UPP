@@ -20,6 +20,8 @@ export class DodajCasopisComponent implements OnInit {
   errIssn: boolean = false;
   errNaplata: boolean = false;
 
+  lclhst: string = "http://localhost:4202";
+
   constructor(private casopisService: CasopisService) {
     casopisService.startCasopisProcess().subscribe(
       res => {
@@ -82,7 +84,7 @@ export class DodajCasopisComponent implements OnInit {
       x.subscribe(
         res => {
           console.log(res);
-          window.location.href="http://localhost:4200/casopis/" + this.processInstance;
+          window.location.href= this.lclhst + "/casopis/" + this.processInstance;
         },
         err => {
             alert("Error occured");

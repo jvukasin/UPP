@@ -6,9 +6,11 @@ import com.naucnacentrala.NaucnaCentrala.dto.UserInfoDTO;
 import com.naucnacentrala.NaucnaCentrala.model.*;
 import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
+import com.naucnacentrala.NaucnaCentrala.services.NOService;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
+import org.camunda.bpm.engine.impl.form.type.EnumFormType;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,9 @@ public class UserController {
     @Autowired
     KorisnikService korisnikService;
 
+    @Autowired
+    NOService noService;
+
     @GetMapping(path = "/get", produces = "application/json")
     public @ResponseBody FormFieldsDTO get() {
         //provera da li korisnik sa id-jem pera postoji
@@ -63,7 +68,23 @@ public class UserController {
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
 
+        List<NaucnaOblast> naucneOblasti = noService.findAll();
+
+        for(FormField field : properties) {
+            if(field.getId().equals("nauc_oblasti")){
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(NaucnaOblast no: naucneOblasti){
+                    enumType.getValues().put(no.getSifra().toString(), no.getNaziv());
+                }
+            }
+        }
+
         return new FormFieldsDTO(task.getId(), pi.getId(), properties);
+    }
+
+    @GetMapping(path = "/test", produces = "application/json")
+    public @ResponseBody String test() {
+        return "Cao, radi!";
     }
 
     @PostMapping(path = "/post/{taskId}", produces = "application/json")

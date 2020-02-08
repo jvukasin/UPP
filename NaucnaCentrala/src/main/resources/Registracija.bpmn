@@ -45,15 +45,6 @@
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
-            <camunda:value id="biologija" name="Biološke nauke" />
-            <camunda:value id="fizika" name="Fizika" />
-            <camunda:value id="hemija" name="Hemija" />
-            <camunda:value id="matematika" name="Matematika" />
-            <camunda:value id="arhitektura" name="Arhitektura" />
-            <camunda:value id="elektrotehnika" name="Elektrotehnika" />
-            <camunda:value id="geodezija" name="Geodezija" />
-            <camunda:value id="racunarstvo" name="Racunarstvo" />
-            <camunda:value id="medicina" name="Medicina" />
           </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
@@ -87,16 +78,16 @@
       <bpmn:incoming>SequenceFlow_11jdblz</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1rpaa88</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="Task_18lirog" name="Promeni status korisnika" camunda:class="com.naucnacentrala.NaucnaCentrala.services.PromeniURecenzenta">
+    <bpmn:serviceTask id="Task_18lirog" name="Promeni status korisnika" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.PromeniURecenzenta">
       <bpmn:incoming>SequenceFlow_11inbhi</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0kdx1be</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0jck7b1" sourceRef="Task_0j1im6a" targetRef="ExclusiveGateway_0cjdj5y" />
-    <bpmn:serviceTask id="Task_121603i" name="Posalji verifikacioni mail" camunda:class="com.naucnacentrala.NaucnaCentrala.services.VerifikacioniMejl">
+    <bpmn:serviceTask id="Task_121603i" name="Posalji verifikacioni mail" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.VerifikacioniMejl">
       <bpmn:incoming>SequenceFlow_1x2nlh1</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1xdjguy</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_0j1im6a" name="Aktiviraj korisnika" camunda:class="com.naucnacentrala.NaucnaCentrala.services.RegistrovanjeKorisnika">
+    <bpmn:serviceTask id="Task_0j1im6a" name="Aktiviraj korisnika" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.RegistrovanjeKorisnika">
       <bpmn:incoming>SequenceFlow_0mvmtbi</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0jck7b1</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -109,20 +100,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_11inbhi" sourceRef="ExclusiveGateway_0cm5ugb" targetRef="Task_18lirog">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${prihvatiRec==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_1pb5g4f">
-      <bpmn:incoming>SequenceFlow_1ffzxwg</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0lyst05</bpmn:outgoing>
-      <bpmn:conditionalEventDefinition>
-        <bpmn:condition xsi:type="bpmn:tFormalExpression">${potvrdio==true}</bpmn:condition>
-      </bpmn:conditionalEventDefinition>
-    </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1xdjguy" sourceRef="Task_121603i" targetRef="ExclusiveGateway_165wslb" />
-    <bpmn:parallelGateway id="ExclusiveGateway_165wslb">
-      <bpmn:incoming>SequenceFlow_1xdjguy</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1ffzxwg</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_169klx5</bpmn:outgoing>
-    </bpmn:parallelGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_1ffzxwg" sourceRef="ExclusiveGateway_165wslb" targetRef="IntermediateThrowEvent_1pb5g4f" />
     <bpmn:sequenceFlow id="SequenceFlow_169klx5" sourceRef="ExclusiveGateway_165wslb" targetRef="IntermediateThrowEvent_13pvl1v" />
     <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_13pvl1v">
       <bpmn:incoming>SequenceFlow_169klx5</bpmn:incoming>
@@ -138,7 +116,7 @@
       <bpmn:outgoing>SequenceFlow_0a5rpgw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0kdx1be" sourceRef="Task_18lirog" targetRef="ExclusiveGateway_12pq6ru" />
-    <bpmn:serviceTask id="ServiceTask_11txt83" name="Obrisi" camunda:class="com.naucnacentrala.NaucnaCentrala.services.UkloniNeaktivnog">
+    <bpmn:serviceTask id="ServiceTask_11txt83" name="Obrisi" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.UkloniNeaktivnog">
       <bpmn:incoming>SequenceFlow_1ozzpvw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_02h11aq</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -179,6 +157,19 @@
     <bpmn:sequenceFlow id="SequenceFlow_0mvmtbi" sourceRef="ExclusiveGateway_0tuae3i" targetRef="Task_0j1im6a">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${potvrdio==true}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
+    <bpmn:eventBasedGateway id="ExclusiveGateway_165wslb">
+      <bpmn:incoming>SequenceFlow_1xdjguy</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_169klx5</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0m8rjyw</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0m8rjyw" sourceRef="ExclusiveGateway_165wslb" targetRef="IntermediateThrowEvent_1pb5g4f" />
+    <bpmn:intermediateCatchEvent id="IntermediateThrowEvent_1pb5g4f">
+      <bpmn:incoming>SequenceFlow_0m8rjyw</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0lyst05</bpmn:outgoing>
+      <bpmn:conditionalEventDefinition>
+        <bpmn:condition xsi:type="bpmn:tFormalExpression">${potvrdio==true}</bpmn:condition>
+      </bpmn:conditionalEventDefinition>
+    </bpmn:intermediateCatchEvent>
   </bpmn:process>
   <bpmn:message id="Message_1ui1j86" name="korisnik potvrdjen" />
   <bpmn:message id="Message_0jksu62" name="Message_04ee7s1" />
@@ -229,27 +220,17 @@
         <di:waypoint x="1440" y="235" />
         <di:waypoint x="1440" y="270" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="IntermediateCatchEvent_0kaonf1_di" bpmnElement="IntermediateThrowEvent_1pb5g4f">
-        <dc:Bounds x="742" y="292" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1xdjguy_di" bpmnElement="SequenceFlow_1xdjguy">
         <di:waypoint x="600" y="310" />
-        <di:waypoint x="645" y="310" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ParallelGateway_0hf964d_di" bpmnElement="ExclusiveGateway_165wslb">
-        <dc:Bounds x="645" y="285" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_1ffzxwg_di" bpmnElement="SequenceFlow_1ffzxwg">
-        <di:waypoint x="695" y="310" />
-        <di:waypoint x="742" y="310" />
+        <di:waypoint x="625" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_169klx5_di" bpmnElement="SequenceFlow_169klx5">
-        <di:waypoint x="670" y="335" />
-        <di:waypoint x="670" y="410" />
-        <di:waypoint x="742" y="410" />
+        <di:waypoint x="650" y="335" />
+        <di:waypoint x="650" y="410" />
+        <di:waypoint x="732" y="410" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="IntermediateCatchEvent_0sbxmih_di" bpmnElement="IntermediateThrowEvent_13pvl1v">
-        <dc:Bounds x="742" y="392" width="36" height="36" />
+        <dc:Bounds x="732" y="392" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_12pq6ru_di" bpmnElement="ExclusiveGateway_12pq6ru" isMarkerVisible="true">
         <dc:Bounds x="1165" y="285" width="50" height="50" />
@@ -295,7 +276,7 @@
         <dc:Bounds x="825" y="285" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0lyst05_di" bpmnElement="SequenceFlow_0lyst05">
-        <di:waypoint x="778" y="310" />
+        <di:waypoint x="768" y="310" />
         <di:waypoint x="825" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1sabrka_di" bpmnElement="SequenceFlow_1sabrka">
@@ -310,7 +291,7 @@
         <di:waypoint x="990" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_050psx6_di" bpmnElement="SequenceFlow_050psx6">
-        <di:waypoint x="778" y="410" />
+        <di:waypoint x="768" y="410" />
         <di:waypoint x="850" y="410" />
         <di:waypoint x="850" y="335" />
       </bpmndi:BPMNEdge>
@@ -319,6 +300,16 @@
         <di:waypoint x="930" y="120" />
         <di:waypoint x="990" y="120" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="EventBasedGateway_17b1mdy_di" bpmnElement="ExclusiveGateway_165wslb">
+        <dc:Bounds x="625" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0m8rjyw_di" bpmnElement="SequenceFlow_0m8rjyw">
+        <di:waypoint x="675" y="310" />
+        <di:waypoint x="732" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="IntermediateCatchEvent_0kaonf1_di" bpmnElement="IntermediateThrowEvent_1pb5g4f">
+        <dc:Bounds x="732" y="292" width="36" height="36" />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

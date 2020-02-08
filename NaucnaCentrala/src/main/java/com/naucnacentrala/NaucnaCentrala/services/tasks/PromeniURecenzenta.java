@@ -1,8 +1,9 @@
-package com.naucnacentrala.NaucnaCentrala.services;
+package com.naucnacentrala.NaucnaCentrala.services.tasks;
 
 import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
 import com.naucnacentrala.NaucnaCentrala.model.User;
 import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
+import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;

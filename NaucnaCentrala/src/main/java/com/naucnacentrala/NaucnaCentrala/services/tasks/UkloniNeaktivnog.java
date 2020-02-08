@@ -1,6 +1,7 @@
-package com.naucnacentrala.NaucnaCentrala.services;
+package com.naucnacentrala.NaucnaCentrala.services.tasks;
 
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
+import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;

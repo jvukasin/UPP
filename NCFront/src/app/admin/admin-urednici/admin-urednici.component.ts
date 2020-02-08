@@ -9,6 +9,7 @@ import { RepositoryService } from 'src/app/services/repository.service';
 export class AdminUredniciComponent implements OnInit {
 
   private tasks = [];
+  lclhst: string = "http://localhost:4202";
 
   constructor(private repositoryService: RepositoryService) { }
 
@@ -27,7 +28,7 @@ export class AdminUredniciComponent implements OnInit {
   }
 
   onClick(id) {
-    window.location.href = "http://localhost:4200/admin/casopis/" + id;
+    window.location.href = this.lclhst + "/admin/casopis/" + id;
   }
 
 }

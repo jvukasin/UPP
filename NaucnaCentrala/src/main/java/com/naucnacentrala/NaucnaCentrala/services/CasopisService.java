@@ -1,5 +1,6 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
+import com.naucnacentrala.NaucnaCentrala.dto.CasopisDTO;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
 import com.naucnacentrala.NaucnaCentrala.repository.CasopisRepository;
 import org.camunda.bpm.engine.form.FormField;
@@ -10,6 +11,7 @@ import org.camunda.bpm.engine.variable.value.TypedValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,41 @@ public class CasopisService {
 
     public void remove(String username) {
         casopisRepository.deleteById(username);
+    }
+
+    public Casopis findBySellerId(long sellerId ) { return casopisRepository.findBySellerId(sellerId); }
+
+    public CasopisDTO findOneDto (long id) {
+        Casopis c = casopisRepository.findOneById(id);
+        CasopisDTO dto = new CasopisDTO();
+        dto.setId(c.getId());
+        dto.setName(c.getNaziv());
+        dto.setIssn(c.getIssn());
+        dto.setScienceFieldList(c.getNaucneOblasti());
+        dto.setChiefEditor(c.getGlavniUrednik());
+        dto.setRegistered(c.isRegistered());
+        dto.setSellerId(c.getSellerId());
+        dto.setSciencePaperDTOList(c.getSciencePapers());
+        return dto;
+    }
+
+    public List<CasopisDTO> findAllDto() {
+        ArrayList<CasopisDTO> retVal = new ArrayList<>();
+        List<Casopis> casopisi = casopisRepository.findAll();
+        for(Casopis c : casopisi) {
+            CasopisDTO dto = new CasopisDTO();
+            dto.setId(c.getId());
+            dto.setName(c.getNaziv());
+            dto.setIssn(c.getIssn());
+            dto.setScienceFieldList(c.getNaucneOblasti());
+            dto.setChiefEditor(c.getGlavniUrednik());
+            dto.setRegistered(c.isRegistered());
+            dto.setSellerId(c.getSellerId());
+            dto.setSciencePaperDTOList(c.getSciencePapers());
+
+            retVal.add(dto);
+        }
+        return retVal;
     }
 
 //    HELPERS

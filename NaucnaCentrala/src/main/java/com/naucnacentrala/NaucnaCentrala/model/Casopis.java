@@ -28,6 +28,9 @@ public class Casopis {
     @Column(name = "clanarina", nullable = false)
     private String clanarina;
 
+    @Column(name = "is_registered")
+    private boolean isRegistered = false;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "casopis_recenzenti",
             joinColumns = @JoinColumn(name = "casopisi_id", referencedColumnName = "id"),
@@ -44,36 +47,51 @@ public class Casopis {
     @Column(name = "aktivan")
     private boolean aktivan;
 
+    @Column(name = "seller_id")
+    private Long sellerId;
+
+    @OneToMany(mappedBy = "magazine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<OrderObject> orderObjects;
+
+    @OneToMany(mappedBy = "magazine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Subscription> subscriptions;
+
+    @OneToMany(mappedBy = "magazine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<NaucniRad> sciencePapers;
+
+    public Casopis() {
+    }
+
+    public boolean isRegistered() {
+        return isRegistered;
+    }
+
+    public void setRegistered(boolean registered) {
+        isRegistered = registered;
+    }
+
     public Long getId() {
         return id;
-    }
-
-    public String getNaziv() {
-        return naziv;
-    }
-
-    public String getIssn() {
-        return issn;
-    }
-
-    public String getClanarina() {
-        return clanarina;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getNaziv() {
+        return naziv;
+    }
+
     public void setNaziv(String naziv) {
         this.naziv = naziv;
     }
 
-    public void setIssn(String issn) {
-        this.issn = issn;
+    public String getIssn() {
+        return issn;
     }
 
-    public void setClanarina(String clanarina) {
-        this.clanarina = clanarina;
+    public void setIssn(String issn) {
+        this.issn = issn;
     }
 
     public List<NaucnaOblast> getNaucneOblasti() {
@@ -84,24 +102,32 @@ public class Casopis {
         this.naucneOblasti = naucneOblasti;
     }
 
+    public String getClanarina() {
+        return clanarina;
+    }
+
+    public void setClanarina(String clanarina) {
+        this.clanarina = clanarina;
+    }
+
     public List<Recenzent> getRecenzenti() {
         return recenzenti;
-    }
-
-    public Urednik getGlavniUrednik() {
-        return glavniUrednik;
-    }
-
-    public List<Urednik> getUredniciNO() {
-        return uredniciNO;
     }
 
     public void setRecenzenti(List<Recenzent> recenzenti) {
         this.recenzenti = recenzenti;
     }
 
+    public Urednik getGlavniUrednik() {
+        return glavniUrednik;
+    }
+
     public void setGlavniUrednik(Urednik glavniUrednik) {
         this.glavniUrednik = glavniUrednik;
+    }
+
+    public List<Urednik> getUredniciNO() {
+        return uredniciNO;
     }
 
     public void setUredniciNO(List<Urednik> uredniciNO) {
@@ -116,4 +142,35 @@ public class Casopis {
         this.aktivan = aktivan;
     }
 
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public List<OrderObject> getOrderObjects() {
+        return orderObjects;
+    }
+
+    public void setOrderObjects(List<OrderObject> orderObjects) {
+        this.orderObjects = orderObjects;
+    }
+
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
+    }
+
+    public void setSubscriptions(List<Subscription> subscriptions) {
+        this.subscriptions = subscriptions;
+    }
+
+    public List<NaucniRad> getSciencePapers() {
+        return sciencePapers;
+    }
+
+    public void setSciencePapers(List<NaucniRad> sciencePapers) {
+        this.sciencePapers = sciencePapers;
+    }
 }

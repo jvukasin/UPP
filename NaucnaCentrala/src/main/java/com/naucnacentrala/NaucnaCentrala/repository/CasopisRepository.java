@@ -9,4 +9,6 @@ public interface CasopisRepository extends JpaRepository<Casopis, String> {
 
     List<Casopis> findAll();
     Casopis findOneById(Long id);
+
+    Casopis findBySellerId(long sellerId);
 }

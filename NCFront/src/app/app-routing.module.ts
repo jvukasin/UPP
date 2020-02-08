@@ -16,11 +16,19 @@ import { UrednikCasopisComponent } from './urednik/urednik-casopis/urednik-casop
 import { PrihvatiCasopisComponent } from './admin/prihvati-casopis/prihvati-casopis.component';
 import { IspraviCasopisComponent } from './urednik/ispravi-casopis-form/ispravi-casopis.component';
 import { IspraviOdborComponent } from './urednik/ispravi-odbor-form/ispravi-odbor.component';
+import { CasopisListComponent } from './casopis/casopis-list/casopis-list.component';
+import { CasopisInfoComponent } from './casopis/casopis-info/casopis-info.component';
+import { AutorComponent } from './autor/autor.component';
+import { AutorRadComponent } from './autor/autor-rad/autor-rad.component';
 
 
 const appRoutes: Routes = [
-	{ path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent },
+	{ path: '', redirectTo: '/pocetna/casopisi', pathMatch: 'full' },
+    { path: 'pocetna', component: HomeComponent , children: [
+		{ path: '', redirectTo: 'casopisi', pathMatch: 'full'},
+		{ path: 'casopisi', component: CasopisListComponent},
+		{ path: 'casopisi/:id', component: CasopisInfoComponent},
+	]},
 	{ path: 'registration', component: RegistrationComponent },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'verify', component: VerifyEmailComponent },
@@ -36,10 +44,15 @@ const appRoutes: Routes = [
 		{ path: '', redirectTo: 'casopisi', pathMatch: 'full'},
 		{ path: 'casopisi', component: UrednikCasopisComponent},
 	]},
-	{ path: 'casopis/dodaj', component: DodajCasopisComponent },
+	{ path: 'dodaj/casopis', component: DodajCasopisComponent },
 	{ path: 'casopis/:id', component: DodajOdborComponent },
 	{ path: 'casopis/promeni/:id', component: IspraviCasopisComponent },
-	{ path: 'casopis/promeniOdbor/:id', component: IspraviOdborComponent }
+	{ path: 'casopis/promeniOdbor/:id', component: IspraviOdborComponent },
+
+	{ path: 'autor', component: AutorComponent, children: [
+		{ path: '', redirectTo: 'radovi', pathMatch: 'full'},
+		{ path: 'radovi', component: AutorRadComponent},
+	]},
 	
 
 ]

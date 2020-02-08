@@ -1,0 +1,25 @@
+<div class="container">
+    <h1 style="padding-top: 30px">{{magazine.name}}</h1>
+    <p style="margin-top:13px">Glavni urednik: {{magazine.chiefEditor}}</p>
+    <p>Naučne oblasti:</p>
+    <span class="oblast" *ngFor="let oblast of magazine.scienceFieldList">{{oblast}} </span>
+    <div class="d-flex flex-row-reverse">
+        <button class="btn btn-outline-warning" (click)="onPretplatise()">Pretplati se</button>
+        <button class="btn btn-outline-primary" (click)="onKupi()">Kupi</button>
+    </div>
+    <hr>
+    
+    <div class="wrapper">
+    
+        <div *ngFor="let sciencePaper of magazine.sciencePaperDTOList" class="paper d-flex d-inline-flex">
+            <div class="right-side">
+                <p>{{ sciencePaper.title }}</p>
+                <p>{{ sciencePaper.price }} {{sciencePaper.currency}}</p>
+            </div>
+            <div class="left-side d-flex justify-content-end">
+                <button class="btn btn-primary d-flex flex-row-reverse" (click)="onKupiRad(sciencePaper)"> Kupi </button>
+            </div>
+        </div>
+    
+    </div>
+</div>

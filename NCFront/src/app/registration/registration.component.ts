@@ -26,6 +26,8 @@ export class RegistrationComponent implements OnInit {
   errPass: boolean = false;
   errNaucne: boolean = false;
 
+  lclhst: string = "http://localhost:4202";
+
   constructor(private userService : UserService, private repositoryService : RepositoryService, private spinner: NgxSpinnerService) {
 
     repositoryService.startProcess().subscribe(
@@ -95,7 +97,7 @@ export class RegistrationComponent implements OnInit {
       x.subscribe(
         res => {
           console.log(res);
-          window.location.href="http://localhost:4200/verify";
+          window.location.href= this.lclhst + "/verify";
         },
         err => {
           alert(err.message);

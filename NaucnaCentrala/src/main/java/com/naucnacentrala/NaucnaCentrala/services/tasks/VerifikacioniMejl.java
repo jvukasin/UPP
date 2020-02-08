@@ -1,8 +1,10 @@
-package com.naucnacentrala.NaucnaCentrala.services;
+package com.naucnacentrala.NaucnaCentrala.services.tasks;
 
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
 import com.naucnacentrala.NaucnaCentrala.model.User;
 import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
+import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
+import com.naucnacentrala.NaucnaCentrala.services.NOService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +59,7 @@ public class VerifikacioniMejl implements JavaDelegate {
             }
             if (formField.getFieldId().equals("nauc_oblasti")) {
                 for(NaucnaOblast n : oblastiIzBaze) {
-                    if(n.getNaziv().equalsIgnoreCase(formField.getFieldValue())) {
+                    if(n.getSifra().equals(Long.parseLong(formField.getFieldValue()))) {
                         no.add(n);
                         break;
                     }

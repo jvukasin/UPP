@@ -1,6 +1,7 @@
-package com.naucnacentrala.NaucnaCentrala.services;
+package com.naucnacentrala.NaucnaCentrala.services.tasks;
 
 import com.naucnacentrala.NaucnaCentrala.model.User;
+import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import org.springframework.stereotype.Service;
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
