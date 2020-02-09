@@ -1,12 +1,29 @@
 <div class="container">
     <h2>Radovi</h2>
-    <h3>Vaši zadaci za obradu rada:</h3>
+    <h4>Vaši zadaci za obradu rada:</h4>
     <table>
         <tr *ngFor="let task of tasks" > <td style="width: 300px; max-width: 550px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClick(task.taskId)">Go to task</button></td></tr>
     </table>
 
-    <h3>Vaši zadaci za biranje recenzenata:</h3>
+    <h4>Vaši zadaci za biranje recenzenata:</h4>
     <table>
         <tr *ngFor="let task of tasksRecen" > <td style="width: 300px; max-width: 550px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickRecen(task.taskId)">Go to task</button></td></tr>
     </table>
+
+    <h4>Vaši zadaci za ponovno biranje jednog recenzenta:</h4>
+    <table>
+        <tr *ngFor="let task of tasksAgain" > <td style="width: 300px; max-width: 550px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickAgain(task.taskId)">Go to task</button></td></tr>
+    </table>
+
+    <h4>Vaši zadaci za recenziranje:</h4>
+    <table>
+        <tr *ngFor="let task of tasksRecenziraj" > <td style="width: 300px; max-width: 550px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickRecenziraj(task.taskId)">Go to task</button></td></tr>
+    </table>
+
+    <h4>Vaši zadaci za pregled recenzija:</h4>
+    <table>
+        <tr *ngFor="let task of tasksPregled" > <td style="width: 300px; max-width: 550px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickPregled(task.taskId)">Go to task</button></td></tr>
+    </table>
+
+    
   </div>

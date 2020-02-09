@@ -38,6 +38,12 @@ public class PronalazenjeGlavnogUrednika implements JavaDelegate  {
             if (formField.getFieldId().equals("naucna_oblast")) {
                 execution.setVariable("konacan_nauc_obl", formField.getFieldValue());
             }
+            if (formField.getFieldId().equals("valuta")) {
+                execution.setVariable("valuta", formField.getFieldValue());
+            }
+            if (formField.getFieldId().equals("cena")) {
+                execution.setVariable("cena", formField.getFieldValue());
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OpenAccessProvera  implements JavaDelegate {
+public class OpenAccessProvera implements JavaDelegate {
 
     @Autowired
     CasopisService casopisService;

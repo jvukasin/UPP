@@ -26,8 +26,9 @@ public class NotifikacijaORecenziranju implements JavaDelegate {
             String username = formField.getFieldValue();
             recenzirosi.add(username);
             User a = korisnikService.findOneByUsername(username);
-            String subject = "Notifikacija o recenziranju rada";
-            String poruka = "Zdravo " + a.getIme() + ",\n\nRad sa nazivom \"" + execution.getVariable("konacan_naslov") + "\" čeka Vašu recenziju.";
+            String subject = "Naucna Centrala - notifikacija o recenziranju rada";
+            String poruka = "Zdravo " + a.getIme() + ",\n\nRad sa nazivom \"" + execution.getVariable("konacan_naslov") + "\" čeka Vašu recenziju.\n" +
+                    "Recenziju je potrebno uraditi u roku od 48 sati, u suprotnom će biti izabran novi recenzent.";
             korisnikService.sendMail(a, subject, poruka);
         }
         execution.setVariable("koRecenzira", recenzirosi);

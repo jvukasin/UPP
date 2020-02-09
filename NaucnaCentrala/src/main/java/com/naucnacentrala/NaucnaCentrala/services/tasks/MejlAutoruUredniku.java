@@ -20,7 +20,7 @@ public class MejlAutoruUredniku implements JavaDelegate {
         User at = korisnikService.findOneByUsername(autor);
         User gu = korisnikService.findOneByUsername(GU);
         String path = "http://localhost:4202";
-        String subject = "Notifikacija o novom radu";
+        String subject = "Naucna Centrala - notifikacija o novom radu";
         String poruka1 = "Zdravo " + at.getIme() + ",\n\n Novi rad sa naslovom \"" + execution.getVariable("konacan_naslov") + "\" je poslat na uvid glavnom uredniku.\n Na Naucnu Centralu možete otići putem ovog linka: "+ path;
         korisnikService.sendMail(at, subject, poruka1);
 

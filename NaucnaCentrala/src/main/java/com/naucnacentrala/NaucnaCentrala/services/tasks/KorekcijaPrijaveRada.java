@@ -17,7 +17,7 @@ public class KorekcijaPrijaveRada implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
         String autor = (String) execution.getVariable("autor");
         User a = korisnikService.findOneByUsername(autor);
-        String subject = "Notifikacija o korekciji prijave rada";
+        String subject = "Naucna Centrala - notifikacija o korekciji prijave rada";
         String poruka = "Zdravo " + a.getIme() + ",\n\nVaš rad sa naslovom \"" + execution.getVariable("konacan_naslov") + "\" zahteva korekciju priloženog dokumenta.\n" +
                 "Rok za korekciju je 24 sata nakon čega se rad odbija.";
         korisnikService.sendMail(a, subject, poruka);

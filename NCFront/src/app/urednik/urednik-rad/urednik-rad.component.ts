@@ -12,6 +12,9 @@ export class UrednikRadComponent implements OnInit {
   lclhst: string = "http://localhost:4202";
   tasks = [];
   tasksRecen = [];
+  tasksAgain = [];
+  tasksRecenziraj = [];
+  tasksPregled = [];
 
   constructor(private radService: RadService, private router: Router) {
     this.radService.getUrednikRadTasks().subscribe(
@@ -32,6 +35,34 @@ export class UrednikRadComponent implements OnInit {
       }
     );
 
+    this.radService.getUrednikIzborRecOpetTasks().subscribe(
+      res => {
+        this.tasksAgain = res;
+      },
+      err => {
+        console.log("Error occured Rad tasks");
+      }
+    );
+
+    this.radService.getRecenzentRecenziranjeTasks().subscribe(
+      res => {
+        this.tasksRecenziraj = res;
+        console.log(this.tasksRecenziraj);
+      },
+      err => {
+        console.log("Error occured Rad tasks");
+      }
+    );
+
+    this.radService.getUrednikPregledaTasks().subscribe(
+      res => {
+        this.tasksPregled = res;
+      },
+      err => {
+        console.log("Error occured Rad tasks");
+      }
+    );
+
   }
 
   ngOnInit() {
@@ -43,6 +74,18 @@ export class UrednikRadComponent implements OnInit {
 
   onClickRecen(id) {
     this.router.navigate(['/izbor-recenzenata/'.concat(id)]);
+  }
+
+  onClickAgain(id) {
+    this.router.navigate(['/izbor-novog-recenzenta/'.concat(id)]);
+  }
+
+  onClickRecenziraj(id) {
+    this.router.navigate(['/recenziranje-rada/'.concat(id)]);
+  }
+
+  onClickPregled(id) {
+    this.router.navigate(['/pregled/recenzije/'.concat(id)]);
   }
 
 }

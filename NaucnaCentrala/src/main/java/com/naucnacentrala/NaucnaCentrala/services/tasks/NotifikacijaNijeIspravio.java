@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RadTematskiNeprihvatljiv implements JavaDelegate {
+public class NotifikacijaNijeIspravio implements JavaDelegate {
 
     @Autowired
     KorisnikService korisnikService;
@@ -21,12 +21,13 @@ public class RadTematskiNeprihvatljiv implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         Long radID = (Long) execution.getVariable("radID");
-        NaucniRad r = naucniRadService.findOneById(radID);
-        naucniRadService.delete(r);
+        NaucniRad rad = naucniRadService.findOneById(radID);
+        naucniRadService.delete(rad);
+
         String autor = (String) execution.getVariable("autor");
         User a = korisnikService.findOneByUsername(autor);
-        String subject = "Naucna Centrala - notifikacija";
-        String poruka = "Zdravo " + a.getIme() + ",\n\n Vaš rad sa naslovom \"" + execution.getVariable("konacan_naslov") + "\" je odbijen od strane glavnog urednika jer tekst rada nije tematski prihvatljiv.";
+        String subject = "Naucna Centrala - notifikacija o radu";
+        String poruka = "Zdravo " + a.getIme() + ",\n\nVreme predviđeno za ispravku Vašeg rada \"" + execution.getVariable("konacan_naslov") + "\" je isteklo. Vaš rad je odbijen.";
         korisnikService.sendMail(a, subject, poruka);
     }
 }

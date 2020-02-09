@@ -25,10 +25,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import sun.awt.image.ImageAccessException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -177,7 +179,6 @@ public class NaucniRadController {
         return new ResponseEntity(dtos,  HttpStatus.OK);
     }
 
-
     @GetMapping(path = "/getRecenzentiForm/{taskId}", produces = "application/json")
     public @ResponseBody
     FormFieldsDTO getRecenzentiForm(@PathVariable String taskId) {
@@ -216,6 +217,61 @@ public class NaucniRadController {
         return new FormFieldsDTO(task.getId(), pid, properties);
     }
 
+
+    @GetMapping(path = "/getNoviRecenzentForm/{taskId}", produces = "application/json")
+    public @ResponseBody
+    FormFieldsDTO getNoviRecenzentForm(@PathVariable String taskId) {
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String pid = task.getProcessInstanceId();
+
+        TaskFormData tfd = formService.getTaskFormData(task.getId());
+        List<FormField> properties = tfd.getFormFields();
+
+        Long casopisID = (Long) runtimeService.getVariable(pid,"izabraniCasopisID");
+        Casopis c = casopisService.findOneById(casopisID);
+        String sifraNO = (String) runtimeService.getVariable(pid,"konacan_nauc_obl");
+        List<String> gotovi = (List<String>) runtimeService.getVariable(pid, "gotovi");
+
+        List<Recenzent> recenzentiCasopis = c.getRecenzenti();
+        List<User> rec = new ArrayList<>();
+
+        for(Recenzent r : recenzentiCasopis) {
+            for(NaucnaOblast no : r.getNaucneOblasti()) {
+                if(no.getSifra().toString().equals(sifraNO)) {
+                    rec.add(r);
+                    break;
+                }
+            }
+        }
+
+        if(gotovi.size() != 0) {
+            for(int i=0; i<rec.size(); i++) {
+                for(String usr : gotovi) {
+                    if(usr.equals(rec.get(i).getUsername())) {
+                        rec.remove(i);
+                    }
+                }
+            }
+        }
+
+        String urednik = (String) runtimeService.getVariable(pid, "ko_bira_rec");
+        User ur = korisnikService.findOneByUsername(urednik);
+        rec.add(ur);
+
+        for(FormField field : properties) {
+            if(field.getId().equals("novi_recenzent")) {
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(User ree : rec){
+                    String ip = ree.getIme() + " " + ree.getPrezime() + "(" + ree.getUsername() +")";
+                    enumType.getValues().put(ree.getUsername(), ip);
+                }
+            }
+        }
+
+        return new FormFieldsDTO(task.getId(), pid, properties);
+    }
+
     @PostMapping(path = "/postRecenzenti/{taskId}", produces = "application/json")
     public @ResponseBody
     ResponseEntity postRecenzenti(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
@@ -225,6 +281,23 @@ public class NaucniRadController {
         String processInstanceId = task.getProcessInstanceId();
 
         runtimeService.setVariable(processInstanceId, "koRecenziraDTO", dto);
+
+        formService.submitTaskForm(taskId, map);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/postNoviRecenzent/{taskId}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity postNoviRecenzent(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        FormSubmissionDTO field = dto.get(0);
+
+        runtimeService.setVariable(processInstanceId, "novi_rec", field.getFieldValue());
 
         formService.submitTaskForm(taskId, map);
 
@@ -243,6 +316,133 @@ public class NaucniRadController {
         }
 
         return new ResponseEntity(dtos,  HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getUrednikIzborRecOpetTasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrednikIzborRecOpetTasks(HttpServletRequest request) {
+
+        String username = korisnikService.getUsernameFromRequest(request);
+        List<Task> tasks = taskService.createTaskQuery().taskName("Izaberi novog recenzenta").taskAssignee(username).list();
+        List<TaskDTO> dtos = new ArrayList<TaskDTO>();
+        for (Task task : tasks) {
+            TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+            dtos.add(t);
+        }
+
+        return new ResponseEntity(dtos,  HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getRecenzentRecenziranjeTasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getRecenzentRecenziranjeTasks(HttpServletRequest request) {
+
+        String username = korisnikService.getUsernameFromRequest(request);
+        List<Task> tasks = taskService.createTaskQuery().taskName("Obavljanje recenzije").taskAssignee(username).list();
+        List<TaskDTO> dtos = new ArrayList<TaskDTO>();
+        for (Task task : tasks) {
+            TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+            dtos.add(t);
+        }
+
+        return new ResponseEntity(dtos,  HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/postRecenzija/{taskId}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity postRecenzija(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+        List<String> komentariUrednici = (List<String>) runtimeService.getVariable(processInstanceId, "komentari_za_urednike");
+        List<String> komentariRad = (List<String>) runtimeService.getVariable(processInstanceId, "komentari_za_autore");
+        List<String> predlozi = (List<String>) runtimeService.getVariable(processInstanceId, "predlog_za_rad");
+        for(FormSubmissionDTO field : dto) {
+            if(field.getFieldId().equals("komentar_za_urednike")) {
+                if(!field.getFieldValue().equals("")) {
+                    komentariUrednici.add(field.getFieldValue());
+                    runtimeService.setVariable(processInstanceId, "komentari_za_urednike", komentariUrednici);
+                }
+            } else if(field.getFieldId().equals("komentar_o_radu")) {
+                if(!field.getFieldValue().equals("")) {
+                    komentariRad.add(field.getFieldValue());
+                    runtimeService.setVariable(processInstanceId, "komentari_za_autore", komentariRad);
+                }
+            } else if(field.getFieldId().equals("preporuka")) {
+                predlozi.add(field.getFieldValue());
+                runtimeService.setVariable(processInstanceId, "predlog_za_rad", predlozi);
+            }
+        }
+
+        formService.submitTaskForm(taskId, map);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "/getUrednikPregledaTasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrednikPregledaTasks(HttpServletRequest request) {
+
+        String username = korisnikService.getUsernameFromRequest(request);
+
+        List<Task> tasks = taskService.createTaskQuery().taskName("Urednik pregleda ocene").taskAssignee(username).list();
+        List<TaskDTO> dtos = new ArrayList<TaskDTO>();
+        for (Task task : tasks) {
+            TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+            dtos.add(t);
+        }
+
+        return new ResponseEntity(dtos,  HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getAutorKomentariTasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getAutorKomentariTasks(HttpServletRequest request) {
+
+        String username = korisnikService.getUsernameFromRequest(request);
+
+        List<Task> tasks = taskService.createTaskQuery().taskName("Prikazivanje komentara autoru").taskAssignee(username).list();
+        List<TaskDTO> dtos = new ArrayList<TaskDTO>();
+        for (Task task : tasks) {
+            TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+            dtos.add(t);
+        }
+
+        return new ResponseEntity(dtos, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getPregledForm/{taskId}", produces = "application/json")
+    public @ResponseBody
+    FormFieldsDTO getPregledForm(@PathVariable String taskId) {
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String pid = task.getProcessInstanceId();
+
+        TaskFormData tfd = formService.getTaskFormData(task.getId());
+        List<FormField> properties = tfd.getFormFields();
+
+        List<String> komentariUrednici = (List<String>) runtimeService.getVariable(pid, "komentari_za_urednike");
+        List<String> komentariRad = (List<String>) runtimeService.getVariable(pid, "komentari_za_autore");
+        List<String> predlozi = (List<String>) runtimeService.getVariable(pid, "predlog_za_rad");
+
+        for(FormField field : properties) {
+            if(field.getId().equals("posl_komentar_o_radu")) {
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(String temp : komentariRad) {
+                    enumType.getValues().put(temp, temp);
+                }
+            } else if (field.getId().equals("posl_preporuka")) {
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(String temp : predlozi) {
+                    enumType.getValues().put(temp, temp);
+                }
+            } else if (field.getId().equals("posl_komentar_za_urednika")) {
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(String temp : komentariUrednici) {
+                    enumType.getValues().put(temp, temp);
+                }
+            }
+        }
+
+        return new FormFieldsDTO(task.getId(), pid, properties);
     }
 
     @GetMapping(path = "/getRadForm/{procesId}", produces = "application/json")
@@ -291,6 +491,23 @@ public class NaucniRadController {
         AccessClanarinaDTO d = new AccessClanarinaDTO(opn, imacln);
 
         return new ResponseEntity<>(d, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/postOdlukaUrednika/{taskId}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity postOdlukaUrednika(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        FormSubmissionDTO formField = dto.get(0);
+        String staKaze = formField.getFieldValue();
+        runtimeService.setVariable(processInstanceId, "prihvati_rad", staKaze);
+
+        formService.submitTaskForm(taskId, map);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(path = "/postRad/{taskId}", produces = "application/json")

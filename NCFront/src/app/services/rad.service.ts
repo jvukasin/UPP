@@ -81,6 +81,42 @@ export class RadService {
   postRecenzenti(o, taskId) {
     return this.http.post("/api/rad/postRecenzenti/".concat(taskId), o) as Observable<any>;
   }
+
+  getRecenzentRecenziranjeTasks() {
+    return this.http.get("/api/rad/getRecenzentRecenziranjeTasks") as Observable<any>;
+  }
+
+  postRecenzija(o, taskId) {
+    return this.http.post("/api/rad/postRecenzija/".concat(taskId), o) as Observable<any>;
+  }
+
+  getUrednikIzborRecOpetTasks() {
+    return this.http.get("/api/rad/getUrednikIzborRecOpetTasks") as Observable<any>;
+  }
+
+  getNoviRecenzentForm(taskId) {
+    return this.http.get("/api/rad/getNoviRecenzentForm/".concat(taskId)) as Observable<any>;
+  }
+
+  postNoviRecenzent(o, taskId) {
+    return this.http.post("/api/rad/postNoviRecenzent/".concat(taskId), o) as Observable<any>;
+  }
+
+  getUrednikPregledaTasks() {
+    return this.http.get("/api/rad/getUrednikPregledaTasks") as Observable<any>;
+  }
+
+  getPregledForm(taskId) {
+    return this.http.get("/api/rad/getPregledForm/".concat(taskId)) as Observable<any>;
+  }
+
+  postOdlukaUrednika(o, taskId) {
+    return this.http.post("/api/rad/postOdlukaUrednika/".concat(taskId), o) as Observable<any>;
+  }
+
+  getAutorKomentariTasks() {
+    return this.http.get("/api/rad/getAutorKomentariTasks") as Observable<any>;
+  }
   
 
 }

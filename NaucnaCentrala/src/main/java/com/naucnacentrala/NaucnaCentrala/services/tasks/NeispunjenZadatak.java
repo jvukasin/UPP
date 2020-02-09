@@ -26,7 +26,7 @@ public class NeispunjenZadatak implements JavaDelegate {
         naucniRadService.delete(r);
         String autor = (String) execution.getVariable("autor");
         User a = korisnikService.findOneByUsername(autor);
-        String subject = "Notifikacija o neispunjenom zadatku";
+        String subject = "Naucna Centrala - notifikacija o neispunjenom zadatku";
         String poruka = "Zdravo " + a.getIme() + ",\n\nVaš rad sa naslovom \"" + execution.getVariable("konacan_naslov") + "\" nije korigovan u predviđenom vremenskom roku.\n" +
                 "Iz tog razloga Vaš rad je odbijen.";
         korisnikService.sendMail(a, subject, poruka);

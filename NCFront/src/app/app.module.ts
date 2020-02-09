@@ -38,6 +38,11 @@ import { UrednikRadComponent } from './urednik/urednik-rad/urednik-rad.component
 import { ObradaRadaComponent } from './urednik/obrada-rada/obrada-rada.component';
 import { IspraviRadComponent } from './autor/ispravi-rad/ispravi-rad.component';
 import { IzborRecenzenataComponent } from './urednik/izbor-recenzenata/izbor-recenzenata.component';
+import { RecenzentComponent } from './recenzent/recenzent.component';
+import { RecenzentRadComponent } from './recenzent/recenzent-rad/recenzent-rad.component';
+import { RecenziranjeComponent } from './recenzent/recenziranje/recenziranje.component';
+import { IzborNovogRecenzentaComponent } from './urednik/izbor-novog-recenzenta/izbor-novog-recenzenta.component';
+import { PregledRecenzijaComponent } from './urednik/pregled-recenzija/pregled-recenzija.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +75,12 @@ import { IzborRecenzenataComponent } from './urednik/izbor-recenzenata/izbor-rec
     UrednikRadComponent,
     ObradaRadaComponent,
     IspraviRadComponent,
-    IzborRecenzenataComponent
+    IzborRecenzenataComponent,
+    RecenzentComponent,
+    RecenzentRadComponent,
+    RecenziranjeComponent,
+    IzborNovogRecenzentaComponent,
+    PregledRecenzijaComponent
   ],
   imports: [
     BrowserModule,
