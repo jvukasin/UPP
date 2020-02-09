@@ -38,6 +38,9 @@ public class NaucniRad {
     @Lob
     private byte[] pdf;
 
+    @Column(name = "pdf_name")
+    private String pdfName;
+
     @OneToMany(mappedBy = "naucniRad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Koautor> koautori;
 
@@ -130,5 +133,13 @@ public class NaucniRad {
 
     public void setKoautori(List<Koautor> koautori) {
         this.koautori = koautori;
+    }
+
+    public String getPdfName() {
+        return pdfName;
+    }
+
+    public void setPdfName(String pdfName) {
+        this.pdfName = pdfName;
     }
 }

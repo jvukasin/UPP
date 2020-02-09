@@ -24,14 +24,23 @@ export class AutorRadComponent implements OnInit {
   constructor(private radService: RadService, private router: Router) { }
 
   ngOnInit() {
-    let x = this.radService.getAutorRadTasks();
-
-    x.subscribe(
+    this.radService.getAutorRadTasks().subscribe(
       res => {
-        console.log(res);
         this.tasksK = res;
         if(this.tasksK.length > 0) {
           this.imaTaskovaZaKoautore = true;
+        }
+      },
+      err => {
+        console.log("Error occured");
+      }
+    );
+
+    this.radService.getAutorIspravkaRadaTasks().subscribe(
+      res => {
+        this.tasksR = res;
+        if(this.tasksR.length > 0) {
+          this.imaTaskovaZaRadove = true;
         }
       },
       err => {
@@ -42,6 +51,10 @@ export class AutorRadComponent implements OnInit {
 
   onClickK(id) {
     this.router.navigate(['/dodaj/rad/koautori/'.concat(id)]);
+  }
+
+  onClickR(id) {
+    this.router.navigate(['/ispravi/rad/'.concat(id)]);
   }
 
   onDodajRad() {

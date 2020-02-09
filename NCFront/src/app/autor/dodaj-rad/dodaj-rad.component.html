@@ -18,7 +18,7 @@
             </select>
         </div>
         <label for="fajl">Dodajte pdf rada</label>
-        <input type="file" class="form-control" accept=".pdf" (change)="handleFileInput($event.target.files)">
+        <input type="file" class="form-control" accept=".pdf" name="fajl" ngModel (change)="handleFileInput($event.target.files)">
         
         <input type="submit" class="btn btn-primary posalji" value="OK">
     </form>

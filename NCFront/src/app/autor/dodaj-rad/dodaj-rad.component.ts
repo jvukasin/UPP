@@ -18,6 +18,7 @@ export class DodajRadComponent implements OnInit {
   fileToUpload: File;
   lclhst: string = "http://localhost:4202";
   radId: any;
+  fileName: any;
 
   constructor(private route: ActivatedRoute, private radService: RadService) {
     this.route.params.subscribe(

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { RadService } from 'src/app/services/rad.service';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-dodaj-koautore',
@@ -16,7 +17,7 @@ export class DodajKoautoreComponent implements OnInit {
   private tasks = [];
   lclhst: string = "http://localhost:4202";
 
-  constructor(private route: ActivatedRoute, private radService: RadService) {
+  constructor(private route: ActivatedRoute, private radService: RadService, private spinner: NgxSpinnerService) {
     this.route.params.subscribe(
       (params: Params) => {
         this.id = params['id'];
@@ -50,12 +51,14 @@ export class DodajKoautoreComponent implements OnInit {
       o.push({fieldId: property, fieldValue: value[property]});
     }
     if(this.proveri(o)) {
+      this.spinner.show();
       this.radService.postKoautor(o, this.formFieldsDto.taskId).subscribe(
         res => {
           window.location.href= this.lclhst + "/autor";
         },
         err => {
           alert("Error occured");
+          this.spinner.hide();
         }
       );
      

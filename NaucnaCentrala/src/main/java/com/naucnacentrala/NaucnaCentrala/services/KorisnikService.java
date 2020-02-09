@@ -111,12 +111,14 @@ public class KorisnikService {
         return recenzenti;
     }
 
-    public ArrayList<User> findUrednike() {
+    public ArrayList<User> findUrednike(String username) {
         ArrayList<User> urednici = new ArrayList<>();
         ArrayList<User> users = (ArrayList) korRepo.findAll();
         for(User u : users) {
             if(u instanceof Urednik) {
-                urednici.add((Urednik) u);
+                if(!u.getUsername().equals(username)) {
+                    urednici.add((Urednik) u);
+                }
             }
         }
         return urednici;

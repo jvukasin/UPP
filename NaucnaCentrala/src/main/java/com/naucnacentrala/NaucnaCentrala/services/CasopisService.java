@@ -49,6 +49,7 @@ public class CasopisService {
         dto.setChiefEditor(c.getGlavniUrednik());
         dto.setRegistered(c.isRegistered());
         dto.setSellerId(c.getSellerId());
+        dto.setActive(c.isAktivan());
         dto.setSciencePaperDTOList(c.getSciencePapers());
         return dto;
     }
@@ -65,6 +66,7 @@ public class CasopisService {
             dto.setChiefEditor(c.getGlavniUrednik());
             dto.setRegistered(c.isRegistered());
             dto.setSellerId(c.getSellerId());
+            dto.setActive(c.isAktivan());
             dto.setSciencePaperDTOList(c.getSciencePapers());
 
             retVal.add(dto);

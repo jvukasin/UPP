@@ -18,12 +18,13 @@ public class CasopisDTO {
     private List<String> scienceFieldList = new ArrayList<>();
     private String chiefEditor;
     private List<NaucniRadDTO> sciencePaperDTOList = new ArrayList<>();
+    private boolean active;
 
     public CasopisDTO() {
     }
 
     public CasopisDTO(Long id, String name, String issn, List<NaucnaOblast> scienceFieldList, Urednik chiefEditor,
-                      boolean isRegistered, long sellerId, List<NaucniRad> sciencePapers) {
+                      boolean isRegistered, long sellerId, List<NaucniRad> sciencePapers, boolean active) {
         this.id = id;
         this.name = name;
         this.issn = issn;
@@ -32,6 +33,7 @@ public class CasopisDTO {
         this.isRegistered = isRegistered;
         this.setSellerId(sellerId);
         this.setSciencePaperDTOList(sciencePapers);
+        this.active = active;
     }
 
     public Long getId() {
@@ -99,5 +101,13 @@ public class CasopisDTO {
 
     public List<NaucniRadDTO> getSciencePaperDTOList() {
         return sciencePaperDTOList;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

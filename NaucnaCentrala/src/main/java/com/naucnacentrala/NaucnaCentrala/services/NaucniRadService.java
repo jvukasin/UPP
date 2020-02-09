@@ -20,6 +20,7 @@ public class NaucniRadService {
     public NaucniRad save(NaucniRad r) {
         return naucniRadRepository.save(r);
     }
+    public void delete(NaucniRad r) { naucniRadRepository.delete(r); }
 
     public NaucniRad savePdf(MultipartFile file, NaucniRad rad){
         try {

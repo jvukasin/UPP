@@ -2,7 +2,7 @@
       <h3 class="mt-5" style="margin-bottom:50px">Naučni časopisi</h3>
 
    <div class="row" *ngFor="let magazine of magazines">
-        <section>
+        <section *ngIf="magazine.active">
             <div class="row" style="width: 100%;">
             <div class="right-side">
                 <p class="magazine-name">{{magazine.name}}</p>

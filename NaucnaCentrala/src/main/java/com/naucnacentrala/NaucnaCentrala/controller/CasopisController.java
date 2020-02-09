@@ -165,15 +165,16 @@ public class CasopisController {
 
     @GetMapping(path = "/get/UredRec/{procesId}", produces = "application/json")
     public @ResponseBody
-    FormFieldsDTO getUredRecForm(@PathVariable String procesId) {
+    FormFieldsDTO getUredRecForm(@PathVariable String procesId, HttpServletRequest request) {
         Task task = taskService.createTaskQuery().processInstanceId(procesId).singleResult();
 
         String pid = task.getProcessInstanceId();
         TaskFormData tfd = formService.getTaskFormData(task.getId());
         List<FormField> properties = tfd.getFormFields();
 
+        String user = korisnikService.getUsernameFromRequest(request);
         ArrayList<User> recenzentiBaza = korisnikService.findRecenzente();
-        ArrayList<User> uredniciBaza = korisnikService.findUrednike();
+        ArrayList<User> uredniciBaza = korisnikService.findUrednike(user);
 
         Long casopisID = (Long) runtimeService.getVariable(pid, "casopisID");
         Casopis c = casopisService.findOneById(casopisID);

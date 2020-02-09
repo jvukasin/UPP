@@ -52,7 +52,34 @@ export class RadService {
   }
 
   getUrednikRadTasks() {
-    
+    return this.http.get("/api/rad/getUrednikRadTasks") as Observable<any>;
+  }
+
+  UrednikObradaRada(o, taskId) {
+    return this.http.post("/api/rad/obradaRada/".concat(taskId), o) as Observable<any>;
+  }
+
+  downloadFile(procesId) {
+    const httpOptions = {
+      'responseType'  : 'arraybuffer' as 'json'
+    };
+    return this.http.get("/api/rad/downloadFile/".concat(procesId), httpOptions) as Observable<any>;
+  }
+
+  getAutorIspravkaRadaTasks() {
+    return this.http.get("/api/rad/getAutorIspravkaRadaTasks") as Observable<any>;
+  }
+
+  getUrednikIzborRecTasks() {
+    return this.http.get("/api/rad/getUrednikIzborRecTasks") as Observable<any>;
+  }
+
+  getRecenzentiForm(taskId) {
+    return this.http.get("/api/rad/getRecenzentiForm/".concat(taskId)) as Observable<any>;
+  }
+
+  postRecenzenti(o, taskId) {
+    return this.http.post("/api/rad/postRecenzenti/".concat(taskId), o) as Observable<any>;
   }
   
 

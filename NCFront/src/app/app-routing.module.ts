@@ -24,6 +24,9 @@ import { DodajRadComponent } from './autor/dodaj-rad/dodaj-rad.component';
 import { UplataClanarineComponent } from './autor/uplata-clanarine/uplata-clanarine.component';
 import { DodajKoautoreComponent } from './autor/dodaj-koautore/dodaj-koautore.component';
 import { UrednikRadComponent } from './urednik/urednik-rad/urednik-rad.component';
+import { ObradaRadaComponent } from './urednik/obrada-rada/obrada-rada.component';
+import { IspraviRadComponent } from './autor/ispravi-rad/ispravi-rad.component';
+import { IzborRecenzenataComponent } from './urednik/izbor-recenzenata/izbor-recenzenata.component';
 
 
 const appRoutes: Routes = [
@@ -62,6 +65,9 @@ const appRoutes: Routes = [
 	{ path: 'dodaj/rad/:id', component: DodajRadComponent},
 	{ path: 'dodaj/rad/koautori/:id', component: DodajKoautoreComponent},
 	{ path: 'uplataClanarine/:id', component: UplataClanarineComponent},
+	{ path: 'obrada-rada/:id', component: ObradaRadaComponent},
+	{ path: 'ispravi/rad/:id', component: IspraviRadComponent},
+	{ path: 'izbor-recenzenata/:id', component: IzborRecenzenataComponent},
 
 	
 

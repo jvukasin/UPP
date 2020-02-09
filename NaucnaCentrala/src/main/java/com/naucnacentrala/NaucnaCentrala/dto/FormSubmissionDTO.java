@@ -10,7 +10,6 @@ public class FormSubmissionDTO implements Serializable {
 
     public FormSubmissionDTO() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
     public FormSubmissionDTO(String fieldId, String fieldValue) {
