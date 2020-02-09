@@ -59,6 +59,12 @@ public class Casopis {
     @OneToMany(mappedBy = "magazine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<NaucniRad> sciencePapers;
 
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "casopis_korisnici_clanarine",
+            joinColumns = @JoinColumn(name = "casopisi_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "clanarina_id", referencedColumnName = "id"))
+    private List<Clanarina> korisniciSaClanarinom;
+
     public Casopis() {
     }
 
@@ -173,4 +179,14 @@ public class Casopis {
     public void setSciencePapers(List<NaucniRad> sciencePapers) {
         this.sciencePapers = sciencePapers;
     }
+
+    public List<Clanarina> getKorisniciSaClanarinom() {
+        return korisniciSaClanarinom;
+    }
+
+    public void setKorisniciSaClanarinom(List<Clanarina> korisniciSaClanarinom) {
+        this.korisniciSaClanarinom = korisniciSaClanarinom;
+    }
+
+
 }

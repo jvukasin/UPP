@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RadService } from 'src/app/services/rad.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-autor-rad',
@@ -8,16 +9,19 @@ import { RadService } from 'src/app/services/rad.service';
 })
 export class AutorRadComponent implements OnInit {
 
-  tasks = [];
+  tasksK = [];
+  tasksR = [];
   radList: any = [];
   emptyRadList: boolean = false;
   retHref: any;
+  imaTaskovaZaKoautore: boolean = false;
+  imaTaskovaZaRadove: boolean = false;
 
   lclhst: string = "http://localhost:4202";
 
   showModal: boolean = false;
 
-  constructor(private radService: RadService) { }
+  constructor(private radService: RadService, private router: Router) { }
 
   ngOnInit() {
     let x = this.radService.getAutorRadTasks();
@@ -25,7 +29,10 @@ export class AutorRadComponent implements OnInit {
     x.subscribe(
       res => {
         console.log(res);
-        this.tasks = res;
+        this.tasksK = res;
+        if(this.tasksK.length > 0) {
+          this.imaTaskovaZaKoautore = true;
+        }
       },
       err => {
         console.log("Error occured");
@@ -33,9 +40,8 @@ export class AutorRadComponent implements OnInit {
     );
   }
 
-  onClick(id) {
-    // window.location.href = this.lclhst + "/casopis/promeni/" + id;
-    alert("kliknuo na dugme u zadacima");
+  onClickK(id) {
+    this.router.navigate(['/dodaj/rad/koautori/'.concat(id)]);
   }
 
   onDodajRad() {
@@ -44,12 +50,6 @@ export class AutorRadComponent implements OnInit {
 
   onCloseModal() {
     this.showModal = false;
-  }
-
-  casopisSubmitted(magID) {
-    this.showModal = false;
-    alert("Izabrani casopis je ".concat(magID));
-    //KOD ZA PROCES
   }
 
 

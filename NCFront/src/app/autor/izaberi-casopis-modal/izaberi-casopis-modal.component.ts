@@ -8,14 +8,16 @@ import { RadService } from 'src/app/services/rad.service';
 })
 export class IzaberiCasopisModalComponent implements OnInit {
 
-  @Output() submit = new EventEmitter();
-
   private formFieldsDto = null;
   private formFields = [];
   private processInstance = "";
   private enumValues1 = [];
   private enumValues = [];
   private tasks = [];
+  retVal: any;
+  lclhst: string = "http://localhost:4202";
+
+  errorPolje: boolean = false;
 
   constructor(private radService: RadService) { }
 
@@ -52,8 +54,39 @@ export class IzaberiCasopisModalComponent implements OnInit {
         o.push({fieldId : property, fieldValue : value[property]});
       }
     }
-
+    if(this.izabraoCasopis(o)) {
+      this.radService.postIzabraniCasopis(o, this.formFieldsDto.taskId).subscribe(
+        res => {
+          console.log(res);
+          this.retVal = res;
+          if(this.retVal.openAccess == false ) {
+            //vodi ga na unos podataka o radu
+            window.location.href= this.lclhst + "/dodaj/rad/" + this.processInstance;
+          } else if (this.retVal.imaClanarinu == false) {
+            //vodi ga na placanje clanarine
+            window.location.href= this.lclhst + "/uplataClanarine/" + this.processInstance;
+          } else {
+            //vodi ga na unos podataka o radu
+            window.location.href= this.lclhst + "/dodaj/rad/" + this.processInstance;
+          }
+          
+        },
+        err => {
+            alert("Error occured");
+        }
+      );
+    }
     
+  }
+
+  izabraoCasopis(o) {
+    const val = o[0].fieldValue;
+    if(val === "") {
+      this.errorPolje = true;
+      return false;
+    }
+    this.errorPolje = false;
+    return true;
   }
 
 }

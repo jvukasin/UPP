@@ -1,0 +1,7 @@
+<div class="container">
+    <h2>Radovi</h2>
+    <h3>Vaši zadaci :</h3>
+    <table>
+        <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td><button class="btn btn-primary" (click)="onClick(task.taskId)">Go to task</button></td></tr>
+    </table>
+  </div>

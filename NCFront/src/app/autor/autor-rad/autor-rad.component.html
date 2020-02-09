@@ -7,7 +7,7 @@
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Naziv rada</th>
-                <th scope="col">ISSN</th>
+                <th scope="col">Cena</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -16,7 +16,7 @@
                 <tr *ngFor="let rad of radList">
                     <th scope="row">{{ rad.id }}</th>
                     <td>{{ rad.name }}</td>
-                    <td>{{ rad.issn }}</td>
+                    <td>{{ rad.price }} {{rad.currency}}</td>
                   </tr>
               </tbody>
           </table>
@@ -26,9 +26,15 @@
       </div>
   
   
-      <h3>Vaši zadaci:</h3>
+      <h3>Zadaci za koautore:</h3>
+      <p *ngIf="!imaTaskovaZaKoautore">Trenutno nemate ovakav tip zadatka.</p>
       <table>
-          <tr *ngFor="let task of tasks" > <td>{{task.name}}</td><td><button class="btn btn-primary" (click)="onClick(task.taskId)">Go to task</button></td></tr>
+          <tr *ngFor="let task of tasksK" > <td style="width: 300px; max-width: 500px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickK(task.taskId)">Go to task</button></td></tr>
+      </table>
+      <h3>Zadaci za izmenu radova:</h3>
+      <p *ngIf="!imaTaskovaZaRadove">Trenutno nemate ovakav tip zadatka.</p>
+      <table>
+          <tr *ngFor="let task of tasksR" > <td style="width: 300px; max-width: 500px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickR(task.taskId)">Go to task</button></td></tr>
       </table>
   </div>
 
@@ -38,7 +44,7 @@
           <button type="button" class="close" (click)="onCloseModal()">
               <span aria-hidden="true">&times;</span>
             </button>
-        <app-izaberi-casopis-modal (submit)="casopisSubmitted($event)"></app-izaberi-casopis-modal>
+        <app-izaberi-casopis-modal></app-izaberi-casopis-modal>
       </div>
     </div>
 </div>

@@ -16,9 +16,9 @@ insert into role values (4, 'ROLE_RECENZENT');
 insert into role values (5, 'ROLE_AUTOR');
 
 insert into user (type, username, active, drzava, email, grad, ime, password, prezime, titula) values
-('Admin','vlada', 1, 'Srbija', 'cvetanovic9696@gmail.com', 'Novi Knezevac', 'Vladimir', '$2a$10$QAOKmXRKmsq3ifhxkVmbAuJq0cDnxnc7abfy00eK3k96l91qDQCUy', 'Cvetanovic', '');
+('Admin','vlada', 1, 'Srbija', 'flylivedrive@gmail.com', 'Novi Knezevac', 'Vladimir', '$2a$10$QAOKmXRKmsq3ifhxkVmbAuJq0cDnxnc7abfy00eK3k96l91qDQCUy', 'Cvetanovic', '');
 insert into user (type, username, active, drzava, email, grad, ime, password, prezime, titula) values
-('User','vule', 1, 'Srbija', 'jovic.vukasin@gmail.com', 'Novi Sad', 'Vukasin', '$2a$10$SAQescpnqhTxAVN6i1h2ROsoNYrR8KnEbZtylPUSEfqOrL8c9KIxy', 'Jovic', '');
+('User','vule', 1, 'Srbija', 'flylivedrive@gmail.com', 'Novi Sad', 'Vukasin', '$2a$10$SAQescpnqhTxAVN6i1h2ROsoNYrR8KnEbZtylPUSEfqOrL8c9KIxy', 'Jovic', '');
 insert into user (type, username, active, drzava, email, grad, ime, password, prezime, titula) values
 ('Urednik','djo', 1, 'Srbija', 'flylivedrive@gmail.com', 'Novi Sad', 'Nikola', '$2a$10$I4xaV2Eyy.k2NwRLMkBqBe2xbF1oTTtEpUZwMjOzZV3m6l47IaBjS', 'Djordjevic', '');
 insert into user (type, username, active, drzava, email, grad, ime, password, prezime, titula) values
@@ -48,7 +48,8 @@ insert into privilege values (1, 'RECENZENTI_TASK');
 insert into roles_privileges values (2,1);
 
 insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registered) values (1, "Nauka generalno", 1, "111", "citaoci", "djo", false);
+insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registered) values (2, "Test za autore", 1, "222", "autori", "djo", false);
 
-insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1);
-insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1);
+-- insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1);
+-- insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1);
 

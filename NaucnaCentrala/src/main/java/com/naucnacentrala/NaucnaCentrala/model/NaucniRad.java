@@ -34,6 +34,13 @@ public class NaucniRad {
     @Column(name = "price")
     private double price;
 
+    @Column(name = "pdf")
+    @Lob
+    private byte[] pdf;
+
+    @OneToMany(mappedBy = "naucniRad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Koautor> koautori;
+
     public NaucniRad() {
     }
 
@@ -107,5 +114,21 @@ public class NaucniRad {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public byte[] getPdf() {
+        return pdf;
+    }
+
+    public void setPdf(byte[] pdf) {
+        this.pdf = pdf;
+    }
+
+    public List<Koautor> getKoautori() {
+        return koautori;
+    }
+
+    public void setKoautori(List<Koautor> koautori) {
+        this.koautori = koautori;
     }
 }

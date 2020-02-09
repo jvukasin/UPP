@@ -1,0 +1,17 @@
+h4 {
+    text-align: center;
+}
+
+.container {
+    width: 50%;
+}
+
+.posalji {
+    margin: 15px;
+    margin-left: 35%;
+    width: 30%;
+}
+
+.error {
+    color: red;
+}

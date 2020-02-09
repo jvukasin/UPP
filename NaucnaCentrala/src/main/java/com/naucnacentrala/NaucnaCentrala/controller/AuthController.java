@@ -59,7 +59,7 @@ public class AuthController {
         String jwt = tokenUtils.generateToken(user.getUsername(), device);
         int expiresIn = 3600;
 
-
+        identityService.setAuthenticatedUserId(authenticationRequest.getUsername());
         return ResponseEntity.ok(new UserTokenState(jwt,expiresIn));
     }
 
@@ -70,6 +70,7 @@ public class AuthController {
         if (authentication != null)
             new SecurityContextLogoutHandler().logout(request, response, authentication);
 
+        identityService.setAuthenticatedUserId(null);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

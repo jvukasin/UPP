@@ -31,6 +31,10 @@ import { CasopisInfoComponent } from './casopis/casopis-info/casopis-info.compon
 import { AutorComponent } from './autor/autor.component';
 import { AutorRadComponent } from './autor/autor-rad/autor-rad.component';
 import { IzaberiCasopisModalComponent } from './autor/izaberi-casopis-modal/izaberi-casopis-modal.component';
+import { DodajRadComponent } from './autor/dodaj-rad/dodaj-rad.component';
+import { UplataClanarineComponent } from './autor/uplata-clanarine/uplata-clanarine.component';
+import { DodajKoautoreComponent } from './autor/dodaj-koautore/dodaj-koautore.component';
+import { UrednikRadComponent } from './urednik/urednik-rad/urednik-rad.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +60,11 @@ import { IzaberiCasopisModalComponent } from './autor/izaberi-casopis-modal/izab
     CasopisInfoComponent,
     AutorComponent,
     AutorRadComponent,
-    IzaberiCasopisModalComponent
+    IzaberiCasopisModalComponent,
+    DodajRadComponent,
+    UplataClanarineComponent,
+    DodajKoautoreComponent,
+    UrednikRadComponent
   ],
   imports: [
     BrowserModule,

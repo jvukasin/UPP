@@ -16,7 +16,7 @@ export class UrednikCasopisComponent implements OnInit {
 
   lclhst: string = "http://localhost:4202";
 
-  constructor(private kpService: KPService,private casopisService: CasopisService) { }
+  constructor(private kpService: KPService, private casopisService: CasopisService) { }
 
   ngOnInit() {
     let x = this.casopisService.getUrednikCasopisTasks();

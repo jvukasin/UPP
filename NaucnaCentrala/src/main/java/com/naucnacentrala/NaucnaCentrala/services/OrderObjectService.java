@@ -23,7 +23,7 @@ public class OrderObjectService {
     CasopisService magazineService;
 
     @Autowired
-    NaurcniRadService sciencePaperService;
+    NaucniRadService sciencePaperService;
 
     @Autowired
     TokenUtils tokenUtils;

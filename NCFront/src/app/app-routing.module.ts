@@ -20,6 +20,10 @@ import { CasopisListComponent } from './casopis/casopis-list/casopis-list.compon
 import { CasopisInfoComponent } from './casopis/casopis-info/casopis-info.component';
 import { AutorComponent } from './autor/autor.component';
 import { AutorRadComponent } from './autor/autor-rad/autor-rad.component';
+import { DodajRadComponent } from './autor/dodaj-rad/dodaj-rad.component';
+import { UplataClanarineComponent } from './autor/uplata-clanarine/uplata-clanarine.component';
+import { DodajKoautoreComponent } from './autor/dodaj-koautore/dodaj-koautore.component';
+import { UrednikRadComponent } from './urednik/urednik-rad/urednik-rad.component';
 
 
 const appRoutes: Routes = [
@@ -43,6 +47,7 @@ const appRoutes: Routes = [
 	{ path: 'urednik', component: CasopisComponent, children: [
 		{ path: '', redirectTo: 'casopisi', pathMatch: 'full'},
 		{ path: 'casopisi', component: UrednikCasopisComponent},
+		{ path: 'radovi', component: UrednikRadComponent},
 	]},
 	{ path: 'dodaj/casopis', component: DodajCasopisComponent },
 	{ path: 'casopis/:id', component: DodajOdborComponent },
@@ -52,7 +57,12 @@ const appRoutes: Routes = [
 	{ path: 'autor', component: AutorComponent, children: [
 		{ path: '', redirectTo: 'radovi', pathMatch: 'full'},
 		{ path: 'radovi', component: AutorRadComponent},
+		
 	]},
+	{ path: 'dodaj/rad/:id', component: DodajRadComponent},
+	{ path: 'dodaj/rad/koautori/:id', component: DodajKoautoreComponent},
+	{ path: 'uplataClanarine/:id', component: UplataClanarineComponent},
+
 	
 
 ]

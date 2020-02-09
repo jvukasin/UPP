@@ -1,5 +1,6 @@
 <div class="container">
     <div class="row">
+        <p class="error" *ngIf="errorPolje">Izbor časopisa je obavezan</p>
         <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
             <div *ngFor="let field of formFields">
                 <label for={{field.id}}>{{field.label}}</label>
