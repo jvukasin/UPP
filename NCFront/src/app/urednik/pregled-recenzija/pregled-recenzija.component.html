@@ -1,7 +1,7 @@
 <div class="container">
     <ngx-spinner></ngx-spinner>
-    <h4 class="mt-4">Izbor recenzenata rada</h4>
-    <span class="error" *ngIf="errRec">Izbor minimum 2 recenzenta je obavezan.</span>
+    <h4 class="mt-4">Pregled recenzija</h4>
+    <span class="error" *ngIf="errRec">Mora se izabrati odluka o objavljivanju.</span>
     <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)" ngNativeValidate>
         <div *ngFor="let field of formFields">
             <label for={{field.id}}>{{field.label}}</label>
@@ -9,17 +9,17 @@
             <input type="text" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='string'" >
             <input type="checkbox" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='boolean'">
             <input type="number" class="form-control" name={{field.id}} ngModel  *ngIf="field.type.name=='long'">
-            <select multiple name={{field.id}} class="form-control" ngModel *ngIf="field.type.name=='enum' && field.id=='posl_komentar_o_radu'">
+            <select multiple readonly name={{field.id}} class="form-control" ngModel *ngIf="field.type.name=='enum' && field.id=='posl_komentar_o_radu'">
               <option *ngFor="let val of enumValues1" value={{val}}>
                 {{field.type.values[val]}}
               </option>
             </select>
-            <select multiple name={{field.id}} class="form-control" ngModel *ngIf="field.type.name=='enum' && field.id=='posl_preporuka'">
+            <select multiple readonly name={{field.id}} class="form-control" ngModel *ngIf="field.type.name=='enum' && field.id=='posl_preporuka'">
                 <option *ngFor="let val of enumValues2" value={{val}}>
                   {{field.type.values[val]}}
                 </option>
             </select>
-            <select multiple name={{field.id}} class="form-control" ngModel *ngIf="field.type.name=='enum' && field.id=='posl_komentar_za_urednika'">
+            <select multiple readonly name={{field.id}} class="form-control" ngModel *ngIf="field.type.name=='enum' && field.id=='posl_komentar_za_urednika'">
             <option *ngFor="let val of enumValues3" value={{val}}>
                 {{field.type.values[val]}}
             </option>

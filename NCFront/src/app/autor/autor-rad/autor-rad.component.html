@@ -22,25 +22,32 @@
           </table>
           </div>
         <div>
-          <h3 *ngIf="emptyRadList">U sistemu nema zabeleženih radova.</h3>
+          <h4 *ngIf="emptyRadList">U sistemu nema zabeleženih radova.</h4>
       </div>
   
-      <h3>Zadaci za koautore:</h3>
+      <h4>Zadaci za koautore:</h4>
       <p *ngIf="!imaTaskovaZaKoautore">Trenutno nemate ovakav tip zadatka.</p>
       <table>
           <tr *ngFor="let task of tasksK" > <td style="width: 300px; max-width: 500px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickK(task.taskId)">Go to task</button></td></tr>
       </table>
 
-      <h3>Zadaci za izmenu radova:</h3>
+      <h4>Zadaci za izmenu radova:</h4>
       <p *ngIf="!imaTaskovaZaRadove">Trenutno nemate ovakav tip zadatka.</p>
       <table>
           <tr *ngFor="let task of tasksR" > <td style="width: 300px; max-width: 500px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickR(task.taskId)">Go to task</button></td></tr>
       </table>
 
-      <h3>Zadaci za izmenu rada sa komentarima:</h3>
+      <h4>Zadaci za izmenu rada sa komentarima:</h4>
       <p *ngIf="!imaTaskovaSaKomentarima">Trenutno nemate ovakav tip zadatka.</p>
       <table>
           <tr *ngFor="let task of tasksKom" > <td style="width: 300px; max-width: 500px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickKom(task.taskId)">Go to task</button></td></tr>
+      </table>
+
+
+      <h4>FINALNE izmene:</h4>
+      <p *ngIf="!imaTaskovaFinal">Trenutno nemate ovakav tip zadatka.</p>
+      <table>
+          <tr *ngFor="let task of tasksFinal" > <td style="width: 300px; max-width: 500px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickFinal(task.taskId)">Go to task</button></td></tr>
       </table>
   </div>
 

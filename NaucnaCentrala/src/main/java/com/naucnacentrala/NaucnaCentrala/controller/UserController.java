@@ -112,11 +112,13 @@ public class UserController {
         String praviUsername = new String(actualByte1);
         String praviProces = new String(actualByte2);
 
-        runtimeService.setVariable(praviProces, "potvrdio", true);
         runtimeService.setVariable(praviProces, "korisnik", praviUsername);
 
         RedirectView rv = new RedirectView();
-        rv.setUrl("http://localhost:4200/verified");
+        rv.setUrl("http://localhost:4202/verified");
+
+        runtimeService.setVariable(praviProces, "potvrdio", true);
+
         return rv;
     }
 
@@ -135,6 +137,8 @@ public class UserController {
                 ui.setRole("Recenzent");
             } else if (u instanceof Urednik) {
                 ui.setRole("Urednik");
+            } else if (u instanceof User) {
+                ui.setRole("Korisnik");
             }
             ui.setUsername(u.getUsername());
             return new ResponseEntity<UserInfoDTO>(ui, HttpStatus.OK);

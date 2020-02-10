@@ -32,6 +32,9 @@ import { RecenzentRadComponent } from './recenzent/recenzent-rad/recenzent-rad.c
 import { RecenziranjeComponent } from './recenzent/recenziranje/recenziranje.component';
 import { IzborNovogRecenzentaComponent } from './urednik/izbor-novog-recenzenta/izbor-novog-recenzenta.component';
 import { PregledRecenzijaComponent } from './urednik/pregled-recenzija/pregled-recenzija.component';
+import { KomIspraviRadComponent } from './autor/kom-ispravi-rad/kom-ispravi-rad.component';
+import { FinalIspravkaRadComponent } from './autor/final-ispravka-rad/final-ispravka-rad.component';
+import { FinalKomentariPregledComponent } from './urednik/final-komentari-pregled/final-komentari-pregled.component';
 
 
 const appRoutes: Routes = [
@@ -79,10 +82,10 @@ const appRoutes: Routes = [
 	{ path: 'recenziranje-rada/:id', component: RecenziranjeComponent},
 	{ path: 'izbor-novog-recenzenta/:id', component: IzborNovogRecenzentaComponent},
 	{ path: 'pregled/recenzije/:id', component: PregledRecenzijaComponent},
+	{ path: 'komentar/ispravi/rad/:id', component: KomIspraviRadComponent},
+	{ path: 'ispravka/:id', component: FinalIspravkaRadComponent},
+	{ path: 'final/pregled/:id', component: FinalKomentariPregledComponent},
 	
-
-	
-
 ]
 
 @NgModule({

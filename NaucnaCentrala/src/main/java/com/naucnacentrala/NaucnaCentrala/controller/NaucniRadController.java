@@ -409,6 +409,60 @@ public class NaucniRadController {
         return new ResponseEntity(dtos, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/getAutorFinalTasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getAutorFinalTasks(HttpServletRequest request) {
+
+        String username = korisnikService.getUsernameFromRequest(request);
+
+        List<Task> tasks = taskService.createTaskQuery().taskName("Autor ponovo ispravlja").taskAssignee(username).list();
+        List<TaskDTO> dtos = new ArrayList<TaskDTO>();
+        for (Task task : tasks) {
+            TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+            dtos.add(t);
+        }
+
+        return new ResponseEntity(dtos, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getUrednikFinalTasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getUrednikFinalTasks(HttpServletRequest request) {
+
+        String username = korisnikService.getUsernameFromRequest(request);
+
+        List<Task> tasks = taskService.createTaskQuery().taskName("Urednik ponovo pregleda").taskAssignee(username).list();
+        List<TaskDTO> dtos = new ArrayList<TaskDTO>();
+        for (Task task : tasks) {
+            TaskDTO t = new TaskDTO(task.getId(), task.getName(), task.getAssignee());
+            dtos.add(t);
+        }
+
+        return new ResponseEntity(dtos, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getFinalUrednikForm/{taskId}", produces = "application/json")
+    public @ResponseBody
+    FormFieldsDTO getFinalUrednikForm(@PathVariable String taskId) {
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String pid = task.getProcessInstanceId();
+
+        TaskFormData tfd = formService.getTaskFormData(task.getId());
+        List<FormField> properties = tfd.getFormFields();
+
+        List<String> komentariRad = (List<String>) runtimeService.getVariable(pid, "komentari_za_autore");
+
+        for(FormField field : properties) {
+            if(field.getId().equals("kom_rec")) {
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(String temp : komentariRad) {
+                    enumType.getValues().put(temp, temp);
+                }
+            }
+        }
+
+        return new FormFieldsDTO(task.getId(), pid, properties);
+    }
+
     @GetMapping(path = "/getPregledForm/{taskId}", produces = "application/json")
     public @ResponseBody
     FormFieldsDTO getPregledForm(@PathVariable String taskId) {
@@ -437,6 +491,47 @@ public class NaucniRadController {
             } else if (field.getId().equals("posl_komentar_za_urednika")) {
                 EnumFormType enumType = (EnumFormType) field.getType();
                 for(String temp : komentariUrednici) {
+                    enumType.getValues().put(temp, temp);
+                }
+            }
+        }
+
+        return new FormFieldsDTO(task.getId(), pid, properties);
+    }
+
+    @PostMapping(path = "/postFinalUrednik/{taskId}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity postFinalUrednik(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        FormSubmissionDTO formField = dto.get(0);
+        String staKaze = formField.getFieldValue();
+        runtimeService.setVariable(processInstanceId, "sta_s_radom", staKaze);
+
+        formService.submitTaskForm(taskId, map);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/getKomentarIspravkaForm/{taskId}", produces = "application/json")
+    public @ResponseBody
+    FormFieldsDTO getKomentarIspravkaForm(@PathVariable String taskId) {
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String pid = task.getProcessInstanceId();
+
+        TaskFormData tfd = formService.getTaskFormData(task.getId());
+        List<FormField> properties = tfd.getFormFields();
+
+        List<String> komentariRad = (List<String>) runtimeService.getVariable(pid, "komentari_za_autore");
+
+        for(FormField field : properties) {
+            if(field.getId().equals("prikaz_recen_komentara")) {
+                EnumFormType enumType = (EnumFormType) field.getType();
+                for(String temp : komentariRad) {
                     enumType.getValues().put(temp, temp);
                 }
             }
@@ -559,6 +654,48 @@ public class NaucniRadController {
         return new ResponseEntity<>(rad.getId().toString(),HttpStatus.OK);
     }
 
+    @PostMapping(path = "/postIspravkeRada/{taskId}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity postIspravkeRada(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId, HttpServletRequest request) {
+        HashMap<String, Object> map = this.mapListToDto(dto);
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        List<FormSubmissionDTO> formFields = dto;
+        String naslovID = "";
+        Long id = (Long) runtimeService.getVariable(processInstanceId, "radID");
+        NaucniRad rad = naucniRadService.findOneById(id);
+        for(FormSubmissionDTO field : formFields) {
+            if(field.getFieldId().equals("fajl")) {
+                String nazivFajlaCEO = field.getFieldValue();
+                String nazivFajla = nazivFajlaCEO.substring(12);
+                rad.setPdfName(nazivFajla);
+            } else if (field.getFieldId().equals("naslov3")) {
+                naslovID = "naslov3";
+            }
+        }
+        if(naslovID == "naslov3") {
+            for(FormSubmissionDTO field : formFields) {
+                if(field.getFieldId().equals("naslov3")) {
+                    runtimeService.setVariable(processInstanceId, "konacan_naslov", field.getFieldValue());
+                } else if (field.getFieldId().equals("apstrakt3")) {
+                    runtimeService.setVariable(processInstanceId, "konacan_apstrakt", field.getFieldValue());
+                } else if (field.getFieldId().equals("kljucni_pojmovi3")) {
+                    runtimeService.setVariable(processInstanceId, "konacan_kljuc_poj", field.getFieldValue());
+                } else if (field.getFieldId().equals("komentar_o_promeni")) {
+                    runtimeService.setVariable(processInstanceId, "odgovorNaKomentar", field.getFieldValue());
+                }
+            }
+
+        }
+        rad = naucniRadService.save(rad);
+
+        formService.submitTaskForm(taskId, map);
+
+        return new ResponseEntity<>(rad.getId().toString(),HttpStatus.OK);
+    }
+
     @PostMapping(path = "/obradaRada/{taskId}", produces = "application/json")
     public @ResponseBody
     ResponseEntity obradaRada(@RequestBody List<FormSubmissionDTO> dto, @PathVariable String taskId) {
@@ -628,6 +765,19 @@ public class NaucniRadController {
         }
 
         return map;
+    }
+
+
+
+    @GetMapping(path = "/downloadFileByRadID/{radID}")
+    public @ResponseBody
+    ResponseEntity downloadFileByRadID(@PathVariable Long radID) {
+        NaucniRad rad = naucniRadService.findOneById(radID);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/pdf"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + rad.getPdfName() + "\"")
+                .body(new ByteArrayResource(rad.getPdf()));
     }
 
 }

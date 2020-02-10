@@ -117,6 +117,37 @@ export class RadService {
   getAutorKomentariTasks() {
     return this.http.get("/api/rad/getAutorKomentariTasks") as Observable<any>;
   }
+
+  getKomentarIspravkaForm(taskId) {
+    return this.http.get("/api/rad/getKomentarIspravkaForm/".concat(taskId)) as Observable<any>;
+  }
+
+  postIspravkeRada(o, taskId) {
+    return this.http.post("/api/rad/postIspravkeRada/".concat(taskId), o) as Observable<any>;
+  }
+
+  getAutorFinalTasks() {
+    return this.http.get("/api/rad/getAutorFinalTasks") as Observable<any>;
+  }
   
+  getUrednikFinalTasks() {
+    return this.http.get("/api/rad/getUrednikFinalTasks") as Observable<any>;
+  }
+
+  getFinalUrednikForm(taskId) {
+    return this.http.get("/api/rad/getFinalUrednikForm/".concat(taskId)) as Observable<any>;
+  }
+  
+  postFinalUrednik(o, taskId) {
+    return this.http.post("/api/rad/postFinalUrednik/".concat(taskId), o) as Observable<any>;
+  }
+
+  //mock download rada brisi
+  downloadFileByradID(radID) {
+    const httpOptions = {
+      'responseType'  : 'arraybuffer' as 'json'
+    };
+    return this.http.get("/api/rad/downloadFileByRadID/".concat(radID), httpOptions) as Observable<any>;
+  }
 
 }

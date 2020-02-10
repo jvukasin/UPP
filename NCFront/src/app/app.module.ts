@@ -43,6 +43,9 @@ import { RecenzentRadComponent } from './recenzent/recenzent-rad/recenzent-rad.c
 import { RecenziranjeComponent } from './recenzent/recenziranje/recenziranje.component';
 import { IzborNovogRecenzentaComponent } from './urednik/izbor-novog-recenzenta/izbor-novog-recenzenta.component';
 import { PregledRecenzijaComponent } from './urednik/pregled-recenzija/pregled-recenzija.component';
+import { KomIspraviRadComponent } from './autor/kom-ispravi-rad/kom-ispravi-rad.component';
+import { FinalIspravkaRadComponent } from './autor/final-ispravka-rad/final-ispravka-rad.component';
+import { FinalKomentariPregledComponent } from './urednik/final-komentari-pregled/final-komentari-pregled.component';
 
 @NgModule({
   declarations: [
@@ -80,7 +83,10 @@ import { PregledRecenzijaComponent } from './urednik/pregled-recenzija/pregled-r
     RecenzentRadComponent,
     RecenziranjeComponent,
     IzborNovogRecenzentaComponent,
-    PregledRecenzijaComponent
+    PregledRecenzijaComponent,
+    KomIspraviRadComponent,
+    FinalIspravkaRadComponent,
+    FinalKomentariPregledComponent
   ],
   imports: [
     BrowserModule,

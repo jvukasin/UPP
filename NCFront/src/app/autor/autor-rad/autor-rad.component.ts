@@ -12,12 +12,15 @@ export class AutorRadComponent implements OnInit {
   tasksK = [];
   tasksR = [];
   tasksKom = [];
+  tasksFinal = [];
+
   radList: any = [];
   emptyRadList: boolean = false;
   retHref: any;
   imaTaskovaZaKoautore: boolean = false;
   imaTaskovaZaRadove: boolean = false;
   imaTaskovaSaKomentarima: boolean = false;
+  imaTaskovaFinal: boolean = false;
 
   lclhst: string = "http://localhost:4202";
 
@@ -61,6 +64,18 @@ export class AutorRadComponent implements OnInit {
         console.log("Error occured");
       }
     );
+
+    this.radService.getAutorFinalTasks().subscribe(
+      res => {
+        this.tasksFinal = res;
+        if(this.tasksFinal.length > 0) {
+          this.imaTaskovaFinal = true;
+        }
+      },
+      err => {
+        console.log("Error occured");
+      }
+    );
   }
 
   onClickK(id) {
@@ -72,7 +87,11 @@ export class AutorRadComponent implements OnInit {
   }
 
   onClickKom(id) {
+    this.router.navigate(['/komentar/ispravi/rad/'.concat(id)]);
+  }
 
+  onClickFinal(id) {
+    this.router.navigate(['/ispravka/'.concat(id)]);
   }
 
   onDodajRad() {

@@ -25,5 +25,10 @@
         <tr *ngFor="let task of tasksPregled" > <td style="width: 300px; max-width: 550px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickPregled(task.taskId)">Go to task</button></td></tr>
     </table>
 
+    <h4>Finalni zadaci za radove:</h4>
+    <table>
+        <tr *ngFor="let task of tasksFinal" > <td style="width: 300px; max-width: 550px;">{{task.name}}</td><td><button class="btn btn-primary" (click)="onClickFinal(task.taskId)">Go to task</button></td></tr>
+    </table>
+
     
   </div>

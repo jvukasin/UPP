@@ -226,8 +226,7 @@ var ArrayList = Java.type("java.util.ArrayList");
 var instance = new ArrayList(temp_comm);
 execution.setVariable("komentari_za_urednike", instance);
 execution.setVariable("komentari_za_autore", instance);
-execution.setVariable("predlog_za_rad", instance);
-</bpmn:script>
+execution.setVariable("predlog_za_rad", instance);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:userTask id="Task_0og9ju5" name="Urednik pregleda ocene" camunda:assignee="${execution.getVariable(&#34;ko_bira_rec&#34;)}">
       <bpmn:extensionElements>
@@ -293,7 +292,7 @@ execution.setVariable("predlog_za_rad", instance);
     <bpmn:userTask id="Task_0mj6q22" name="Prikazivanje komentara autoru" camunda:assignee="${execution.getVariable(&#34;autor&#34;)}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="prikaz_recen_komentara" label="Komentar recenzenta" type="string" defaultValue="${komentari_za_autore.get(0)}">
+          <camunda:formField id="prikaz_recen_komentara" label="Komentari recenzenata" type="enum">
             <camunda:validation>
               <camunda:constraint name="readonly" />
             </camunda:validation>
@@ -319,11 +318,6 @@ execution.setVariable("predlog_za_rad", instance);
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
-        <camunda:taskListener event="complete">
-          <camunda:script scriptFormat="Groovy">task.getExecution().setVariable("konacan_naslov", naslov3);
-task.getExecution().setVariable("konacan_apstrakt", apstrakt3);
-task.getExecution().setVariable("konacan_kljuc_poj", kljucni_pojmovi3);</camunda:script>
-        </camunda:taskListener>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1j0hq85</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12a7v25</bpmn:outgoing>
@@ -331,14 +325,14 @@ task.getExecution().setVariable("konacan_kljuc_poj", kljucni_pojmovi3);</camunda
     <bpmn:boundaryEvent id="IntermediateThrowEvent_0idcs2v" attachedToRef="Task_0mj6q22">
       <bpmn:outgoing>SequenceFlow_0rdoj1g</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT90S</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT48H</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="SequenceFlow_12a7v25" sourceRef="Task_0mj6q22" targetRef="ExclusiveGateway_1ot0ggw" />
     <bpmn:userTask id="Task_0krw8lr" name="Urednik ponovo pregleda" camunda:assignee="${execution.getVariable(&#34;ko_bira_rec&#34;)}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="kom_rec" label="Komentar recenzenta" type="string" defaultValue="${komentari_za_autore.get(0)}">
+          <camunda:formField id="kom_rec" label="Komentari recenzenata" type="enum">
             <camunda:validation>
               <camunda:constraint name="readonly" />
             </camunda:validation>
@@ -404,7 +398,7 @@ task.getExecution().setVariable("konacan_kljuc_poj", kljucni_pojmovi3);</camunda
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_1x58jfd" sourceRef="Task_1eoa0if" targetRef="EndEvent_1o5jhga" />
     <bpmn:sequenceFlow id="SequenceFlow_121chw5" sourceRef="Task_0krw8lr" targetRef="ExclusiveGateway_16zovem" />
-    <bpmn:serviceTask id="Task_04t5dn0" name="Obavesti autora" camunda:expression="{true}">
+    <bpmn:serviceTask id="Task_04t5dn0" name="Obavesti autora" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.NotifikacijaDorade">
       <bpmn:incoming>SequenceFlow_0a3da6h</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1xzyppe</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -412,7 +406,11 @@ task.getExecution().setVariable("konacan_kljuc_poj", kljucni_pojmovi3);</camunda
     <bpmn:userTask id="Task_1xmmkkj" name="Autor ponovo ispravlja" camunda:assignee="${execution.getVariable(&#34;autor&#34;)}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="kraj" label="Posalji ispravljeni rad" type="boolean" defaultValue="true" />
+          <camunda:formField id="naslov_kraj" label="Naslov rada" type="string" defaultValue="${execution.getVariable(&#34;konacan_naslov&#34;)}">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_1xzyppe</bpmn:incoming>
@@ -435,7 +433,7 @@ task.getExecution().setVariable("konacan_kljuc_poj", kljucni_pojmovi3);</camunda
     <bpmn:boundaryEvent id="IntermediateThrowEvent_0fiprux" attachedToRef="Task_1xmmkkj">
       <bpmn:outgoing>SequenceFlow_1phmbyz</bpmn:outgoing>
       <bpmn:timerEventDefinition>
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT90S</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT24H</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:endEvent id="EndEvent_0pv7eka">
@@ -580,13 +578,16 @@ task.getExecution().setVariable("konacan_kljuc_poj", kljucni_pojmovi3);</camunda
         <bpmn:outgoing>SequenceFlow_1htysp0</bpmn:outgoing>
       </bpmn:serviceTask>
       <bpmn:sequenceFlow id="SequenceFlow_1eopd6e" sourceRef="Task_1d9rd57" targetRef="UserTask_1kkppsr" />
-      <bpmn:scriptTask id="Task_1d9rd57" name="Lista za gotove" scriptFormat="JavaScript">
+      <bpmn:scriptTask id="Task_1d9rd57" name="Liste" scriptFormat="JavaScript">
         <bpmn:incoming>SequenceFlow_1mcu84e</bpmn:incoming>
         <bpmn:outgoing>SequenceFlow_1eopd6e</bpmn:outgoing>
         <bpmn:script>var temp_comm=[];
 var ArrayList = Java.type("java.util.ArrayList");
 var instance = new ArrayList(temp_comm);
-execution.setVariable("gotovi", instance);</bpmn:script>
+execution.setVariable("gotovi", instance);
+execution.setVariable("komentari_za_urednike", instance);
+execution.setVariable("komentari_za_autore", instance);
+execution.setVariable("predlog_za_rad", instance);</bpmn:script>
       </bpmn:scriptTask>
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="SequenceFlow_1ra6miq" sourceRef="Task_0lyys66" targetRef="ExclusiveGateway_02z25u8" />
@@ -629,23 +630,23 @@ var ArrayList = Java.type("java.util.ArrayList");
 var instance = new ArrayList(temp_comm);
 execution.setVariable("komentari_za_urednike", instance);
 execution.setVariable("komentari_za_autore", instance);
-execution.setVariable("predlog_za_rad", instance);
-</bpmn:script>
+execution.setVariable("predlog_za_rad", instance);</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="SequenceFlow_0cenw6x" sourceRef="Task_0yyaigk" targetRef="ScriptTask_18r3gcx" />
     <bpmn:exclusiveGateway id="ExclusiveGateway_02z25u8">
       <bpmn:incoming>SequenceFlow_1ra6miq</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1jwkz82</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_0rwntoq</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0gn77dt</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0jk93bs</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0jk93bs" sourceRef="ExclusiveGateway_02z25u8" targetRef="SubProcess_07zwt9g" />
     <bpmn:sequenceFlow id="SequenceFlow_1jwkz82" sourceRef="ScriptTask_18r3gcx" targetRef="ExclusiveGateway_02z25u8" />
-    <bpmn:sequenceFlow id="SequenceFlow_0rwntoq" sourceRef="Task_00ncnbs" targetRef="ExclusiveGateway_02z25u8" />
-    <bpmn:textAnnotation id="TextAnnotation_1eow0h7">
-      <bpmn:text>DOVDE SI STAO!!!! Ucita task, ali ne i formu i to dalje...</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_156db6y" sourceRef="Task_0mj6q22" targetRef="TextAnnotation_1eow0h7" />
+    <bpmn:sequenceFlow id="SequenceFlow_0rwntoq" sourceRef="Task_00ncnbs" targetRef="ServiceTask_1symt2y" />
+    <bpmn:serviceTask id="ServiceTask_1symt2y" name="Opet notifikacija recenzentima" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.OpetNotifikacijaORecenziranju">
+      <bpmn:incoming>SequenceFlow_0rwntoq</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0gn77dt</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0gn77dt" sourceRef="ServiceTask_1symt2y" targetRef="ExclusiveGateway_02z25u8" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="obrada_teksta">
@@ -848,46 +849,47 @@ execution.setVariable("predlog_za_rad", instance);
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0kbi0hc_di" bpmnElement="SequenceFlow_0kbi0hc">
         <di:waypoint x="3230" y="655" />
-        <di:waypoint x="3230" y="600" />
+        <di:waypoint x="3230" y="610" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1oaj3yi_di" bpmnElement="Task_009c3tj">
-        <dc:Bounds x="3180" y="520" width="100" height="80" />
+        <dc:Bounds x="3180" y="530" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1j0hq85_di" bpmnElement="SequenceFlow_1j0hq85">
-        <di:waypoint x="3230" y="520" />
-        <di:waypoint x="3230" y="470" />
+        <di:waypoint x="3230" y="530" />
+        <di:waypoint x="3230" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_03t16b4_di" bpmnElement="Task_0mj6q22">
-        <dc:Bounds x="3180" y="390" width="100" height="80" />
+        <dc:Bounds x="3180" y="400" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BoundaryEvent_0ja4cup_di" bpmnElement="IntermediateThrowEvent_0idcs2v">
-        <dc:Bounds x="3262" y="452" width="36" height="36" />
+        <dc:Bounds x="3262" y="462" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_12a7v25_di" bpmnElement="SequenceFlow_12a7v25">
-        <di:waypoint x="3230" y="390" />
-        <di:waypoint x="3230" y="365" />
+        <di:waypoint x="3230" y="400" />
+        <di:waypoint x="3230" y="375" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_130995q_di" bpmnElement="Task_0krw8lr">
-        <dc:Bounds x="3340" y="300" width="100" height="80" />
+        <dc:Bounds x="3340" y="310" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_1ot0ggw_di" bpmnElement="ExclusiveGateway_1ot0ggw" isMarkerVisible="true">
-        <dc:Bounds x="3205" y="315" width="50" height="50" />
+        <dc:Bounds x="3205" y="325" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_11xwlid_di" bpmnElement="SequenceFlow_11xwlid">
-        <di:waypoint x="3255" y="340" />
-        <di:waypoint x="3340" y="340" />
+        <di:waypoint x="3255" y="350" />
+        <di:waypoint x="3340" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0lidci0_di" bpmnElement="SequenceFlow_0lidci0">
-        <di:waypoint x="3205" y="340" />
-        <di:waypoint x="2970" y="340" />
+        <di:waypoint x="3205" y="350" />
+        <di:waypoint x="2970" y="350" />
         <di:waypoint x="2970" y="400" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ScriptTask_1d4nwx0_di" bpmnElement="Task_00ncnbs">
         <dc:Bounds x="2920" y="400" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_0rdoj1g_di" bpmnElement="SequenceFlow_0rdoj1g">
-        <di:waypoint x="3280" y="488" />
-        <di:waypoint x="3280" y="510" />
+        <di:waypoint x="3298" y="480" />
+        <di:waypoint x="3359" y="480" />
+        <di:waypoint x="3359" y="510" />
         <di:waypoint x="3420" y="510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_1voljjv_di" bpmnElement="Task_1eoa0if">
@@ -901,7 +903,7 @@ execution.setVariable("predlog_za_rad", instance);
         <di:waypoint x="3572" y="510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_121chw5_di" bpmnElement="SequenceFlow_121chw5">
-        <di:waypoint x="3390" y="300" />
+        <di:waypoint x="3390" y="310" />
         <di:waypoint x="3390" y="265" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0lbj9s9_di" bpmnElement="Task_04t5dn0">
@@ -927,9 +929,7 @@ execution.setVariable("predlog_za_rad", instance);
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1ei98z0_di" bpmnElement="SequenceFlow_1ei98z0">
         <di:waypoint x="3540" y="350" />
-        <di:waypoint x="3490" y="350" />
-        <di:waypoint x="3490" y="340" />
-        <di:waypoint x="3440" y="340" />
+        <di:waypoint x="3440" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1phmbyz_di" bpmnElement="SequenceFlow_1phmbyz">
         <di:waypoint x="3620" y="408" />
@@ -1123,15 +1123,15 @@ execution.setVariable("predlog_za_rad", instance);
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0rwntoq_di" bpmnElement="SequenceFlow_0rwntoq">
         <di:waypoint x="2970" y="480" />
+        <di:waypoint x="2970" y="510" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_1symt2y_di" bpmnElement="ServiceTask_1symt2y">
+        <dc:Bounds x="2920" y="510" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0gn77dt_di" bpmnElement="SequenceFlow_0gn77dt">
+        <di:waypoint x="2970" y="590" />
         <di:waypoint x="2970" y="830" />
         <di:waypoint x="2885" y="830" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="TextAnnotation_1eow0h7_di" bpmnElement="TextAnnotation_1eow0h7">
-        <dc:Bounds x="2860" y="140" width="99.99999794078421" height="82.32118758434548" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_156db6y_di" bpmnElement="Association_156db6y">
-        <di:waypoint x="3180" y="430" />
-        <di:waypoint x="2955" y="222" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

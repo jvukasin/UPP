@@ -46,5 +46,7 @@ public class RegistrovanjeKorisnika implements JavaDelegate {
         User k = korServis.findOneByUsername(user.getId());
         k.setAktivan(true);
         k = korServis.save(k);
+
+        execution.setVariable("isActive", true);
     }
 }

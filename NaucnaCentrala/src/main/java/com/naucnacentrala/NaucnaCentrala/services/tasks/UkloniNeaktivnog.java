@@ -23,5 +23,6 @@ public class UkloniNeaktivnog implements JavaDelegate {
             }
         }
         servis.remove(username);
+        execution.setVariable("isUklonjen", true);
     }
 }

@@ -11,9 +11,10 @@ h2 {
 .container {
     width: 90%;
     margin-top: 15px;
+    margin-bottom: 150px;
 }
 
-h3 {
+h4 {
     margin-top: 50px;
     margin-bottom: 60px;
 }

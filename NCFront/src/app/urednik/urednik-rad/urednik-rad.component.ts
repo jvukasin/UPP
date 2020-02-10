@@ -15,6 +15,7 @@ export class UrednikRadComponent implements OnInit {
   tasksAgain = [];
   tasksRecenziraj = [];
   tasksPregled = [];
+  tasksFinal = [];
 
   constructor(private radService: RadService, private router: Router) {
     this.radService.getUrednikRadTasks().subscribe(
@@ -63,6 +64,15 @@ export class UrednikRadComponent implements OnInit {
       }
     );
 
+    this.radService.getUrednikFinalTasks().subscribe(
+      res => {
+        this.tasksFinal = res;
+      },
+      err => {
+        console.log("Error occured Rad tasks");
+      }
+    );
+
   }
 
   ngOnInit() {
@@ -86,6 +96,10 @@ export class UrednikRadComponent implements OnInit {
 
   onClickPregled(id) {
     this.router.navigate(['/pregled/recenzije/'.concat(id)]);
+  }
+
+  onClickFinal(id) {
+    this.router.navigate(['/final/pregled/'.concat(id)]);
   }
 
 }
