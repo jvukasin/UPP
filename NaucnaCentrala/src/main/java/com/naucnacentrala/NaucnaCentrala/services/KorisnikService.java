@@ -75,7 +75,7 @@ public class KorisnikService {
         String encUser = Base64.getEncoder().encodeToString(user.getUsername().getBytes());
         String encProces = Base64.getEncoder().encodeToString(procesId.getBytes());
 
-        String path = "http://localhost:8601/users/verify/" + encProces + "/" + encUser;
+        String path = "https://localhost:8601/users/verify/" + encProces + "/" + encUser;
 
         mail.setText("Zdravo " + user.getIme() + ",\n\n Molimo vas da kliknete na sledeći link kako biste verifikovali vaš nalog: "+ path);
 

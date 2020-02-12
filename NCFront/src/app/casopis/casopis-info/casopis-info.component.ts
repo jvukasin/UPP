@@ -15,6 +15,7 @@ export class CasopisInfoComponent implements OnInit {
   magazineId: any;
   magazine: any;
   retHref: any;
+  pretplacen: boolean = false;
 
   ulogovanKorisnik: boolean = false;
 
@@ -32,9 +33,11 @@ export class CasopisInfoComponent implements OnInit {
     this.casopisService.get(this.magazineId).subscribe(
       (response) => {
         this.magazine = response;
+        var casopis = this.magazine;
         var rola = localStorage.getItem('rola');
         if(rola === "Korisnik") {
           this.ulogovanKorisnik = true;
+          this.daLiJePretplacen(casopis.id);
         }
       },
       (error) => {
@@ -43,8 +46,32 @@ export class CasopisInfoComponent implements OnInit {
     )
   }
 
+  daLiJePretplacen(casID) {
+    this.casopisService.proveriPretplacen(casID).subscribe(
+      (res) => {
+        var jelJe = res;
+        if(jelJe === "Subbed") {
+          this.pretplacen = true;
+        }
+      }, err => {
+        alert("error pretplacen");
+      }
+    );
+  }
+
   onKupi(){
-    this.orderService.initMagazineOrder(this.magazine).subscribe(
+    var casopis = {
+        id: this.magazine.id,
+        name: this.magazine.name,
+        issn: this.magazine.issn,
+        isRegistered: true,
+        sellerId: this.magazine.sellerId,
+        scienceFieldList: this.magazine.scienceFieldList,
+        chiefEditor: this.magazine.chiefEditor,
+        sciencePaperDTOList: this.magazine.sciencePaperDTOList,
+        active: this.magazine.active
+    }
+    this.orderService.initMagazineOrder(casopis).subscribe(
       (response: any) => {
         window.location.href = response.redirectUrl;
       },
@@ -66,15 +93,17 @@ export class CasopisInfoComponent implements OnInit {
   }
 
   onKupiRad(paper) {
-    // this.orderService.initPaperOrder(paper).subscribe(
-    //   (response: any) => {
-    //     window.location.href = response.redirectUrl;
-    //   },
-    //   (error) => {
-    //     alert(error.message);
-    //   }
-    // )
+    this.orderService.initPaperOrder(paper).subscribe(
+      (response: any) => {
+        window.location.href = response.redirectUrl;
+      },
+      (error) => {
+        alert(error.message);
+      }
+    );
+  }
 
+  onPreuzmiRad(paper) {
     this.radService.downloadFileByradID(paper.id).subscribe(
       res => {
         var blob = new Blob([res], {type: 'application/pdf'});

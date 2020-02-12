@@ -1,9 +1,6 @@
 package com.naucnacentrala.NaucnaCentrala.controller;
 
-import com.naucnacentrala.NaucnaCentrala.dto.CasopisDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.TaskDTO;
+import com.naucnacentrala.NaucnaCentrala.dto.*;
 import com.naucnacentrala.NaucnaCentrala.model.*;
 import com.naucnacentrala.NaucnaCentrala.services.CasopisService;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
@@ -22,7 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -59,6 +59,41 @@ public class CasopisController {
     @RequestMapping(value = "/casopisi", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<CasopisDTO>> getAllC(){
         return new ResponseEntity<>(casopisService.findAllDto(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/isSubbed/{casopisID}", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<String> checkIfSubbed(@PathVariable Long casopisID, HttpServletRequest request) throws ParseException {
+        Casopis c = casopisService.findOneById(casopisID);
+        String korisnik = korisnikService.getUsernameFromRequest(request);
+
+        for(Clanarina clan : c.getKorisniciSaClanarinom()) {
+            if(clan.getUsername().equals(korisnik) && checkDates(clan.getEndDate())) {
+                return new ResponseEntity<String>("Subbed", HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<String>("notSubbed", HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getAllByUrednik", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<CasopisDTO>> getAllByUrednik(HttpServletRequest request) throws ParseException {
+        String korisnik = korisnikService.getUsernameFromRequest(request);
+        return new ResponseEntity(casopisService.findAllByUrednik(korisnik), HttpStatus.OK);
+    }
+
+
+
+    public boolean checkDates(String dateClanarine) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String dt = sdf.format(date);
+
+        Date today = sdf.parse(dt);
+        //TODO sredi format u yyyy-MM-dd kad stigne u orderObject i kad se sacuva u bazu
+        Date sub = sdf.parse(dateClanarine);
+        if(today.compareTo(sub) > 0) {
+            return false;
+        }
+        return true;
     }
 
     @GetMapping(path = "/get", produces = "application/json")

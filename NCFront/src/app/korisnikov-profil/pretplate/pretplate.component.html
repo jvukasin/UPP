@@ -1,0 +1,35 @@
+<div class="container">
+    <h2>Moje pretplate</h2>
+    <div class="table-responsive">
+        <table class="table table-hover" id="lista">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Naziv plana</th>
+              <th scope="col">Cena</th>
+              <th scope="col">Datum kreiranja</th>
+              <th scope="col">Datum isteka</th>
+              <th scope="col">Način naplate</th>
+              <th scope="col">Broj ciklusa</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let agreement of agrList">
+                  <th scope="row">{{ agreement.id }}</th>
+                  <td>{{ agreement.name }}</td>
+                  <td>{{ agreement.amount }} {{agreement.currency}}</td>
+                  <td>{{ agreement.startDate }}</td>
+                  <td>{{ agreement.endDate }}</td>
+                  <td>Na svakih {{ agreement.freqInterval }} {{ agreement.frequency }}</td>
+                  <td>{{ agreement.cycles }}</td>
+                  <!-- stavi da se dugme za otkazivanje pojavi tek kada je status created ili activated sta god -->
+                  <td><button class="btn btn-link" (click)="onCancelAgreement(agreement.id)">Otkaži</button></td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+      <div>
+        <h4 *ngIf="emptyList">U sistemu nema zabeleženih pretplata.</h4>
+    </div>
+</div>

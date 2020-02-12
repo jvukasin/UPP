@@ -1,10 +1,7 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
 import com.naucnacentrala.NaucnaCentrala.client.RegistrationClient;
-import com.naucnacentrala.NaucnaCentrala.dto.CasopisDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.CasopisInfoDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.KPRegistrationDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.StringDTO;
+import com.naucnacentrala.NaucnaCentrala.dto.*;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
 import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
@@ -31,6 +29,9 @@ public class KPService {
 
     @Autowired
     OrderObjectService orderObjectService;
+
+    @Autowired
+    KorisnikService korisnikService;
 
 
     public KPRegistrationDTO initRegistration(CasopisDTO magazineDTO) {
@@ -103,5 +104,14 @@ public class KPService {
         StringDTO text = new StringDTO((String) response.getBody());
 
         return text.getHref();
+    }
+
+    public List<AgreementDTO> getUserAgreements(HttpServletRequest request) {
+        String korisnik = korisnikService.getUsernameFromRequest(request);
+
+        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/paypal-service/paypal/getUserAgreements/" + korisnik,
+                AgreementDTO[].class);
+        List<AgreementDTO> lista = (List<AgreementDTO>) response.getBody();
+        return lista;
     }
 }

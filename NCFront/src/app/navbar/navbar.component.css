@@ -8,8 +8,10 @@
 }
 
 .razmak {
-    margin-right: 50%;
+    margin-right: 20%;
+    width: 200px;
 }
+
 
 .btn:hover {
     border-bottom: 2px solid rgb(28, 119, 28);

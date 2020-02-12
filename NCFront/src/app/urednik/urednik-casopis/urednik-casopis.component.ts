@@ -30,6 +30,15 @@ export class UrednikCasopisComponent implements OnInit {
         console.log("Error occured");
       }
     );
+
+    this.casopisService.getAllByUrednik().subscribe(
+      (data) => {
+        this.magazineList = data;
+      }, 
+      (error) => {
+        alert(error.message);
+      }
+    )
   }
 
   onClick(id) {

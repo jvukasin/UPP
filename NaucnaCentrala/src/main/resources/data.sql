@@ -47,13 +47,13 @@ insert into user_nobl values ('mace', 1), ('mace', 2), ('mace', 3), ('mace', 4),
 insert into privilege values (1, 'RECENZENTI_TASK');
 insert into roles_privileges values (2,1);
 
-insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registered) values (1, "Nauka generalno", 1, "111", "citaoci", "djo", false);
-insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registered) values (2, "Test za autore", 1, "222", "autori", "djo", false);
+insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registered, seller_id) values (1, "Nauka generalno", 1, "111", "citaoci", "djo", true, 2);
+insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registered, seller_id) values (2, "Test za autore", 1, "222", "autori", "djo", false, null);
 
 insert into casopis_nobl (naucna_oblast_sifra, casopisi_id) values (1,1), (2,1), (3,1);
 insert into casopis_recenzenti (recenzent_username, casopisi_id) values ("milica", 1), ("mace", 1);
 
--- insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1);
--- insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1);
+insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1);
+insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1);
 
 

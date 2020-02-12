@@ -26,4 +26,8 @@ export class KPService {
     return this.httpClient.get('/api/kp/getPlans/'.concat(magazienId), {responseType: 'text'});
   }
 
+  getUserAgreements() {
+    return this.httpClient.get('/api/kp/getUserAgreements/');
+  }
+
 }

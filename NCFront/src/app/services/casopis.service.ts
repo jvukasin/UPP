@@ -52,4 +52,12 @@ export class CasopisService {
     return this.http.post("/api/casopis/posaljiIspravljeniCasopis/".concat(taskId), obj) as Observable<any>;
   }
 
+  getAllByUrednik() {
+    return this.http.get('/api/casopis/getAllByUrednik') as Observable<any>;
+  }
+
+  proveriPretplacen(casID) {
+    return this.http.get('/api/casopis/isSubbed/'.concat(casID), {responseType: 'text'}) as Observable<any>;
+  }
+
 }

@@ -1,10 +1,7 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
 import com.naucnacentrala.NaucnaCentrala.client.OrderClient;
-import com.naucnacentrala.NaucnaCentrala.dto.CasopisDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.FinalizeOrderDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.InitOrderResponseDTO;
-import com.naucnacentrala.NaucnaCentrala.dto.NaucniRadDTO;
+import com.naucnacentrala.NaucnaCentrala.dto.*;
 import com.naucnacentrala.NaucnaCentrala.enums.Enums;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
 import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
@@ -15,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderObjectService {
@@ -75,6 +74,29 @@ public class OrderObjectService {
         oo.setAmount(calculateAmount(m));
         oo.setOrderStatus(Enums.OrderStatus.PENDING);
         return oo;
+    }
+
+    public List<OrderObjectDTO> getUserOrders(HttpServletRequest request) {
+        String korisnik = korisnikService.getUsernameFromRequest(request);
+        List<OrderObject> or = orderObjectRepo.findAllByUser(korisnik);
+        List<OrderObjectDTO> orders = new ArrayList<>();
+        for(OrderObject o : or) {
+            OrderObjectDTO dto = new OrderObjectDTO();
+            dto.setId(o.getId());
+            dto.setAmount(o.getAmount());
+            dto.setOrderStatus(o.getOrderStatus());
+            dto.setOrderType(o.getOrderType());
+            dto.setUserId(o.getUserId());
+            if(o.getMagazine() != null) {
+                dto.setName(o.getMagazine().getNaziv());
+            } else if(o.getSciencePaper() != null) {
+                dto.setName(o.getSciencePaper().getTitle());
+            } else {
+                dto.setName(o.getSubscription().getMagazine().getNaziv());
+            }
+            orders.add(dto);
+        }
+        return orders;
     }
 
 

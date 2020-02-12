@@ -35,6 +35,9 @@ import { PregledRecenzijaComponent } from './urednik/pregled-recenzija/pregled-r
 import { KomIspraviRadComponent } from './autor/kom-ispravi-rad/kom-ispravi-rad.component';
 import { FinalIspravkaRadComponent } from './autor/final-ispravka-rad/final-ispravka-rad.component';
 import { FinalKomentariPregledComponent } from './urednik/final-komentari-pregled/final-komentari-pregled.component';
+import { KorisnikovProfilComponent } from './korisnikov-profil/korisnikov-profil.component';
+import { PretplateComponent } from './korisnikov-profil/pretplate/pretplate.component';
+import { PorudzbineComponent } from './korisnikov-profil/porudzbine/porudzbine.component';
 
 
 const appRoutes: Routes = [
@@ -85,7 +88,11 @@ const appRoutes: Routes = [
 	{ path: 'komentar/ispravi/rad/:id', component: KomIspraviRadComponent},
 	{ path: 'ispravka/:id', component: FinalIspravkaRadComponent},
 	{ path: 'final/pregled/:id', component: FinalKomentariPregledComponent},
-	
+	{ path: 'korisnik', component: KorisnikovProfilComponent, children: [
+		{ path: '', redirectTo: 'porudzbine', pathMatch: 'full'},
+		{ path: 'porudzbine', component: PorudzbineComponent},
+		{ path: 'pretplate', component: PretplateComponent},
+	]}
 ]
 
 @NgModule({

@@ -1,7 +1,9 @@
 <div class="container pt-5">
-      <h3 class="mt-5" style="margin-bottom:50px">Naučni časopisi</h3>
+    <div class="row">
+        <h3 class="mt-5" style="margin-bottom:50px">Naučni časopisi</h3>
+    </div>
 
-   <div class="row" *ngFor="let magazine of magazines">
+   <div class="row ml-1" *ngFor="let magazine of magazines">
         <section *ngIf="magazine.active">
             <div class="row" style="width: 100%;">
             <div class="right-side">

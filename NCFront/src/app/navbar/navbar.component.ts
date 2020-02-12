@@ -13,6 +13,7 @@ export class NavbarComponent implements OnInit {
   isUrednik: boolean = false;
   isAutor: boolean = false;
   isRecenzent: boolean = false;
+  isKorisnik: boolean = false;
 
   constructor(private authService: AuthService) {
     var rola = localStorage.getItem('rola');
@@ -24,10 +25,14 @@ export class NavbarComponent implements OnInit {
       this.isAutor = true;
     } else if (rola === "Recenzent") {
       this.isRecenzent = true;
+    } else if (rola === "Korisnik") {
+      this.isKorisnik = true;
     }
     let user = this.authService.getLoggedUser();
     if(user != null){
       this.isLoggedIn = true; 
+    } else {
+      this.isLoggedIn = false;
     }
   }
 
@@ -41,7 +46,9 @@ export class NavbarComponent implements OnInit {
     this.isUrednik = false;
     this.isAutor = false;
     this.isRecenzent = false;
-    var rola = localStorage.setItem('rola', '');
+    this.isKorisnik = false;
+    localStorage.setItem('rola', '');
+    localStorage.setItem('user', '');
   }
 
 }

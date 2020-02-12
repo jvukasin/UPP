@@ -46,6 +46,9 @@ import { PregledRecenzijaComponent } from './urednik/pregled-recenzija/pregled-r
 import { KomIspraviRadComponent } from './autor/kom-ispravi-rad/kom-ispravi-rad.component';
 import { FinalIspravkaRadComponent } from './autor/final-ispravka-rad/final-ispravka-rad.component';
 import { FinalKomentariPregledComponent } from './urednik/final-komentari-pregled/final-komentari-pregled.component';
+import { KorisnikovProfilComponent } from './korisnikov-profil/korisnikov-profil.component';
+import { PorudzbineComponent } from './korisnikov-profil/porudzbine/porudzbine.component';
+import { PretplateComponent } from './korisnikov-profil/pretplate/pretplate.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +89,10 @@ import { FinalKomentariPregledComponent } from './urednik/final-komentari-pregle
     PregledRecenzijaComponent,
     KomIspraviRadComponent,
     FinalIspravkaRadComponent,
-    FinalKomentariPregledComponent
+    FinalKomentariPregledComponent,
+    KorisnikovProfilComponent,
+    PorudzbineComponent,
+    PretplateComponent
   ],
   imports: [
     BrowserModule,

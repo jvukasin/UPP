@@ -16,6 +16,9 @@ public class Clanarina {
     @Column
     private String endDate;
 
+    @Column
+    private String chosenSubscription;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "casopis_korisnici_clanarine")
     private List<Casopis> casopisi;
@@ -50,5 +53,13 @@ public class Clanarina {
 
     public void setCasopisi(List<Casopis> casopisi) {
         this.casopisi = casopisi;
+    }
+
+    public String getChosenSubscription() {
+        return chosenSubscription;
+    }
+
+    public void setChosenSubscription(String chosenSubscription) {
+        this.chosenSubscription = chosenSubscription;
     }
 }

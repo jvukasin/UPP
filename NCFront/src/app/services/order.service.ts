@@ -8,16 +8,20 @@ export class OrderService {
 
   constructor(private httpClient: HttpClient) { }
 
-  initMagazineOrder(casopisDTO){
-    return this.httpClient.post('/api/orders/magazine/init', casopisDTO);
+  initMagazineOrder(casopis){
+    return this.httpClient.post('/api/orders/casopis/init', casopis);
   }
 
-  initMagazineSubscription(casopisDTO) {
-    return this.httpClient.post('/api/orders/magazine/initSub', casopisDTO);
+  initMagazineSubscription(casopis) {
+    return this.httpClient.post('/api/orders/casopis/initSub', casopis);
   }
 
   initPaperOrder(rad) {
     return this.httpClient.post('/api/orders/scPaper/init', rad);
+  }
+
+  getUserOrders() {
+    return this.httpClient.get('/api/orders/userOrders');
   }
 
 }

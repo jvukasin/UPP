@@ -11,6 +11,8 @@
         <button class="btn razmak" [routerLink]="['/urednik']" *ngIf="isUrednik">Urednik</button>
         <button class="btn razmak" [routerLink]="['/autor']" *ngIf="isAutor">Autor</button>
         <button class="btn razmak" [routerLink]="['/recenzent']" *ngIf="isRecenzent">Recenzent</button>
+        <button class="btn razmak" [routerLink]="['/korisnik']" *ngIf="isKorisnik">Moj profil</button>
+        <button class="btn" [routerLink]="['/pocetna']" *ngIf="isLoggedIn">Početna</button>
       </div>
     </div>
   </nav>

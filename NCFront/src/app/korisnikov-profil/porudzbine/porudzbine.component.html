@@ -1,0 +1,28 @@
+<div class="container">
+    <h2>Moje porudžbine</h2>
+    <div class="table-responsive">
+        <table class="table table-hover" id="lista">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Naziv porudžbine</th>
+              <th scope="col">Cena</th>
+              <th scope="col">Tip</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let ord of orderList">
+                  <th scope="row">{{ ord.id }}</th>
+                  <td>{{ ord.name }}</td>
+                  <td>{{ ord.amount }} USD</td>
+                  <td>{{ ord.orderType }}</td>
+                  <td>{{ ord.orderStatus }}</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+      <div>
+        <h4 *ngIf="emptyList">U sistemu nema zabeleženih porudžbina.</h4>
+    </div>
+</div>

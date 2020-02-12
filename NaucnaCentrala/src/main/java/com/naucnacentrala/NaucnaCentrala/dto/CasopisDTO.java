@@ -110,4 +110,5 @@ public class CasopisDTO {
     public void setActive(boolean active) {
         this.active = active;
     }
+
 }

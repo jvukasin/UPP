@@ -1,6 +1,7 @@
 package com.naucnacentrala.NaucnaCentrala.controller;
 
 import com.naucnacentrala.NaucnaCentrala.client.RegistrationClient;
+import com.naucnacentrala.NaucnaCentrala.dto.AgreementDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.CasopisDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.KPRegistrationDTO;
 import com.naucnacentrala.NaucnaCentrala.services.KPService;
@@ -8,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "kp")
@@ -41,6 +45,11 @@ public class KPController {
     @RequestMapping(value = "/getPlans/{magazineId}", method = RequestMethod.GET)
     public ResponseEntity<?> getBillingPlans(@PathVariable("magazineId") long magazineId){
         return new ResponseEntity<>(kpService.getMagazinePlans(magazineId), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getUserAgreements", method = RequestMethod.GET)
+    public ResponseEntity<List<AgreementDTO>> getUserAgreements(HttpServletRequest request){
+        return new ResponseEntity<List<AgreementDTO>>(kpService.getUserAgreements(request), HttpStatus.OK);
     }
 
 }

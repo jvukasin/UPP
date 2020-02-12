@@ -54,6 +54,28 @@ public class CasopisService {
         return dto;
     }
 
+    public List<CasopisDTO> findAllByUrednik(String korisnik) {
+        List<CasopisDTO> casopisi = new ArrayList<>();
+        for(Casopis c : casopisRepository.finAllByUrednik(korisnik)) {
+            CasopisDTO dto = new CasopisDTO();
+            dto.setId(c.getId());
+            dto.setName(c.getNaziv());
+            dto.setIssn(c.getIssn());
+            dto.setRegistered(c.isRegistered());
+            dto.setScienceFieldList(c.getNaucneOblasti());
+            dto.setChiefEditor(c.getGlavniUrednik());
+            dto.setActive(c.isAktivan());
+            dto.setSciencePaperDTOList(c.getSciencePapers());
+            if(c.getSellerId() != null) {
+                dto.setSellerId(c.getSellerId());
+            } else {
+                dto.setSellerId(new Long(0));
+            }
+            casopisi.add(dto);
+        }
+        return casopisi;
+    }
+
     public List<CasopisDTO> findAllDto() {
         ArrayList<CasopisDTO> retVal = new ArrayList<>();
         List<Casopis> casopisi = casopisRepository.findAll();
