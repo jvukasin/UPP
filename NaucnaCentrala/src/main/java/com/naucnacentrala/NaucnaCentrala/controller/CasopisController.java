@@ -88,7 +88,6 @@ public class CasopisController {
         String dt = sdf.format(date);
 
         Date today = sdf.parse(dt);
-        //TODO sredi format u yyyy-MM-dd kad stigne u orderObject i kad se sacuva u bazu
         Date sub = sdf.parse(dateClanarine);
         if(today.compareTo(sub) > 0) {
             return false;

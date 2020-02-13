@@ -16,6 +16,10 @@ public class NaucnaOblast {
     @JoinTable(name = "casopis_nobl")
     private List<Casopis> casopisi;
 
+    public NaucnaOblast() {
+
+    }
+
     public Long getSifra() {
         return sifra;
     }

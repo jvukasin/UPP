@@ -4,6 +4,7 @@ import com.naucnacentrala.NaucnaCentrala.client.OrderClient;
 import com.naucnacentrala.NaucnaCentrala.dto.*;
 import com.naucnacentrala.NaucnaCentrala.enums.Enums;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
+import com.naucnacentrala.NaucnaCentrala.model.Clanarina;
 import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
 import com.naucnacentrala.NaucnaCentrala.model.OrderObject;
 import com.naucnacentrala.NaucnaCentrala.repository.OrderObjectRepository;
@@ -12,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,6 +39,9 @@ public class OrderObjectService {
 
     @Autowired
     KorisnikService korisnikService;
+
+    @Autowired
+    CasopisService casopisService;
 
     public InitOrderResponseDTO create(CasopisDTO magazineDTO, HttpServletRequest request){
         Casopis magazine = magazineService.findOneById(magazineDTO.getId());
@@ -113,6 +120,18 @@ public class OrderObjectService {
         OrderObject o = orderObjectRepo.findById(foDTO.getNcOrderId()).get();
         o.setOrderStatus(foDTO.getOrderStatus());
         orderObjectRepo.save(o);
-
+        if(o.getOrderType().toString().equals("ORDER_SUBSCRIPTION") && o.getMagazine()!= null) {
+            Casopis c = casopisService.findOneById(o.getMagazine().getId());
+            Date endDate = foDTO.getFinalDate();
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String dejt = dateFormat.format(endDate);
+            Clanarina cl = new Clanarina();
+            cl.setUsername(o.getUserId());
+            cl.setEndDate(dejt);
+            cl.setAgreementID(foDTO.getAgreementID());
+            List<Clanarina> lista = c.getKorisniciSaClanarinom();
+            lista.add(cl);
+            casopisService.save(c);
+        }
     }
 }

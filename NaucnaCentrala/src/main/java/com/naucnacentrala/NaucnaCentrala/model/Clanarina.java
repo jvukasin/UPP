@@ -19,9 +19,16 @@ public class Clanarina {
     @Column
     private String chosenSubscription;
 
+    @Column
+    private long agreementID;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "casopis_korisnici_clanarine")
     private List<Casopis> casopisi;
+
+    public Clanarina() {
+
+    }
 
     public Long getId() {
         return id;
@@ -61,5 +68,13 @@ public class Clanarina {
 
     public void setChosenSubscription(String chosenSubscription) {
         this.chosenSubscription = chosenSubscription;
+    }
+
+    public long getAgreementID() {
+        return agreementID;
+    }
+
+    public void setAgreementID(long agreementID) {
+        this.agreementID = agreementID;
     }
 }

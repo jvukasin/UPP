@@ -60,18 +60,7 @@ export class CasopisInfoComponent implements OnInit {
   }
 
   onKupi(){
-    var casopis = {
-        id: this.magazine.id,
-        name: this.magazine.name,
-        issn: this.magazine.issn,
-        isRegistered: true,
-        sellerId: this.magazine.sellerId,
-        scienceFieldList: this.magazine.scienceFieldList,
-        chiefEditor: this.magazine.chiefEditor,
-        sciencePaperDTOList: this.magazine.sciencePaperDTOList,
-        active: this.magazine.active
-    }
-    this.orderService.initMagazineOrder(casopis).subscribe(
+    this.orderService.initMagazineOrder(this.magazine).subscribe(
       (response: any) => {
         window.location.href = response.redirectUrl;
       },

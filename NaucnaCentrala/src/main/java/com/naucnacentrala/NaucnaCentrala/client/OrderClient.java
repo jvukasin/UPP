@@ -21,7 +21,7 @@ public class OrderClient {
 
     public InitOrderResponseDTO initOrder(Casopis magazine, OrderObject orderObject) {
         InitOrderRequestDTO initOrderRequestDTO = new InitOrderRequestDTO(orderObject.getId(), magazine.getNaziv(), "USD",
-                magazine.getSellerId(), orderObject.getAmount(), this.returnUrl, orderObject.getOrderType(), orderObject.getOrderStatus());
+                magazine.getSellerId(), orderObject.getAmount(), this.returnUrl, orderObject.getOrderType(), orderObject.getOrderStatus(), orderObject.getUserId());
 
         HttpEntity<InitOrderRequestDTO> httpEntity = new HttpEntity<>(initOrderRequestDTO);
         ResponseEntity<InitOrderResponseDTO> responseEntity = restTemplate.postForEntity("https://localhost:8500/sellers/active-order/init", httpEntity, InitOrderResponseDTO.class);
@@ -30,7 +30,7 @@ public class OrderClient {
 
     public InitOrderResponseDTO initPaperOrder(NaucniRad paper, OrderObject orderObject) {
         InitOrderRequestDTO initOrderRequestDTO = new InitOrderRequestDTO(orderObject.getId(), paper.getTitle(), paper.getCurrency(),
-                paper.getMagazine().getSellerId(), orderObject.getAmount(), this.returnUrl, orderObject.getOrderType(), orderObject.getOrderStatus());
+                paper.getMagazine().getSellerId(), orderObject.getAmount(), this.returnUrl, orderObject.getOrderType(), orderObject.getOrderStatus(), orderObject.getUserId());
 
         HttpEntity<InitOrderRequestDTO> httpEntity = new HttpEntity<>(initOrderRequestDTO);
         ResponseEntity<InitOrderResponseDTO> responseEntity = restTemplate.postForEntity("https://localhost:8500/sellers/active-order/init", httpEntity, InitOrderResponseDTO.class);

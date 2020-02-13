@@ -12,10 +12,10 @@ export class PretplateComponent implements OnInit {
   emptyList: boolean = true;
 
   constructor(private kpServis: KPService) {
-    this.kpServis.getUserAgreements().subscibe(
+    this.kpServis.getUserAgreements().subscribe(
       res => {
         this.agrList = res;
-        if(this.agrList.lenth != 0) {
+        if(this.agrList.length != 0) {
           this.emptyList = false;
         }
       }, err => {
@@ -25,6 +25,20 @@ export class PretplateComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  onCancelAgreement(agrID) {
+    this.kpServis.cancelAgreement(agrID).subscribe(
+      res => {
+        if(res === "done") {
+          let i = this.agrList.findIndex(agr => agr.id === agrID);
+          this.agrList.splice(i, 1);
+          alert("Agreement cancelled!");
+        }
+      }, error => {
+        alert("error canceling agreement");
+      }
+    );
   }
 
 }

@@ -1,7 +1,10 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
 import com.naucnacentrala.NaucnaCentrala.dto.CasopisDTO;
+import com.naucnacentrala.NaucnaCentrala.dto.NaucniRadDTO;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
+import com.naucnacentrala.NaucnaCentrala.model.NaucnaOblast;
+import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
 import com.naucnacentrala.NaucnaCentrala.repository.CasopisRepository;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.FormFieldValidationConstraint;
@@ -41,35 +44,43 @@ public class CasopisService {
 
     public CasopisDTO findOneDto (long id) {
         Casopis c = casopisRepository.findOneById(id);
-        CasopisDTO dto = new CasopisDTO();
-        dto.setId(c.getId());
-        dto.setName(c.getNaziv());
-        dto.setIssn(c.getIssn());
-        dto.setScienceFieldList(c.getNaucneOblasti());
-        dto.setChiefEditor(c.getGlavniUrednik());
-        dto.setRegistered(c.isRegistered());
-        dto.setSellerId(c.getSellerId());
-        dto.setActive(c.isAktivan());
-        dto.setSciencePaperDTOList(c.getSciencePapers());
+        List<String> no = new ArrayList<>();
+        for(NaucnaOblast o : c.getNaucneOblasti()) {
+            no.add(o.getNaziv());
+        }
+        String urednik = c.getGlavniUrednik().getIme() + " " + c.getGlavniUrednik().getPrezime();
+        List<NaucniRadDTO> radovi = new ArrayList<>();
+        for(NaucniRad r : c.getSciencePapers()) {
+            NaucniRadDTO dto = new NaucniRadDTO(r.getId(), r.getTitle(), r.getKeyTerm(), r.getPaperAbstract(), r.getPrice(), r.getCurrency());
+            radovi.add(dto);
+        }
+        CasopisDTO dto;
+        if(c.getSellerId() != null) {
+            dto = new CasopisDTO(c.getId(), c.getNaziv(), c.getIssn(), no, urednik, c.isRegistered(), c.getSellerId(), radovi, c.isAktivan());
+        } else {
+            dto = new CasopisDTO(c.getId(), c.getNaziv(), c.getIssn(), no, urednik, c.isRegistered(), new Long(0), radovi, c.isAktivan());
+        }
         return dto;
     }
 
     public List<CasopisDTO> findAllByUrednik(String korisnik) {
         List<CasopisDTO> casopisi = new ArrayList<>();
         for(Casopis c : casopisRepository.finAllByUrednik(korisnik)) {
-            CasopisDTO dto = new CasopisDTO();
-            dto.setId(c.getId());
-            dto.setName(c.getNaziv());
-            dto.setIssn(c.getIssn());
-            dto.setRegistered(c.isRegistered());
-            dto.setScienceFieldList(c.getNaucneOblasti());
-            dto.setChiefEditor(c.getGlavniUrednik());
-            dto.setActive(c.isAktivan());
-            dto.setSciencePaperDTOList(c.getSciencePapers());
+            CasopisDTO dto;
+            List<String> no = new ArrayList<>();
+            for(NaucnaOblast o : c.getNaucneOblasti()) {
+                no.add(o.getNaziv());
+            }
+            String urednik = c.getGlavniUrednik().getIme() + " " + c.getGlavniUrednik().getPrezime();
+            List<NaucniRadDTO> radovi = new ArrayList<>();
+            for(NaucniRad r : c.getSciencePapers()) {
+                NaucniRadDTO nr = new NaucniRadDTO(r.getId(), r.getTitle(), r.getKeyTerm(), r.getPaperAbstract(), r.getPrice(), r.getCurrency());
+                radovi.add(nr);
+            }
             if(c.getSellerId() != null) {
-                dto.setSellerId(c.getSellerId());
+                dto = new CasopisDTO(c.getId(), c.getNaziv(), c.getIssn(), no, urednik, c.isRegistered(), c.getSellerId(), radovi, c.isAktivan());
             } else {
-                dto.setSellerId(new Long(0));
+                dto = new CasopisDTO(c.getId(), c.getNaziv(), c.getIssn(), no, urednik, c.isRegistered(), new Long(0), radovi, c.isAktivan());
             }
             casopisi.add(dto);
         }
@@ -80,18 +91,22 @@ public class CasopisService {
         ArrayList<CasopisDTO> retVal = new ArrayList<>();
         List<Casopis> casopisi = casopisRepository.findAll();
         for(Casopis c : casopisi) {
-            CasopisDTO dto = new CasopisDTO();
-            dto.setId(c.getId());
-            dto.setName(c.getNaziv());
-            dto.setIssn(c.getIssn());
-            dto.setScienceFieldList(c.getNaucneOblasti());
-            dto.setChiefEditor(c.getGlavniUrednik());
-            dto.setRegistered(c.isRegistered());
-            dto.setSellerId(c.getSellerId());
-            dto.setActive(c.isAktivan());
-            dto.setSciencePaperDTOList(c.getSciencePapers());
-
-            retVal.add(dto);
+            List<String> no = new ArrayList<>();
+            for(NaucnaOblast o : c.getNaucneOblasti()) {
+                no.add(o.getNaziv());
+            }
+            String urednik = c.getGlavniUrednik().getIme() + " " + c.getGlavniUrednik().getPrezime();
+            List<NaucniRadDTO> radovi = new ArrayList<>();
+            for(NaucniRad r : c.getSciencePapers()) {
+                NaucniRadDTO nr = new NaucniRadDTO(r.getId(), r.getTitle(), r.getKeyTerm(), r.getPaperAbstract(), r.getPrice(), r.getCurrency());
+                radovi.add(nr);
+            }
+            CasopisDTO dto;
+            if(c.getSellerId() != null) {
+                dto = new CasopisDTO(c.getId(), c.getNaziv(), c.getIssn(), no, urednik, c.isRegistered(), c.getSellerId(), radovi, c.isAktivan());
+            } else {
+                dto = new CasopisDTO(c.getId(), c.getNaziv(), c.getIssn(), no, urednik, c.isRegistered(), new Long(0), radovi, c.isAktivan());
+            }retVal.add(dto);
         }
         return retVal;
     }

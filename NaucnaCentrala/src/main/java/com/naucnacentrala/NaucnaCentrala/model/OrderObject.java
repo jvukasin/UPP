@@ -34,6 +34,7 @@ public class OrderObject {
     @ManyToOne
     private Subscription subscription;
 
+
     public OrderObject() {
     }
 

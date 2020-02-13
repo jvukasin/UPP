@@ -23,16 +23,16 @@ public class CasopisDTO {
     public CasopisDTO() {
     }
 
-    public CasopisDTO(Long id, String name, String issn, List<NaucnaOblast> scienceFieldList, Urednik chiefEditor,
-                      boolean isRegistered, long sellerId, List<NaucniRad> sciencePapers, boolean active) {
+    public CasopisDTO(Long id, String name, String issn, List<String> scienceFieldList, String chiefEditor,
+                      boolean isRegistered, long sellerId, List<NaucniRadDTO> sciencePapers, boolean active) {
         this.id = id;
         this.name = name;
         this.issn = issn;
-        this.setScienceFieldList(scienceFieldList);
-        this.setChiefEditor(chiefEditor);
+        this.scienceFieldList = scienceFieldList;
+        this.chiefEditor = chiefEditor;
         this.isRegistered = isRegistered;
         this.setSellerId(sellerId);
-        this.setSciencePaperDTOList(sciencePapers);
+        this.sciencePaperDTOList = sciencePapers;
         this.active = active;
     }
 
@@ -72,31 +72,12 @@ public class CasopisDTO {
         isRegistered = registered;
     }
 
-    public void setScienceFieldList(List<NaucnaOblast> scienceFieldList) {
-        for(NaucnaOblast scienceField: scienceFieldList){
-            this.scienceFieldList.add(scienceField.getNaziv());
-        }
-    }
-    public String getChiefEditor() {
-        return chiefEditor;
-    }
-
-    public void setChiefEditor(Urednik chiefEditor) {
-        this.chiefEditor = chiefEditor.getIme() + " " + chiefEditor.getPrezime();
-    }
-
     public Long getSellerId() {
         return sellerId;
     }
 
     public void setSellerId(Long sellerId) {
         this.sellerId = sellerId;
-    }
-
-    public void setSciencePaperDTOList(List<NaucniRad> sciencePapers) {
-        for(NaucniRad paper: sciencePapers){
-            this.sciencePaperDTOList.add(new NaucniRadDTO(paper.getId(), paper.getTitle(), paper.getKeyTerm(), paper.getPaperAbstract(), paper.getPrice(), paper.getCurrency()));
-        }
     }
 
     public List<NaucniRadDTO> getSciencePaperDTOList() {
@@ -111,4 +92,19 @@ public class CasopisDTO {
         this.active = active;
     }
 
+    public void setScienceFieldList(List<String> scienceFieldList) {
+        this.scienceFieldList = scienceFieldList;
+    }
+
+    public String getChiefEditor() {
+        return chiefEditor;
+    }
+
+    public void setChiefEditor(String chiefEditor) {
+        this.chiefEditor = chiefEditor;
+    }
+
+    public void setSciencePaperDTOList(List<NaucniRadDTO> sciencePaperDTOList) {
+        this.sciencePaperDTOList = sciencePaperDTOList;
+    }
 }

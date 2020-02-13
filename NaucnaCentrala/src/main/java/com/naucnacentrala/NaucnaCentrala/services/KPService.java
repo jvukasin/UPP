@@ -110,8 +110,19 @@ public class KPService {
         String korisnik = korisnikService.getUsernameFromRequest(request);
 
         ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/paypal-service/paypal/getUserAgreements/" + korisnik,
-                AgreementDTO[].class);
-        List<AgreementDTO> lista = (List<AgreementDTO>) response.getBody();
+                AgreementListDTO.class);
+        AgreementListDTO al = (AgreementListDTO) response.getBody();
+        List<AgreementDTO> lista = al.getAgreements();
         return lista;
+    }
+
+    public String cancelAgreement(long agrID) {
+        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/paypal-service/paypal/cancelAgreement/" + agrID,
+                String.class);
+        String ret = (String) response.getBody();
+        if(ret.equals("done")) {
+            
+        }
+        return ret;
     }
 }
