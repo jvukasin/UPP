@@ -106,9 +106,8 @@ public class KPService {
         return text;
     }
 
-    public String getMagazinePlans(long magId) {
-        Casopis m = magazineService.findOneById(magId);
-        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/sellers/sellers/getPlans/" + m.getSellerId(),
+    public String getMagazinePlans(long selId) {
+        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/sellers/sellers/getPlans/" + selId,
                 String.class);
         StringDTO text = new StringDTO((String) response.getBody());
 

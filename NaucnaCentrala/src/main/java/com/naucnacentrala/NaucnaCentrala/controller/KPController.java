@@ -42,9 +42,9 @@ public class KPController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getPlans/{magazineId}", method = RequestMethod.GET)
-    public ResponseEntity<?> getBillingPlans(@PathVariable("magazineId") long magazineId){
-        return new ResponseEntity<>(kpService.getMagazinePlans(magazineId), HttpStatus.OK);
+    @RequestMapping(value = "/getPlans/{sellerId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getBillingPlans(@PathVariable("sellerId") long sellerId){
+        return new ResponseEntity<>(kpService.getMagazinePlans(sellerId), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/getUserAgreements", method = RequestMethod.GET)

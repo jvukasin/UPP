@@ -19,7 +19,7 @@
                   <td>{{ magazine.issn }}</td>
                   <td style="width:350px" class="text-right">
                     <ng-container *ngIf="magazine.sellerId != 0">
-                      <button class="btn btn-primary" (click)="onListPlans(magazine.id)" *ngIf="magazine.registered">Pregledaj planove</button>
+                      <button class="btn btn-primary" (click)="onListPlans(magazine.sellerId)" *ngIf="magazine.registered">Pregledaj planove</button>
                     </ng-container>
                   </td>
                   <td>

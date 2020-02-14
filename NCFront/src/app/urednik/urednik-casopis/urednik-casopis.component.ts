@@ -95,8 +95,8 @@ export class UrednikCasopisComponent implements OnInit {
     );
   }
 
-  onListPlans(magazineID) {
-    this.kpService.getPlans(magazineID).subscribe(
+  onListPlans(sellerID) {
+    this.kpService.getPlans(sellerID).subscribe(
       (data) => {
         this.retHref = data;
         window.location.href = this.retHref;
