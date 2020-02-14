@@ -52,9 +52,9 @@ public class KPController {
         return new ResponseEntity<List<AgreementDTO>>(kpService.getUserAgreements(request), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/cancelAgreement/{agrID}", method = RequestMethod.GET)
-    public ResponseEntity<String> cancelAgreement(@PathVariable("agrID") long agrID){
-        return new ResponseEntity<String>(kpService.cancelAgreement(agrID), HttpStatus.OK);
+    @RequestMapping(value = "/cancelAgreement/{agrID}/{sellerID}", method = RequestMethod.GET)
+    public ResponseEntity<String> cancelAgreement(@PathVariable("agrID") long agrID, @PathVariable("sellerID") long sellerID){
+        return new ResponseEntity<String>(kpService.cancelAgreement(agrID, sellerID), HttpStatus.OK);
     }
 
 }

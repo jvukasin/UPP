@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -51,6 +52,9 @@ public class CasopisController {
     @Autowired
     NOService noService;
 
+    @Autowired
+    RestTemplate restTemplate;
+
     @RequestMapping(value = "/casopisi/{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<CasopisDTO> getSpecificC(@PathVariable("id") long id){
         return new ResponseEntity<>(casopisService.findOneDto(id), HttpStatus.OK);
@@ -67,8 +71,27 @@ public class CasopisController {
         String korisnik = korisnikService.getUsernameFromRequest(request);
 
         for(Clanarina clan : c.getKorisniciSaClanarinom()) {
-            if(clan.getUsername().equals(korisnik) && checkDates(clan.getEndDate())) {
-                return new ResponseEntity<String>("Subbed", HttpStatus.OK);
+            if(clan.getUsername().equals(korisnik)) {
+                if(checkDates(clan.getEndDate())) {
+                    if(clan.getAgreementID() == 0) {
+                        return new ResponseEntity<String>("Subbed", HttpStatus.OK);
+                    } else {
+                        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/paypal-service/paypal/AgreementExistsOnPP/" + clan.getAgreementID(),
+                                String.class);
+                        String retVal = (String) response.getBody();
+                        if(retVal.equals("exists")) {
+                            return new ResponseEntity<String>("Subbed", HttpStatus.OK);
+                        } else {
+                            c.getKorisniciSaClanarinom().remove(clan);
+                            casopisService.save(c);
+                            return new ResponseEntity<String>("notSubbed", HttpStatus.OK);
+                        }
+                    }
+                } else {
+                    c.getKorisniciSaClanarinom().remove(clan);
+                    casopisService.save(c);
+                    return new ResponseEntity<String>("notSubbed", HttpStatus.OK);
+                }
             }
         }
         return new ResponseEntity<String>("notSubbed", HttpStatus.OK);

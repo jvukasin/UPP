@@ -17,14 +17,10 @@ public class Clanarina {
     private String endDate;
 
     @Column
-    private String chosenSubscription;
-
-    @Column
     private long agreementID;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "casopis_korisnici_clanarine")
-    private List<Casopis> casopisi;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Casopis casopis;
 
     public Clanarina() {
 
@@ -54,20 +50,12 @@ public class Clanarina {
         this.endDate = endDate;
     }
 
-    public List<Casopis> getCasopisi() {
-        return casopisi;
+    public Casopis getCasopis() {
+        return casopis;
     }
 
-    public void setCasopisi(List<Casopis> casopisi) {
-        this.casopisi = casopisi;
-    }
-
-    public String getChosenSubscription() {
-        return chosenSubscription;
-    }
-
-    public void setChosenSubscription(String chosenSubscription) {
-        this.chosenSubscription = chosenSubscription;
+    public void setCasopis(Casopis casopis) {
+        this.casopis = casopis;
     }
 
     public long getAgreementID() {

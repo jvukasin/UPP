@@ -3,7 +3,9 @@ package com.naucnacentrala.NaucnaCentrala.services;
 import com.naucnacentrala.NaucnaCentrala.client.RegistrationClient;
 import com.naucnacentrala.NaucnaCentrala.dto.*;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
+import com.naucnacentrala.NaucnaCentrala.model.Clanarina;
 import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
+import com.naucnacentrala.NaucnaCentrala.repository.ClanarinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,6 +35,12 @@ public class KPService {
 
     @Autowired
     KorisnikService korisnikService;
+
+    @Autowired
+    CasopisService casopisService;
+
+    @Autowired
+    ClanarinaRepository clanarinaRepository;
 
 
     public KPRegistrationDTO initRegistration(CasopisDTO magazineDTO) {
@@ -116,12 +125,16 @@ public class KPService {
         return lista;
     }
 
-    public String cancelAgreement(long agrID) {
+    public String cancelAgreement(long agrID, long sellerID) {
         ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/paypal-service/paypal/cancelAgreement/" + agrID,
                 String.class);
         String ret = (String) response.getBody();
         if(ret.equals("done")) {
-            
+            Casopis c = casopisService.findBySellerId(sellerID);
+            Clanarina clan = clanarinaRepository.findByAgrAndCas(c.getId(), agrID);
+            if(clan != null) {
+                clanarinaRepository.delete(clan);
+            }
         }
         return ret;
     }

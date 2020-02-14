@@ -30,8 +30,8 @@ export class KPService {
     return this.httpClient.get('/api/kp/getUserAgreements/');
   }
 
-  cancelAgreement(agrID) {
-    return this.httpClient.get('/api/kp/cancelAgreement/'.concat(agrID), {responseType: 'text'});
+  cancelAgreement(agrID, sellerID) {
+    return this.httpClient.get('/api/kp/cancelAgreement/'.concat(agrID).concat("/").concat(sellerID), {responseType: 'text'});
   }
 
 }

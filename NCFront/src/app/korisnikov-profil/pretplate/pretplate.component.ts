@@ -27,8 +27,8 @@ export class PretplateComponent implements OnInit {
   ngOnInit() {
   }
 
-  onCancelAgreement(agrID) {
-    this.kpServis.cancelAgreement(agrID).subscribe(
+  onCancelAgreement(agrID, sellerID) {
+    this.kpServis.cancelAgreement(agrID, sellerID).subscribe(
       res => {
         if(res === "done") {
           let i = this.agrList.findIndex(agr => agr.id === agrID);

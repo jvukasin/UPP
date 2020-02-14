@@ -24,7 +24,7 @@
                   <td>Na svakih {{ agreement.freqInterval }} {{ agreement.frequency }}</td>
                   <td>{{ agreement.cycles }}</td>
                   <!-- stavi da se dugme za otkazivanje pojavi tek kada je status created ili activated sta god -->
-                  <td><button class="btn btn-link" (click)="onCancelAgreement(agreement.id)">Otkaži</button></td>
+                  <td><button class="btn btn-link" (click)="onCancelAgreement(agreement.id, agreement.sellerId)">Otkaži</button></td>
                 </tr>
             </tbody>
         </table>

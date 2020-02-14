@@ -7,6 +7,7 @@ import com.naucnacentrala.NaucnaCentrala.model.Casopis;
 import com.naucnacentrala.NaucnaCentrala.model.Clanarina;
 import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
 import com.naucnacentrala.NaucnaCentrala.model.OrderObject;
+import com.naucnacentrala.NaucnaCentrala.repository.ClanarinaRepository;
 import com.naucnacentrala.NaucnaCentrala.repository.OrderObjectRepository;
 import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,9 @@ public class OrderObjectService {
 
     @Autowired
     CasopisService casopisService;
+
+    @Autowired
+    ClanarinaRepository clanarinaRepository;
 
     public InitOrderResponseDTO create(CasopisDTO magazineDTO, HttpServletRequest request){
         Casopis magazine = magazineService.findOneById(magazineDTO.getId());
@@ -129,8 +133,8 @@ public class OrderObjectService {
             cl.setUsername(o.getUserId());
             cl.setEndDate(dejt);
             cl.setAgreementID(foDTO.getAgreementID());
-            List<Clanarina> lista = c.getKorisniciSaClanarinom();
-            lista.add(cl);
+            cl.setCasopis(c);
+            clanarinaRepository.save(cl);
             casopisService.save(c);
         }
     }

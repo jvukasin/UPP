@@ -56,4 +56,5 @@ insert into casopis_recenzenti (recenzent_username, casopisi_id) values ("milica
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1);
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1);
 
+insert into clanarina values ('1', '1', '2020-02-18', 'vule', '1');
 
