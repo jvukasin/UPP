@@ -9,6 +9,7 @@
               <th scope="col">Cena</th>
               <th scope="col">Tip</th>
               <th scope="col">Status</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -18,6 +19,7 @@
                   <td>{{ ord.amount }} USD</td>
                   <td>{{ ord.orderType }}</td>
                   <td>{{ ord.orderStatus }}</td>
+                  <td><button *ngIf="ord.orderStatus == 'Uspešno' && ord.orderType == 'Rad'" class="btn btn-link" (click)="onPreuzmiRad(ord.radId)">Preuzmi</button></td>
                 </tr>
             </tbody>
         </table>

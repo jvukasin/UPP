@@ -100,8 +100,10 @@ public class OrderObjectService {
             dto.setUserId(o.getUserId());
             if(o.getMagazine() != null) {
                 dto.setName(o.getMagazine().getNaziv());
+                dto.setCasopisId(o.getMagazine().getId());
             } else if(o.getSciencePaper() != null) {
                 dto.setName(o.getSciencePaper().getTitle());
+                dto.setRadId(o.getSciencePaper().getId());
             } else {
                 dto.setName(o.getSubscription().getMagazine().getNaziv());
             }

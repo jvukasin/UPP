@@ -11,6 +11,8 @@ public class OrderObjectDTO {
     private String orderType;
     private String orderStatus;
     private String name;
+    private long casopisId;
+    private long radId;
 
     public long getId() {
         return id;
@@ -41,9 +43,9 @@ public class OrderObjectDTO {
     }
 
     public void setOrderType(Enums.OrderType orderType) {
-        if(orderType.equals("ORDER_CASOPIS")) {
+        if(orderType.toString().equals("ORDER_CASOPIS")) {
             this.orderType = "Casopis";
-        } else if (orderType.equals("ORDER_RAD")) {
+        } else if (orderType.toString().equals("ORDER_RAD")) {
             this.orderType = "Rad";
         } else {
             this.orderType = "Pretplata";
@@ -70,5 +72,21 @@ public class OrderObjectDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getCasopisId() {
+        return casopisId;
+    }
+
+    public void setCasopisId(long casopisId) {
+        this.casopisId = casopisId;
+    }
+
+    public long getRadId() {
+        return radId;
+    }
+
+    public void setRadId(long radId) {
+        this.radId = radId;
     }
 }
