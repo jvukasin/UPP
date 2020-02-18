@@ -19,7 +19,12 @@ import java.util.List;
 @Service
 public class KPService {
 
-    private final String REG_STATUS_CALLBACK_URL = "https://localhost:8600/kp/registration/status";
+//    private final String REG_STATUS_CALLBACK_URL = "https://localhost:8601/kp/registration/status";
+//    private final String returnUrl = "https://localhost:8500";
+
+    //LAN
+    private final String REG_STATUS_CALLBACK_URL = "https://192.168.43.86:8601/kp/registration/status";
+    private final String returnUrl = "https://192.168.43.124:8500";
 
     @Autowired
     CasopisService magazineService;
@@ -100,14 +105,14 @@ public class KPService {
         }
         double roundAmount = Math.round(amount * 100.0) / 100.0;
         CasopisInfoDTO magazineDTO = new CasopisInfoDTO(m.getNaziv(), m.getIssn(), currency, roundAmount, m.getSellerId());
-        ResponseEntity response = restTemplate.postForEntity("https://localhost:8500/sellers/sellers/createPlan", new HttpEntity<>(magazineDTO),
+        ResponseEntity response = restTemplate.postForEntity(this.returnUrl + "/sellers/sellers/createPlan", new HttpEntity<>(magazineDTO),
                 String.class);
         StringDTO text = new StringDTO((String) response.getBody());
         return text;
     }
 
     public String getMagazinePlans(long selId) {
-        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/sellers/sellers/getPlans/" + selId,
+        ResponseEntity response = restTemplate.getForEntity(this.returnUrl + "/sellers/sellers/getPlans/" + selId,
                 String.class);
         StringDTO text = new StringDTO((String) response.getBody());
 
@@ -117,7 +122,7 @@ public class KPService {
     public List<AgreementDTO> getUserAgreements(HttpServletRequest request) {
         String korisnik = korisnikService.getUsernameFromRequest(request);
 
-        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/paypal-service/paypal/getUserAgreements/" + korisnik,
+        ResponseEntity response = restTemplate.getForEntity(this.returnUrl + "/paypal-service/paypal/getUserAgreements/" + korisnik,
                 AgreementListDTO.class);
         AgreementListDTO al = (AgreementListDTO) response.getBody();
         List<AgreementDTO> lista = al.getAgreements();
@@ -125,7 +130,7 @@ public class KPService {
     }
 
     public String cancelAgreement(long agrID, long sellerID) {
-        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/paypal-service/paypal/cancelAgreement/" + agrID,
+        ResponseEntity response = restTemplate.getForEntity(this.returnUrl + "/paypal-service/paypal/cancelAgreement/" + agrID,
                 String.class);
         String ret = (String) response.getBody();
         if(ret.equals("done")) {

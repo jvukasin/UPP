@@ -2,7 +2,9 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 
 import com.naucnacentrala.NaucnaCentrala.dto.*;
 import com.naucnacentrala.NaucnaCentrala.model.*;
+import com.naucnacentrala.NaucnaCentrala.repository.ClanarinaRepository;
 import com.naucnacentrala.NaucnaCentrala.services.CasopisService;
+import com.naucnacentrala.NaucnaCentrala.services.ClanarinaService;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
 import com.naucnacentrala.NaucnaCentrala.services.NOService;
 import org.camunda.bpm.engine.*;
@@ -31,6 +33,9 @@ import java.util.List;
 @RequestMapping("/casopis")
 public class CasopisController {
 
+//    private final String kpUrl = "https://localhost:8500";
+    private final String kpUrl = "https://192.168.43.124:8500";
+
     @Autowired
     IdentityService identityService;
 
@@ -55,6 +60,9 @@ public class CasopisController {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    ClanarinaService clanarinaService;
+
     @RequestMapping(value = "/casopisi/{id}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<CasopisDTO> getSpecificC(@PathVariable("id") long id){
         return new ResponseEntity<>(casopisService.findOneDto(id), HttpStatus.OK);
@@ -76,20 +84,18 @@ public class CasopisController {
                     if(clan.getAgreementID() == 0) {
                         return new ResponseEntity<String>("Subbed", HttpStatus.OK);
                     } else {
-                        ResponseEntity response = restTemplate.getForEntity("https://localhost:8500/paypal-service/paypal/AgreementExistsOnPP/" + clan.getAgreementID(),
+                        ResponseEntity response = restTemplate.getForEntity(this.kpUrl + "/paypal-service/paypal/AgreementExistsOnPP/" + clan.getAgreementID(),
                                 String.class);
                         String retVal = (String) response.getBody();
                         if(retVal.equals("exists")) {
                             return new ResponseEntity<String>("Subbed", HttpStatus.OK);
                         } else {
-                            c.getKorisniciSaClanarinom().remove(clan);
-                            casopisService.save(c);
+                            clanarinaService.remove(clan.getId());
                             return new ResponseEntity<String>("notSubbed", HttpStatus.OK);
                         }
                     }
                 } else {
-                    c.getKorisniciSaClanarinom().remove(clan);
-                    casopisService.save(c);
+                    clanarinaService.remove(clan.getId());
                     return new ResponseEntity<String>("notSubbed", HttpStatus.OK);
                 }
             }

@@ -59,7 +59,7 @@ public class Casopis {
     @OneToMany(mappedBy = "magazine", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<NaucniRad> sciencePapers;
 
-    @OneToMany(mappedBy = "casopis", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "casopis", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private List<Clanarina> korisniciSaClanarinom;
 
     public Casopis() {

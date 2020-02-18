@@ -13,8 +13,12 @@ public class RegistrationClient {
     @Autowired
     RestTemplate restTemplate;
 
-    private final String INIT_REG_ENDPOINT = "https://localhost:8500/sellers/sellers/register/init";
-    private final String INIT_REG_REVIEW_ENDPOINT = "https://localhost:8500/sellers/sellers/register/review";
+//    private final String INIT_REG_ENDPOINT = "https://localhost:8500/sellers/sellers/register/init";
+//    private final String INIT_REG_REVIEW_ENDPOINT = "https://localhost:8500/sellers/sellers/register/review";
+
+    //LAN
+    private final String INIT_REG_ENDPOINT = "https://192.168.43.124:8500/sellers/sellers/register/init";
+    private final String INIT_REG_REVIEW_ENDPOINT = "https://192.168.43.124:8500/sellers/sellers/register/review";
 
 
     public KPRegistrationDTO initRegistration(KPRegistrationDTO kprDTO) {

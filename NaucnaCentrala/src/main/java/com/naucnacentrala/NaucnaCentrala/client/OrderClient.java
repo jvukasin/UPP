@@ -14,7 +14,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class OrderClient {
 
-    private final static String returnUrl = "https://localhost:8601/orders/finalize";
+//    private final static String returnUrl = "https://localhost:8601/orders/finalize";
+//    private final static String sellersUrl = "https://localhost:8500/sellers/active-order/init";
+
+    //LAN
+    private final static String returnUrl = "https://192.168.43.86:8601/orders/finalize";
+    private final static String sellersUrl = "https://192.168.43.124:8500/sellers/active-order/init";
 
     @Autowired
     RestTemplate restTemplate;
@@ -24,7 +29,7 @@ public class OrderClient {
                 magazine.getSellerId(), orderObject.getAmount(), this.returnUrl, orderObject.getOrderType(), orderObject.getOrderStatus(), orderObject.getUserId());
 
         HttpEntity<InitOrderRequestDTO> httpEntity = new HttpEntity<>(initOrderRequestDTO);
-        ResponseEntity<InitOrderResponseDTO> responseEntity = restTemplate.postForEntity("https://localhost:8500/sellers/active-order/init", httpEntity, InitOrderResponseDTO.class);
+        ResponseEntity<InitOrderResponseDTO> responseEntity = restTemplate.postForEntity(this.sellersUrl, httpEntity, InitOrderResponseDTO.class);
         return responseEntity.getBody();
     }
 
@@ -33,7 +38,7 @@ public class OrderClient {
                 paper.getMagazine().getSellerId(), orderObject.getAmount(), this.returnUrl, orderObject.getOrderType(), orderObject.getOrderStatus(), orderObject.getUserId());
 
         HttpEntity<InitOrderRequestDTO> httpEntity = new HttpEntity<>(initOrderRequestDTO);
-        ResponseEntity<InitOrderResponseDTO> responseEntity = restTemplate.postForEntity("https://localhost:8500/sellers/active-order/init", httpEntity, InitOrderResponseDTO.class);
+        ResponseEntity<InitOrderResponseDTO> responseEntity = restTemplate.postForEntity(this.sellersUrl, httpEntity, InitOrderResponseDTO.class);
         return responseEntity.getBody();
     }
 }
