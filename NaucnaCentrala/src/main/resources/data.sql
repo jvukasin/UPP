@@ -59,5 +59,4 @@ insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, ma
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1);
 
 insert into clanarina values ('4', '1', '2020-02-26', 'vule', '1');
-;
 

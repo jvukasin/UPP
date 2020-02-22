@@ -2,7 +2,6 @@ package com.naucnacentrala.NaucnaCentrala.controller;
 
 import com.naucnacentrala.NaucnaCentrala.dto.*;
 import com.naucnacentrala.NaucnaCentrala.model.*;
-import com.naucnacentrala.NaucnaCentrala.repository.ClanarinaRepository;
 import com.naucnacentrala.NaucnaCentrala.services.CasopisService;
 import com.naucnacentrala.NaucnaCentrala.services.ClanarinaService;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
@@ -11,7 +10,6 @@ import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.impl.form.type.EnumFormType;
-import org.camunda.bpm.engine.impl.form.type.StringFormType;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;

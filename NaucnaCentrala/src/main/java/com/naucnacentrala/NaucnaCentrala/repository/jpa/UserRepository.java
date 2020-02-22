@@ -1,4 +1,4 @@
-package com.naucnacentrala.NaucnaCentrala.repository;
+package com.naucnacentrala.NaucnaCentrala.repository.jpa;
 
 import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
 import com.naucnacentrala.NaucnaCentrala.model.User;

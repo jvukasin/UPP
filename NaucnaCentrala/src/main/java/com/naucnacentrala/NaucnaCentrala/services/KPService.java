@@ -5,7 +5,7 @@ import com.naucnacentrala.NaucnaCentrala.dto.*;
 import com.naucnacentrala.NaucnaCentrala.model.Casopis;
 import com.naucnacentrala.NaucnaCentrala.model.Clanarina;
 import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
-import com.naucnacentrala.NaucnaCentrala.repository.ClanarinaRepository;
+import com.naucnacentrala.NaucnaCentrala.repository.jpa.ClanarinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

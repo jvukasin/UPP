@@ -277,7 +277,7 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
       <bpmn:outgoing>SequenceFlow_06hiuri</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="EndEvent_1v8l23g">
-      <bpmn:incoming>SequenceFlow_09vxtik</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0pn3nmw</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_06hiuri" sourceRef="ServiceTask_0f6b3nm" targetRef="ServiceTask_0r5gdj9" />
     <bpmn:sequenceFlow id="SequenceFlow_112zg62" sourceRef="ExclusiveGateway_04wi29t" targetRef="ServiceTask_0f6b3nm">
@@ -437,7 +437,7 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:endEvent id="EndEvent_0pv7eka">
-      <bpmn:incoming>SequenceFlow_1eobevn</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0cjqdwu</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow_10x3g2s" sourceRef="Task_08vlgxh" targetRef="Task_07p9lqq" />
     <bpmn:serviceTask id="Task_08vlgxh" name="Notifikacija autoru da je rad prihvacen" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.NotifikacijaRadPrihvacen">
@@ -455,7 +455,7 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
       <bpmn:incoming>SequenceFlow_0ujl8wt</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ycdvpw</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1eobevn" sourceRef="Task_07p9lqq" targetRef="EndEvent_0pv7eka" />
+    <bpmn:sequenceFlow id="SequenceFlow_1eobevn" sourceRef="Task_07p9lqq" targetRef="ServiceTask_0ixolf8" />
     <bpmn:serviceTask id="Task_07p9lqq" name="Uvrsti rad u casopis" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.SnimiRad">
       <bpmn:incoming>SequenceFlow_10x3g2s</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1eobevn</bpmn:outgoing>
@@ -464,7 +464,7 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
       <bpmn:incoming>SequenceFlow_06hiuri</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_09vxtik</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="SequenceFlow_09vxtik" sourceRef="ServiceTask_0r5gdj9" targetRef="EndEvent_1v8l23g" />
+    <bpmn:sequenceFlow id="SequenceFlow_09vxtik" sourceRef="ServiceTask_0r5gdj9" targetRef="Task_12ymhr3" />
     <bpmn:serviceTask id="Task_0lyys66" name="Notifikacija recenzentima" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.NotifikacijaORecenziranju">
       <bpmn:incoming>SequenceFlow_012c1fy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1ra6miq</bpmn:outgoing>
@@ -647,6 +647,16 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
       <bpmn:outgoing>SequenceFlow_0gn77dt</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="SequenceFlow_0gn77dt" sourceRef="ServiceTask_1symt2y" targetRef="ExclusiveGateway_02z25u8" />
+    <bpmn:sequenceFlow id="SequenceFlow_0pn3nmw" sourceRef="Task_12ymhr3" targetRef="EndEvent_1v8l23g" />
+    <bpmn:serviceTask id="Task_12ymhr3" name="ElasticSearch DOI" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.AddESDOI">
+      <bpmn:incoming>SequenceFlow_09vxtik</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0pn3nmw</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="ServiceTask_0ixolf8" name="ElasticSearch DOI" camunda:class="com.naucnacentrala.NaucnaCentrala.services.tasks.AddESDOI">
+      <bpmn:incoming>SequenceFlow_1eobevn</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0cjqdwu</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0cjqdwu" sourceRef="ServiceTask_0ixolf8" targetRef="EndEvent_0pv7eka" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="obrada_teksta">
@@ -837,7 +847,7 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
         <dc:Bounds x="3320" y="640" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_1v8l23g_di" bpmnElement="EndEvent_1v8l23g">
-        <dc:Bounds x="3682" y="662" width="36" height="36" />
+        <dc:Bounds x="3762" y="662" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_06hiuri_di" bpmnElement="SequenceFlow_06hiuri">
         <di:waypoint x="3420" y="680" />
@@ -940,7 +950,7 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
         <dc:Bounds x="3602" y="372" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_0pv7eka_di" bpmnElement="EndEvent_0pv7eka">
-        <dc:Bounds x="3682" y="102" width="36" height="36" />
+        <dc:Bounds x="3782" y="102" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_10x3g2s_di" bpmnElement="SequenceFlow_10x3g2s">
         <di:waypoint x="3440" y="120" />
@@ -965,7 +975,7 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1eobevn_di" bpmnElement="SequenceFlow_1eobevn">
         <di:waypoint x="3610" y="120" />
-        <di:waypoint x="3682" y="120" />
+        <di:waypoint x="3650" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0ry0spc_di" bpmnElement="Task_07p9lqq">
         <dc:Bounds x="3510" y="80" width="100" height="80" />
@@ -975,7 +985,7 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_09vxtik_di" bpmnElement="SequenceFlow_09vxtik">
         <di:waypoint x="3590" y="680" />
-        <di:waypoint x="3682" y="680" />
+        <di:waypoint x="3630" y="680" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_14ylyw4_di" bpmnElement="Task_0lyys66">
         <dc:Bounds x="2810" y="640" width="100" height="80" />
@@ -1132,6 +1142,20 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
         <di:waypoint x="2970" y="590" />
         <di:waypoint x="2970" y="830" />
         <di:waypoint x="2885" y="830" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0pn3nmw_di" bpmnElement="SequenceFlow_0pn3nmw">
+        <di:waypoint x="3730" y="680" />
+        <di:waypoint x="3762" y="680" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ServiceTask_0aoc3zt_di" bpmnElement="Task_12ymhr3">
+        <dc:Bounds x="3630" y="640" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="ServiceTask_0ixolf8_di" bpmnElement="ServiceTask_0ixolf8">
+        <dc:Bounds x="3650" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0cjqdwu_di" bpmnElement="SequenceFlow_0cjqdwu">
+        <di:waypoint x="3750" y="120" />
+        <di:waypoint x="3782" y="120" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -1,15 +1,21 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
 import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
-import com.naucnacentrala.NaucnaCentrala.repository.NaucniRadRepository;
+import com.naucnacentrala.NaucnaCentrala.repository.jpa.NaucniRadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 public class NaucniRadService {
+
+    private final String path = "D:\\git\\UPP_projekat\\NaucnaCentrala\\src\\main\\resources\\files";
+    private final Path storageLocation = Paths.get(this.path);
 
     @Autowired
     NaucniRadRepository naucniRadRepository;
@@ -29,6 +35,11 @@ public class NaucniRadService {
             e.printStackTrace();
         }
         return naucniRadRepository.save(rad);
+    }
+
+    public String getPath(Long id) throws UnsupportedEncodingException {
+        NaucniRad naucniRad = naucniRadRepository.findOneById(id);
+        return this.path + "\\" + naucniRad.getPdfName();
     }
 
 

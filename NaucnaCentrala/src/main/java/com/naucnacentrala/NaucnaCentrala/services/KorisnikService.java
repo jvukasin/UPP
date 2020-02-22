@@ -3,7 +3,7 @@ package com.naucnacentrala.NaucnaCentrala.services;
 import com.naucnacentrala.NaucnaCentrala.model.Recenzent;
 import com.naucnacentrala.NaucnaCentrala.model.Urednik;
 import com.naucnacentrala.NaucnaCentrala.model.User;
-import com.naucnacentrala.NaucnaCentrala.repository.UserRepository;
+import com.naucnacentrala.NaucnaCentrala.repository.jpa.UserRepository;
 import com.naucnacentrala.NaucnaCentrala.security.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
@@ -12,16 +12,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.core.env.Environment;
 
-import javax.mail.*;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
-import java.util.Properties;
 
 @Service
 public class KorisnikService {

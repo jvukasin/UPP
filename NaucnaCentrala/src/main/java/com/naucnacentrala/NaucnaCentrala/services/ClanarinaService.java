@@ -1,7 +1,7 @@
 package com.naucnacentrala.NaucnaCentrala.services;
 
 import com.naucnacentrala.NaucnaCentrala.model.Clanarina;
-import com.naucnacentrala.NaucnaCentrala.repository.ClanarinaRepository;
+import com.naucnacentrala.NaucnaCentrala.repository.jpa.ClanarinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
