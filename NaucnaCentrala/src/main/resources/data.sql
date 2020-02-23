@@ -55,8 +55,8 @@ insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registe
 insert into casopis_nobl (naucna_oblast_sifra, casopisi_id) values (1,1), (2,1), (3,1);
 insert into casopis_recenzenti (recenzent_username, casopisi_id) values ("milica", 1), ("mace", 1);
 
-insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1);
-insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1);
+insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1, 1, 'Naucna Centrala.pdf', 'pera');
+insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1, 1, 'Naucna Centrala.pdf', 'pera');
 
 insert into clanarina values ('4', '1', '2020-02-26', 'vule', '1');
 

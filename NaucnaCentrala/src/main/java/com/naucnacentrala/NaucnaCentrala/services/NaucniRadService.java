@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -31,6 +32,10 @@ public class NaucniRadService {
     public NaucniRad savePdf(MultipartFile file, NaucniRad rad){
         try {
             rad.setPdf(file.getBytes());
+
+            //sacuvaj u resource/files
+            Files.deleteIfExists(this.storageLocation.resolve(rad.getPdfName()));
+            Files.copy(file.getInputStream(), this.storageLocation.resolve(rad.getPdfName()));
         } catch (IOException e) {
             e.printStackTrace();
         }

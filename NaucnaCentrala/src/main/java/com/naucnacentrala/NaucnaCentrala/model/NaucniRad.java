@@ -41,10 +41,22 @@ public class NaucniRad {
     @Column(name = "pdf_name")
     private String pdfName;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "autor_id")
+    private Autor autor;
+
     @OneToMany(mappedBy = "naucniRad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Koautor> koautori;
 
     public NaucniRad() {
+    }
+
+    public Autor getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Autor autor) {
+        this.autor = autor;
     }
 
     public Long getId() {
