@@ -49,6 +49,9 @@ import { FinalKomentariPregledComponent } from './urednik/final-komentari-pregle
 import { KorisnikovProfilComponent } from './korisnikov-profil/korisnikov-profil.component';
 import { PorudzbineComponent } from './korisnikov-profil/porudzbine/porudzbine.component';
 import { PretplateComponent } from './korisnikov-profil/pretplate/pretplate.component';
+import { PretragaComponent } from './pretraga/pretraga.component';
+import { BasicComponent } from './pretraga/basic/basic.component';
+import { AdvancedComponent } from './pretraga/advanced/advanced.component';
 
 @NgModule({
   declarations: [
@@ -92,7 +95,10 @@ import { PretplateComponent } from './korisnikov-profil/pretplate/pretplate.comp
     FinalKomentariPregledComponent,
     KorisnikovProfilComponent,
     PorudzbineComponent,
-    PretplateComponent
+    PretplateComponent,
+    PretragaComponent,
+    BasicComponent,
+    AdvancedComponent
   ],
   imports: [
     BrowserModule,

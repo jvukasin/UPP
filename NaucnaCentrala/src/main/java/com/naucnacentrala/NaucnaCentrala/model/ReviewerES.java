@@ -32,21 +32,17 @@ public class ReviewerES {
     @Field(type = FieldType.Text, store = true)
     private List<String> scienceFields = new ArrayList<>();
 
-    @Field(type = FieldType.Nested, store = true)
-    private List<SciencePaperES> sciencePapers = new ArrayList<>();
-
     public ReviewerES() {
 
     }
 
-    public ReviewerES(String id, String firstName, String lastName, String email, GeoPoint location, List<String> scienceFields, List<SciencePaperES> sciencePapers) {
+    public ReviewerES(String id, String firstName, String lastName, String email, GeoPoint location, List<String> scienceFields) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.location = location;
         this.scienceFields = scienceFields;
-        this.sciencePapers = sciencePapers;
     }
 
     public String getId() {
@@ -97,13 +93,5 @@ public class ReviewerES {
         for(NaucnaOblast scienceField: scienceFields){
             this.scienceFields.add(scienceField.getNaziv());
         }
-    }
-
-    public List<SciencePaperES> getSciencePapers() {
-        return sciencePapers;
-    }
-
-    public void setSciencePapers(List<SciencePaperES> sciencePapers) {
-        this.sciencePapers = sciencePapers;
     }
 }

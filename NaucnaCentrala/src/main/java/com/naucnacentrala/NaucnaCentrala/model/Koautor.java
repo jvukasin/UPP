@@ -6,11 +6,14 @@ import javax.persistence.*;
 public class Koautor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "ime")
     private String ime;
+
+    @Column(name = "prezime")
+    private String prezime;
 
     @Column(name = "email")
     private String email;
@@ -25,6 +28,14 @@ public class Koautor {
     private NaucniRad naucniRad;
 
     public Koautor() {
+    }
+
+    public String getPrezime() {
+        return prezime;
+    }
+
+    public void setPrezime(String prezime) {
+        this.prezime = prezime;
     }
 
     public Long getId() {

@@ -5,6 +5,8 @@ import com.naucnacentrala.NaucnaCentrala.repository.elasticSearch.ReviewerESRepo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReviewerESService {
 
@@ -18,5 +20,7 @@ public class ReviewerESService {
     public ReviewerES findOneById(String id){
         return reviewerESRepo.findOneById(id);
     }
+
+    public List<ReviewerES> findAll() { return reviewerESRepo.findAll(); }
 
 }

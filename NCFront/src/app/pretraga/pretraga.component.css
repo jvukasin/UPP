@@ -1,0 +1,59 @@
+.container {
+    width: 70%;
+    margin-top: 20px;
+}
+
+.sidenav {
+    height: 100%;
+    width: 190px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #343a40;
+    overflow-x: hidden;
+    padding-top: 10px;
+  }
+
+  .sidenav a {
+    padding: 10px 8px 6px 20px;
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .navContent a:hover {
+    background-color: #32cd32;
+  }
+
+  .home {
+    margin-bottom: 4rem;
+    font-size: 20px;
+  }
+
+  .home:hover {
+    background-color: transparent;
+  }
+
+  .navbar-brand {
+    background-color: transparent;
+  }
+
+  .main {
+     border: 1px solid transparent;
+  }
+
+  a.active {
+    background-color:#32cd32 !important;
+  }
+
+  h3 {
+      margin-top: 10px;
+  }

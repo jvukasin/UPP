@@ -18,3 +18,7 @@
     transition: 0.3s;
     transform: scale(1.12, 1.12);
 }
+
+.pretraga {
+    margin-left: 40px;
+}

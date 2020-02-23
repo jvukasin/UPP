@@ -29,10 +29,6 @@ public class AddESDOI implements JavaDelegate {
     public void execute(DelegateExecution delegateExecution) throws Exception {
 
         NaucniRad naucniRad = naucniRadService.findOneById((Long) delegateExecution.getVariable("radID"));
-        List<Koautor> coauthorList = new ArrayList<>();
-        for(Koautor koautor: naucniRad.getKoautori()){
-            coauthorList.add(koautor);
-        }
 
         // sacuvaj u elastic-u
         SciencePaperES sciencePaperES = new SciencePaperES();
@@ -50,20 +46,13 @@ public class AddESDOI implements JavaDelegate {
         int suffix = rand.nextInt(1000) + 1;
         sciencePaperES.setDoi("10." + prefix + "/" + suffix);
 
-        sciencePaperES = sciencePaperESService.save(sciencePaperES);
-
-        // sacuvaj recenzente
-        Casopis casopis = naucniRad.getMagazine();
-        for(Recenzent recen: casopis.getRecenzenti()) {
-            ReviewerES reviewerES = new ReviewerES();
-            reviewerES.setScienceFields(recen.getNaucneOblasti());
-            reviewerES.setFirstName(recen.getIme());
-            reviewerES.setLastName(recen.getPrezime());
-            reviewerES.setEmail(recen.getEmail());
-            reviewerES.setId(recen.getUsername());
-            reviewerES.getSciencePapers().add(sciencePaperES);
-            reviewerES.setLocation(null);
-            reviewerESService.save(reviewerES);
+        String autori="";
+        autori+=naucniRad.getAutor().getIme() + " " + naucniRad.getAutor().getPrezime();
+        for(Koautor coAuthor : naucniRad.getKoautori()){
+            autori+=" ,"+coAuthor.getIme()+" "+coAuthor.getPrezime();
         }
+        sciencePaperES.setAuthor(autori);
+
+        sciencePaperESService.save(sciencePaperES);
     }
 }

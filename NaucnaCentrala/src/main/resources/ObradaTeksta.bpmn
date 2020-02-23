@@ -478,17 +478,18 @@ execution.setVariable("predlog_za_rad", instance);</bpmn:script>
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="email_koautora" label="Email koautora" type="string">
+          <camunda:formField id="prezime_koautora" label="Prezime" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="grad_koautora" label="Grad koautora" type="string">
+          <camunda:formField id="email_koautora" label="Email" type="string" />
+          <camunda:formField id="grad_koautora" label="Grad" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="drzava_koautora" label="Država koautora" type="string">
+          <camunda:formField id="drzava_koautora" label="Država" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
             </camunda:validation>

@@ -126,6 +126,8 @@ public class NaucniRadController {
         for(FormSubmissionDTO d : formFields) {
             if(d.getFieldId().equals("ime_koautora")) {
                 k.setIme(d.getFieldValue());
+            } else if (d.getFieldId().equals("prezime_koautora")) {
+                k.setPrezime(d.getFieldValue());
             } else if (d.getFieldId().equals("email_koautora")) {
                 k.setEmail(d.getFieldValue());
             }

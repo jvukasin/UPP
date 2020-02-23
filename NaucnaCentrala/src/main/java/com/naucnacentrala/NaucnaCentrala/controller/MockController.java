@@ -1,8 +1,10 @@
 package com.naucnacentrala.NaucnaCentrala.controller;
 
+import com.naucnacentrala.NaucnaCentrala.CoordsFromAdressUtil;
 import com.naucnacentrala.NaucnaCentrala.dto.FormFieldsDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.FormSubmissionDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.NaucniRadDTO;
+import com.naucnacentrala.NaucnaCentrala.dto.UserInfoDTO;
 import com.naucnacentrala.NaucnaCentrala.model.*;
 import com.naucnacentrala.NaucnaCentrala.services.CasopisService;
 import com.naucnacentrala.NaucnaCentrala.services.KorisnikService;
@@ -18,6 +20,7 @@ import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.impl.form.type.EnumFormType;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
+import org.elasticsearch.common.geo.GeoPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -120,9 +123,13 @@ public class MockController {
         int prefix = rand.nextInt(1000) + 1;
         int suffix = rand.nextInt(1000) + 1;
         sciencePaperES.setDoi("10." + prefix + "/" + suffix);
-        Autor author = (Autor) korisnikService.findOneByUsername(sciencePaper.getAutor().getUsername());
-        sciencePaperES.setAuthor(author.getIme() + " " + author.getPrezime());
 
+        String autori="";
+        autori+=sciencePaper.getAutor().getIme() + " " + sciencePaper.getAutor().getPrezime();
+        for(Koautor coAuthor : sciencePaper.getKoautori()){
+            autori+=" ,"+coAuthor.getIme()+" "+coAuthor.getPrezime();
+        }
+        sciencePaperES.setAuthor(autori);
 
         sciencePaperES = sciencePaperESService.save(sciencePaperES);
         NaucniRadDTO sciencePaperDTO = new NaucniRadDTO();
@@ -130,22 +137,6 @@ public class MockController {
         sciencePaperDTO.setTitle(sciencePaperES.getTitle());
         sciencePaperDTO.setKeyTerm(sciencePaperES.getKeyTerms());
         sciencePaperDTO.setPaperAbstract(sciencePaperES.getPaperAbstract());
-
-        Casopis magazine = sciencePaper.getMagazine();
-        List<ReviewerES> reviewerESList = new ArrayList<>();
-        for(Recenzent reviewer: magazine.getRecenzenti()){
-            ReviewerES reviewerES = new ReviewerES();
-            reviewerES.setScienceFields(reviewer.getNaucneOblasti());
-            reviewerES.setFirstName(reviewer.getIme());
-            reviewerES.setLastName(reviewer.getPrezime());
-            reviewerES.setEmail(reviewer.getEmail());
-            reviewerES.setId(reviewer.getUsername());
-            reviewerES.getSciencePapers().add(sciencePaperES);
-            reviewerES.setLocation(null);
-//            Location location = googleClient.getCoordinates(reviewer.getCity());
-//            reviewerES.setLocation(new GeoPoint(location.getLatitude(), location.getLongitude()));
-            reviewerESService.save(reviewerES);
-        }
 
         return new ResponseEntity<>(sciencePaperDTO, HttpStatus.OK);
     }
@@ -158,6 +149,40 @@ public class MockController {
         sciencePaperDTO.setKeyTerm(sciencePaperES.getKeyTerms());
         sciencePaperDTO.setPaperAbstract(sciencePaperES.getPaperAbstract());
         return new ResponseEntity<>(sciencePaperDTO, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/saveReviewers", method = RequestMethod.POST, produces = "application/json")
+    private ResponseEntity<List<UserInfoDTO>> saveReviewers() throws UnsupportedEncodingException {
+        ArrayList<User> recenzenti = korisnikService.findRecenzente();
+        List<UserInfoDTO> ret = new ArrayList<>();
+        for(User reviewer: recenzenti) {
+            ReviewerES reviewerES = new ReviewerES();
+            reviewerES.setScienceFields(reviewer.getNaucneOblasti());
+            reviewerES.setFirstName(reviewer.getIme());
+            reviewerES.setLastName(reviewer.getPrezime());
+            reviewerES.setEmail(reviewer.getEmail());
+            reviewerES.setId(reviewer.getUsername());
+            CoordsFromAdressUtil coords = new CoordsFromAdressUtil(reviewer.getGrad());
+            reviewerES.setLocation(new GeoPoint(coords.getLat(), coords.getLon()));
+            reviewerESService.save(reviewerES);
+            UserInfoDTO dto = new UserInfoDTO();
+            dto.setUsername(reviewer.getUsername());
+            ret.add(dto);
+        }
+
+        return new ResponseEntity<>(ret, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/getReviewersAll", method = RequestMethod.GET, produces = "application/json")
+    private ResponseEntity<List<UserInfoDTO>> getReviewrs() {
+        List<ReviewerES> reviewerES = reviewerESService.findAll();
+        List<UserInfoDTO> ret = new ArrayList<>();
+        for(ReviewerES r : reviewerES) {
+            UserInfoDTO dto = new UserInfoDTO();
+            dto.setUsername(r.getId());
+            ret.add(dto);
+        }
+        return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 
 

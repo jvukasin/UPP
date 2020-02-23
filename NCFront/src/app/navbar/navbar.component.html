@@ -1,8 +1,9 @@
 <nav class="navbar navbar-expand">
     <div class="container">
         <a class="navbar-brand" [routerLink]="['/pocetna']">Naucna centrala</a>
+        <button class="btn pretraga" [routerLink]="['/search']">Pretraga</button>
         <ul class="navbar-nav mr-auto">
-        </ul>
+        </ul>        
       <div class="d-flex flex-row-reverse">
         <button class="btn" [routerLink]="['/registration']" *ngIf="!isLoggedIn">Register</button>
         <button class="btn" [routerLink]="['/login']" *ngIf="!isLoggedIn">Login</button>

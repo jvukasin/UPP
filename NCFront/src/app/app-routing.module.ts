@@ -38,6 +38,9 @@ import { FinalKomentariPregledComponent } from './urednik/final-komentari-pregle
 import { KorisnikovProfilComponent } from './korisnikov-profil/korisnikov-profil.component';
 import { PretplateComponent } from './korisnikov-profil/pretplate/pretplate.component';
 import { PorudzbineComponent } from './korisnikov-profil/porudzbine/porudzbine.component';
+import { PretragaComponent } from './pretraga/pretraga.component';
+import { BasicComponent } from './pretraga/basic/basic.component';
+import { AdvancedComponent } from './pretraga/advanced/advanced.component';
 
 
 const appRoutes: Routes = [
@@ -92,7 +95,12 @@ const appRoutes: Routes = [
 		{ path: '', redirectTo: 'porudzbine', pathMatch: 'full'},
 		{ path: 'porudzbine', component: PorudzbineComponent},
 		{ path: 'pretplate', component: PretplateComponent},
-	]}
+	]},
+	{ path: 'search', component: PretragaComponent, children: [
+		{ path: '', redirectTo: 'basic', pathMatch: 'full'},
+		{ path: 'basic', component: BasicComponent},
+		{ path: 'advanced', component: AdvancedComponent},
+	]},
 ]
 
 @NgModule({
