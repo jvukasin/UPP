@@ -1,1 +1,45 @@
-<p>basic works!</p>
+<div class="container">
+    <h2>Pretraga radova</h2>
+
+    <form [formGroup]="searchForm">
+        <div class="row form-group">
+          <div class="col-md-4">
+            <label>Parametar pretrage: </label>
+            <select class="form-control" formControlName="field" (change)="getId($event.target.value)">
+                <option>Naziv časopisa</option>
+                <option>Naslov rada</option>
+                <option>Ime i prezime autora</option>
+                <option>Ključni pojam</option>
+                <option>Sadržaj PDF-a</option>
+                <option>Naučna oblast</option>
+            </select>
+          </div>
+          <div class="col-md-8">
+              <label>Vrednost:</label>
+              <input type=text class="form-control" formControlName="value">
+          </div>
+        </div>
+        <div class="row d-flex justify-content-end">
+            <button class="btn btn-primary src" (click)="onSearch()">Pretraži</button>
+        </div>
+    </form>
+
+    <h4 class="rez">Rezultati:</h4>
+
+    <h5 *ngIf="emptyList">Ne postoje radovi sa traženim kriterijumom.</h5>
+    
+    <div class="card border-success mb-4" *ngFor="let sciencePaper of sciencePaperList">
+        <div class="card-header">{{sciencePaper.title}}</div>
+        <div class="card-body">
+            <div class="left-side">
+                <p>Apstrakt: {{sciencePaper.paperAbstract}}</p>
+                <p class="card-text">Ovde ide hajlajter............................</p>
+            </div>
+            <div class="right-side">
+                <h4>{{sciencePaper.price}}</h4>
+                <h6>{{sciencePaper.currency}}</h6>
+                <button class="btn btn-primary">Kupi</button>
+            </div>
+        </div>
+    </div>
+</div>

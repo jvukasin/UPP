@@ -1,3 +1,38 @@
 h2 {
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+.container {
+    width: 95%;
+}
+
+.src {
+    margin-right: 12px;
+    margin-top: 20px;
+    width: 170px;
+}
+
+.rez {
+    margin-top: 20px;
+    margin-bottom: 35px;
+}
+
+.card-header {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.left-side {
+    display: inline-block;
+    width: 90%;
+}
+
+.right-side {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    border-left: 1px solid #000000;
+    width: 10%;
+    /* padding-left: 8px; */
 }
