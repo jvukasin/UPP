@@ -25,6 +25,10 @@
     </form>
     <hr>
 
+    <div *ngIf="searching" class="d-flex justify-content-center">
+        <img width="20%" height="20%" src="/assets/Loading.gif" style="margin-top: 10px;">
+    </div>
+
     <h5 *ngIf="emptyList">Ne postoje radovi sa traženim kriterijumom.</h5>
     
     <div class="card border-success mb-4" *ngFor="let sciencePaper of sciencePaperList">

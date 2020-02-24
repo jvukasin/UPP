@@ -3,14 +3,10 @@ h2 {
     margin-top: 20px;
 }
 
-.container {
-    width: 95%;
-}
-
 .src {
     margin-right: 12px;
     margin-top: 20px;
-    width: 170px;
+    width: 150px;
 }
 
 .card-header {

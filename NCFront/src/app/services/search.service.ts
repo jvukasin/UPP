@@ -15,4 +15,8 @@ export class SearchService {
     return this.http.post('/api/elastic/simpleSearch', search);
   }
 
+  advancedSearch(search) {
+    return this.http.post('/api/elastic/advancedSearch', search);
+  }
+
 }

@@ -2,3 +2,32 @@ h2 {
     margin-bottom: 5px;
     margin-top: 20px;
 }
+input[type = radio] {
+    display: inline;
+}
+
+label {
+    margin-right: 20px;
+}
+
+.rejdio {
+    margin-top: 18px;
+}
+
+.src {
+    margin-right: 12px;
+    margin-top: 10px;
+    width: 150px;
+    height: 40px;
+}
+
+.card-header {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.desni {
+    vertical-align: bottom;
+    text-align: center;
+    border-left: 1px solid #000000; 
+}
