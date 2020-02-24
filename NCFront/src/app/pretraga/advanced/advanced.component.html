@@ -1,1 +1,92 @@
-<p>advanced works!</p>
+<div class="container">
+    <h2>Pretraga radova</h2><p style="font-size: 12px; margin-bottom: 30px;">(Ostavite praznim polja kojima ne želite da pretražujete)</p>
+        <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f)">
+            <div class="row form-group">
+              <div class="col">
+                <label> Naziv časopisa </label>
+                <input type="text" class="form-control" ngModel name="magazineName">
+                <div  class="form-group">
+                    <input [(ngModel)]="magazineCheck" checked type="radio" id="magazineCheckAND" name="magazineCheck" value=true>
+                    <label for="magazineCheckAND">AND</label><br>
+                    <input [(ngModel)]="magazineCheck" type="radio" id="magazineCheckOR" name="magazineCheck" value=false>
+                    <label for="magazineCheckOR">OR</label><br>
+                </div>
+              </div>
+              <div class="col">
+                <label> Naslov rada </label>
+                <input type="text" class="form-control" ngModel name="title">
+                <div  class="form-group">
+                    <input [(ngModel)]="titleCheck" checked type="radio" id="titleCheckAND" name="titleCheck" value=true>
+                    <label for="titleCheckAND">AND</label><br>
+                    <input [(ngModel)]="titleCheck" type="radio" id="titleCheckOR" name="titleCheck" value=false>
+                    <label for="titleCheckOR">OR</label><br>
+                </div>
+              </div>
+              <div class="col">
+                <label> Ime i prezime autora </label>
+              <input type="text" class="form-control" ngModel name="author">
+              <div  class="form-group">
+                <input [(ngModel)]="authorsCheck" checked type="radio" id="authorsCheckAND" name="authorsCheck" value=true>
+                <label for="authorsCheckAND">AND</label><br>
+                <input [(ngModel)]="authorsCheck" type="radio" id="authorsCheckOR" name="authorsCheckOR" value=false>
+                <label for="authorsCheckOR">OR</label><br> 
+            </div>   
+            </div>
+            </div>
+            <div class="row form-group">
+                <div class="col">
+                    <label> Ključni pojam </label>
+                  <input type="text" class="form-control" ngModel name="keyTerms">
+                  <div  class="form-group">
+                    <input [(ngModel)]="keyTermsCheck" checked type="radio" id="keyTermsCheckAND" name="keyTermsCheck" value=true>
+                    <label for="keyTermsCheckAND">AND</label><br>
+                    <input [(ngModel)]="keyTermsCheck" type="radio" id="keyTermsCheckOR" name="keyTermsCheck" value=false>
+                    <label for="keyTermsCheckOR">OR</label><br>   
+                </div>
+                </div>
+                <div class="col">
+                    <label> Sadržaj </label>
+                  <input type="text" class="form-control" ngModel name="text">
+                  <div  class="form-group">
+                    <input [(ngModel)]="contentCheck" checked type="radio" id="contentCheckAND" name="contentCheck" value=true>
+                    <label for="contentCheckAND">AND</label><br>
+                    <input [(ngModel)]="contentCheck" type="radio" id="contentCheckOR" name="contentCheck" value=false>
+                    <label for="contentCheckOR">OR</label><br>    
+                </div> 
+                </div>
+                <div class="col">
+                    <label> Naučna oblast </label>
+                    <input type="text" class="form-control" ngModel name="scienceField">
+                    <div  class="form-group">
+                        <input [(ngModel)]="NOCheck" checked type="radio" id="NOCheckAND" name="NOCheck" value=true>
+                        <label for="NOCheckAND">AND</label><br>
+                        <input [(ngModel)]="NOCheck" type="radio" id="NOCheckOR" name="NOCheck" value=false>
+                        <label for="NOCheckOR">OR</label><br>
+                    </div>
+                </div>
+              </div>
+              <div class="row d-flex justify-content-end">
+                <button class="btn btn-primary src" (click)="onSearch()">Pretraži</button>
+            </div>
+        </form>
+    
+    <hr>
+
+    <h5 *ngIf="emptyList">Ne postoje radovi sa traženim kriterijumom.</h5>
+
+    <div class="card border-success mb-4" *ngFor="let sciencePaper of sciencePaperList">
+        <div class="card-header">{{sciencePaper.title}}</div>
+        <div class="card-body">
+            <div class="left-side">
+                <p>Apstrakt: {{sciencePaper.paperAbstract}}</p>
+                <p class="card-text" [innerHtml]="sciencePaper.highlight"></p>
+            </div>
+            <div class="right-side">
+                <h4>{{sciencePaper.price}}</h4>
+                <h6>{{sciencePaper.currency}}</h6>
+                <button class="btn btn-primary" *ngIf="sciencePaper.openAcess == true">Preuzmi</button>
+                <button class="btn btn-primary" *ngIf="sciencePaper.openAcess == false">Kupi</button>
+            </div>
+        </div>
+    </div>
+</div>

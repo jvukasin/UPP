@@ -23,22 +23,24 @@
             <button class="btn btn-primary src" (click)="onSearch()">Pretraži</button>
         </div>
     </form>
-
-    <h4 class="rez">Rezultati:</h4>
+    <hr>
 
     <h5 *ngIf="emptyList">Ne postoje radovi sa traženim kriterijumom.</h5>
     
     <div class="card border-success mb-4" *ngFor="let sciencePaper of sciencePaperList">
         <div class="card-header">{{sciencePaper.title}}</div>
         <div class="card-body">
-            <div class="left-side">
-                <p>Apstrakt: {{sciencePaper.paperAbstract}}</p>
-                <p class="card-text">Ovde ide hajlajter............................</p>
-            </div>
-            <div class="right-side">
-                <h4>{{sciencePaper.price}}</h4>
-                <h6>{{sciencePaper.currency}}</h6>
-                <button class="btn btn-primary">Kupi</button>
+            <div class="row">
+                <div class="col-lg-10">
+                    <p>Apstrakt: {{sciencePaper.paperAbstract}}</p>
+                    <p class="card-text" [innerHtml]="sciencePaper.highlight"></p>
+                </div>
+                <div class="col-lg-2 desni">
+                    <h4>{{sciencePaper.price}}</h4>
+                    <h6>{{sciencePaper.currency}}</h6>
+                    <button class="btn btn-primary" *ngIf="sciencePaper.openAcess == true">Preuzmi</button>
+                    <button class="btn btn-primary" *ngIf="sciencePaper.openAcess == false">Kupi</button>
+                </div>
             </div>
         </div>
     </div>

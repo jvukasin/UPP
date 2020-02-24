@@ -55,17 +55,17 @@ export class BasicComponent implements OnInit {
 
   getId(event){
     if(event == "Naziv časopisa"){
-      this.fieldId = "nazivCasopisa";
+      this.fieldId = "magazineName";
     }else if(event == "Naslov rada"){
-      this.fieldId = "nazivRada";
+      this.fieldId = "title";
     }else if(event == "Ime i prezime autora"){
-      this.fieldId = "autor";
+      this.fieldId = "author";
     }else if(event == "Ključni pojam"){
-      this.fieldId = "pojmovi";
+      this.fieldId = "keyTerms";
     }else if(event == "Sadržaj PDF-a"){
       this.fieldId = "text";
     }else{
-      this.fieldId = "noblasti";
+      this.fieldId = "scienceField";
     }
   }
 

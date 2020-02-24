@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-advanced',
@@ -7,7 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdvancedComponent implements OnInit {
 
-  constructor() { }
+  operation: any;
+  sciencePaperList: any = [];
+  searching: boolean = false;
+  emptyList: boolean = false;
+
+  private magazineCheck=true;
+  private titleCheck=true;
+  private contentCheck=true;
+  private keyTermsCheck=true;
+  private authorsCheck=true;
+  private NOCheck=true;
+
+  constructor(private searchService: SearchService) { }
 
   ngOnInit() {
   }

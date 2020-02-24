@@ -105,7 +105,7 @@ public class MockController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/savePaper/{paperID}", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/savePaper/{paperID}", method = RequestMethod.POST, produces = "application/json")
     private ResponseEntity<NaucniRadDTO> save(@PathVariable("paperID") Long id) throws UnsupportedEncodingException {
         NaucniRad sciencePaper = naucniRadService.findOneById(id);
         // sacuvaj u elastic-u rad
@@ -127,11 +127,12 @@ public class MockController {
         String autori="";
         autori+=sciencePaper.getAutor().getIme() + " " + sciencePaper.getAutor().getPrezime();
         for(Koautor coAuthor : sciencePaper.getKoautori()){
-            autori+=" ,"+coAuthor.getIme()+" "+coAuthor.getPrezime();
+            autori+=", "+coAuthor.getIme()+" "+coAuthor.getPrezime();
         }
         sciencePaperES.setAuthor(autori);
 
         sciencePaperES = sciencePaperESService.save(sciencePaperES);
+
         NaucniRadDTO sciencePaperDTO = new NaucniRadDTO();
         sciencePaperDTO.setId(Long.parseLong(sciencePaperES.getId()));
         sciencePaperDTO.setTitle(sciencePaperES.getTitle());
@@ -170,18 +171,6 @@ public class MockController {
             ret.add(dto);
         }
 
-        return new ResponseEntity<>(ret, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/getReviewersAll", method = RequestMethod.GET, produces = "application/json")
-    private ResponseEntity<List<UserInfoDTO>> getReviewrs() {
-        List<ReviewerES> reviewerES = reviewerESService.findAll();
-        List<UserInfoDTO> ret = new ArrayList<>();
-        for(ReviewerES r : reviewerES) {
-            UserInfoDTO dto = new UserInfoDTO();
-            dto.setUsername(r.getId());
-            ret.add(dto);
-        }
         return new ResponseEntity<>(ret, HttpStatus.OK);
     }
 

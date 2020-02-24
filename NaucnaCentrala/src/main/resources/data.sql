@@ -64,7 +64,17 @@ insert into casopis_recenzenti (recenzent_username, casopisi_id) values ("milica
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1, 1, 'Naucna Centrala.pdf', 'pera');
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1, 1, 'Naucna Centrala.pdf', 'pera');
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (3, 'Svet fizike i nečega', 'kljucni kljucni pojam', 'Abstrakt za svet fizike', 19, 'USD', 1, 2, 'Naucna Centrala.pdf', 'pera');
+insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (4, 'Moj naučni rad', 'rad, lorem, ipsum', 'Ovaj rad sadrži specifičan lorem ipsum tekst', 21, 'USD', 1, 3, 'Moj naucni rad.pdf', 'pera');
 
 insert into clanarina values ('4', '1', '2020-02-26', 'vule', '1');
 insert into koautor (id, drzava, email, grad, ime, prezime, naucni_rad_id) values (1, 'Srbija', 'flylivedrive@gmail.com', 'Novi Sad', 'Vukašin', 'Jović', 2);
+
+insert into science_paper_reviewers values ('1', 'mace');
+insert into science_paper_reviewers values ('1', 'milica');
+insert into science_paper_reviewers values ('2', 'mace');
+insert into science_paper_reviewers values ('2', 'milica');
+insert into science_paper_reviewers values ('3', 'milica');
+insert into science_paper_reviewers values ('3', 'mace');
+insert into science_paper_reviewers values ('4', 'deki');
+insert into science_paper_reviewers values ('4', 'duca');
 

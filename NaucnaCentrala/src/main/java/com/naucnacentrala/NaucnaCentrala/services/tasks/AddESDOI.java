@@ -49,7 +49,7 @@ public class AddESDOI implements JavaDelegate {
         String autori="";
         autori+=naucniRad.getAutor().getIme() + " " + naucniRad.getAutor().getPrezime();
         for(Koautor coAuthor : naucniRad.getKoautori()){
-            autori+=" ,"+coAuthor.getIme()+" "+coAuthor.getPrezime();
+            autori+=", "+coAuthor.getIme()+" "+coAuthor.getPrezime();
         }
         sciencePaperES.setAuthor(autori);
 

@@ -48,7 +48,21 @@ public class NaucniRad {
     @OneToMany(mappedBy = "naucniRad", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Koautor> koautori;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "science_paper_reviewers",
+            joinColumns = @JoinColumn(name = "naucni_rad_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "recenzent_id", referencedColumnName = "username"))
+    private List<Recenzent> recenzenti;
+
     public NaucniRad() {
+    }
+
+    public List<Recenzent> getRecenzenti() {
+        return recenzenti;
+    }
+
+    public void setRecenzenti(List<Recenzent> recenzenti) {
+        this.recenzenti = recenzenti;
     }
 
     public Autor getAutor() {
