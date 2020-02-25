@@ -10,7 +10,7 @@ import { SearchService } from 'src/app/services/search.service';
 export class BasicComponent implements OnInit {
 
   searchForm = new FormGroup({
-    field: new FormControl(""),
+    field: new FormControl("Naziv časopisa"),
     value: new FormControl("")
   })
 

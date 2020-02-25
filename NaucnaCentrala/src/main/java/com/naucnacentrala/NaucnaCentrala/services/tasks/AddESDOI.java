@@ -53,6 +53,14 @@ public class AddESDOI implements JavaDelegate {
         }
         sciencePaperES.setAuthor(autori);
 
+        sciencePaperES.setPrice(String.valueOf(naucniRad.getPrice()));
+        sciencePaperES.setCurrency(naucniRad.getCurrency());
+        if(naucniRad.getMagazine().getClanarina().equals("autori")) {
+            sciencePaperES.setOpenAccess("yes");
+        } else {
+            sciencePaperES.setOpenAccess("no");
+        }
+
         sciencePaperESService.save(sciencePaperES);
     }
 }

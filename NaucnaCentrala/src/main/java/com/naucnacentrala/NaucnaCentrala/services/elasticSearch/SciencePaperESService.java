@@ -3,19 +3,27 @@ package com.naucnacentrala.NaucnaCentrala.services.elasticSearch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.naucnacentrala.NaucnaCentrala.CoordsFromAdressUtil;
 import com.naucnacentrala.NaucnaCentrala.dto.AdvancedSearchDTO;
+import com.naucnacentrala.NaucnaCentrala.dto.ReviewerDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.SciencePaperESDTO;
 import com.naucnacentrala.NaucnaCentrala.dto.SimpleSearchDTO;
+import com.naucnacentrala.NaucnaCentrala.model.Autor;
+import com.naucnacentrala.NaucnaCentrala.model.Koautor;
 import com.naucnacentrala.NaucnaCentrala.model.NaucniRad;
 import com.naucnacentrala.NaucnaCentrala.model.SciencePaperES;
 import com.naucnacentrala.NaucnaCentrala.repository.elasticSearch.SciencePaperESRepository;
 import com.naucnacentrala.NaucnaCentrala.services.NaucniRadService;
+import org.apache.commons.text.StringEscapeUtils;
 import org.apache.pdfbox.io.RandomAccessFile;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.TaskService;
+import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -34,6 +42,12 @@ public class SciencePaperESService {
 
     @Autowired
     private NaucniRadService naucniRadService;
+
+    @Autowired
+    private RuntimeService runtimeService;
+
+    @Autowired
+    TaskService taskService;
 
     public SciencePaperES save(SciencePaperES sciencePaperES){
         return sciencePaperESRepo.save(sciencePaperES);
@@ -73,55 +87,190 @@ public class SciencePaperESService {
         return null;
     }
 
+    public List<ReviewerDTO> getReviewersByLocation(String taskId) throws JsonProcessingException {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String pid = task.getProcessInstanceId();
+
+        Long radID = (Long) runtimeService.getVariable(pid, "radID");
+        NaucniRad rad = naucniRadService.findOneById(radID);
+        Autor autor = rad.getAutor();
+        CoordsFromAdressUtil coords = new CoordsFromAdressUtil(autor.getGrad());
+        GeoPoint geoPoint = new GeoPoint(coords.getLat(), coords.getLon());
+        List<Koautor> koautori = rad.getKoautori();
+
+        String query="{\n" +
+                "    \"query\": {\n" +
+                "        \"bool\" : {\n" +
+                "           \"must_not\" : {\n"+
+                "               \"geo_distance\" : {\n" +
+                "                   \"distance\" : \"100km\",\n" +
+                "                   \"location\" : {\n" +
+                "                       \"lat\" :" + geoPoint.getLat() + ",\n" +
+                "                       \"lon\" :" + geoPoint.getLon() + "\n" +
+                "                   }\n" +
+                "               }\n" +
+                "           }\n"+
+                "        }\n" +
+                "    }\n"+
+                "}";
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonquery = objectMapper.readTree(query);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<JsonNode> request = new HttpEntity<>(jsonquery);
+        String url = "http://localhost:9200/reviewers/reviewer/_search?pretty";
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+        JsonNode rootNode = objectMapper.readTree(response.getBody());
+        List<ReviewerDTO> retVal = this.getReviewersFromES(rootNode);  //rec van 100km
+        //izbaci one koji su unutar 100km od koautora - konacna lista je lista recenzenata koji zadovoljavaju uslov
+        System.out.println("VAN 100KM SIZE="+retVal.size());
+        for(Koautor ka: koautori){
+            CoordsFromAdressUtil kacoords = new CoordsFromAdressUtil(ka.getGrad());
+            Double lat = kacoords.getLat();
+            Double lon = kacoords.getLon();
+            String query1="{\n" +
+                    "    \"query\": {\n" +
+                    "        \"bool\" : {\n" +
+                    "            \"must\" : {\n" +
+                    "                \"match_all\" : {}\n" +
+                    "            },\n" +
+                    "            \"filter\" : {\n" +
+                    "                \"geo_distance\" : {\n" +
+                    "                    \"distance\" : \"100km\",\n" +
+                    "                    \"location\" : {\n" +
+                    "                        \"lat\" : "+ lat +",\n" +
+                    "                        \"lon\" : "+ lon +"\n" +
+                    "                    }\n" +
+                    "                }\n" +
+                    "            }\n" +
+                    "        }\n" +
+                    "    }\n" +
+                    "}";
+
+            ObjectMapper objectMapper2 = new ObjectMapper();
+            JsonNode jsonquery2 = objectMapper.readTree(query1);
+
+            RestTemplate restTemplate2 = new RestTemplate();
+            HttpEntity<JsonNode> request2 = new HttpEntity<>(jsonquery2);
+            String url2 = "http://localhost:9200/reviewers/reviewer/_search?pretty";
+            ResponseEntity<String> response2 = restTemplate2.postForEntity(url2, request2, String.class);
+            JsonNode rootNode2 = objectMapper2.readTree(response2.getBody());
+            List<ReviewerDTO> upadaju = this.getReviewersFromES(rootNode2);
+
+            for(int rv=0; rv<retVal.size(); rv++){
+                for(ReviewerDTO crdto : upadaju){
+                    if(crdto.getUsername()==retVal.get(rv).getUsername() || crdto.getUsername().equals(retVal.get(rv).getUsername())){
+                        retVal.remove(rv);
+                    }
+                }
+            }
+        }
+
+        return retVal;
+    }
+
+    public List<ReviewerDTO> getReviewersMoreLikeThis(String taskId) throws JsonProcessingException, UnsupportedEncodingException {
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String pid = task.getProcessInstanceId();
+
+        Long radID = (Long) runtimeService.getVariable(pid, "radID");
+        NaucniRad rad = naucniRadService.findOneById(radID);
+        String parsed = parsePDF(rad);
+        String parsedText = StringEscapeUtils.escapeJson(parsed);
+        String query="{\n" +
+                "    \"query\": {\n" +
+                "        \"more_like_this\" : {\n" +
+                "            \"fields\" : [\"text\"],\n" +
+                "            \"like\" : \""+ parsedText +"\",\n" +
+                "            \"min_term_freq\" : 4,\n" +
+                "            \"max_query_terms\" : 40,\n" +
+                "            \"min_doc_freq\": 2\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonquery = objectMapper.readTree(query);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<JsonNode> request = new HttpEntity<>(jsonquery);
+        String url = "http://localhost:9200/magazine/sciencePaper/_search?pretty";
+        ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
+        JsonNode rootNode = objectMapper.readTree(response.getBody());
+        JsonNode locatedNode = rootNode.path("hits").path("hits");
+        List<SciencePaperESDTO> slicniRadovi = getRetVal(locatedNode, "text");
+
+        //sad trazimo recenzente koji su recenzirali radove sa nadjenim naslovima
+        String queryRC="{\n" +
+                "  \"query\": {\n" +
+                "    \"bool\" : {\n";
+        queryRC += "\"should\" : [\n";
+
+        for(SciencePaperESDTO rd : slicniRadovi) {
+            queryRC += "{ \"match\" : { \"sciencePapers\" : \""+ rd.getTitle() +"\" } },";
+        }
+        queryRC = queryRC.substring(0, queryRC.length()-1);
+        queryRC+="]";
+        queryRC+="    }\n" +
+                "  }\n" +
+                "}";
+
+        ObjectMapper objectMapper2 = new ObjectMapper();
+        JsonNode jsonquery2 = objectMapper.readTree(queryRC);
+
+        RestTemplate restTemplate2 = new RestTemplate();
+        HttpEntity<JsonNode> request2 = new HttpEntity<>(jsonquery2);
+        String url2 = "http://localhost:9200/reviewers/reviewer/_search?pretty";
+        ResponseEntity<String> response2 = restTemplate2.postForEntity(url2, request2, String.class);
+        JsonNode rootNode2 = objectMapper2.readTree(response2.getBody());
+        List<ReviewerDTO> retVal = this.getReviewersFromES(rootNode2);
+
+        return retVal;
+    }
+
+    public List<ReviewerDTO> getReviewersFromES(JsonNode rootNode) {
+        List<ReviewerDTO> reviewers=new ArrayList<>();
+        JsonNode locatedNode = rootNode.path("hits").path("hits");
+
+        for(int i=0;i<locatedNode.size();i++){
+            ReviewerDTO dto=new ReviewerDTO();
+            String usrnm = locatedNode.get(i).path("_source").path("id").asText();
+            dto.setUsername(usrnm);
+            String ime = locatedNode.get(i).path("_source").path("firstName").asText();
+            String prezime = locatedNode.get(i).path("_source").path("lastName").asText();
+            dto.setName(ime + " " + prezime + "(" + usrnm + ")");
+            reviewers.add(dto);
+        }
+        return reviewers;
+    }
+
 
     //SEARCH
 
     public List<SciencePaperESDTO> searchQuery(SimpleSearchDTO dto) throws JsonProcessingException {
-        boolean isPhrase = false;
+        String matchOrPhrase = "match";
         if(dto.getValue().startsWith("\"") && dto.getValue().endsWith("\"")) {
-            isPhrase = true;
             dto.setValue(removePhrase(dto.getValue()));
+            matchOrPhrase = "match_phrase";
         }
-        String query = "";
-        if (!isPhrase) {
-            query = "{\n" +
-                    "    \"query\": {\n" +
-                    "        \"match\" : {\n" +
-                    "            \"" + dto.getField() + "\" : {\n" +
-                    "                \"query\" : \"" + dto.getValue() + "\"\n" +
-                    "            }\n" +
-                    "           \n" +
-                    "        }\n" +
-                    "    },\n" +
-                    "    \"highlight\" : {\n" +
-                    "        \"fields\" : {\n" +
-                    "            \"" + dto.getField() + "\" : {\n" +
-                    "            \t\"type\":\"plain\"\n" +
-                    "            }\n" +
-                    "        }\n" +
-                    "    }\n" +
-                    "}";
-        } else if (isPhrase) {
-            query = "{\n" +
-                    "    \"query\": {\n" +
-                    "        \"match_phrase\" : {\n" +
-                    "            \"" + dto.getField() + "\" : {\n" +
-                    "                \"query\" : \"" + dto.getValue() + "\"\n" +
-                    "         \n" +
-                    "            }\n" +
-                    "           \n" +
-                    "        }\n" +
-                    "    },\n" +
-                    "    \"highlight\" : {\n" +
-                    "        \"fields\" : {\n" +
-                    "            \"" + dto.getField() + "\" : {\n" +
-                    "            \t\"type\":\"plain\"\n" +
-                    "            }\n" +
-                    "        }\n" +
-                    "    }\n" +
-                    "}";
-        }
-
+        String query = "{\n" +
+                "    \"query\": {\n" +
+                "        \"" + matchOrPhrase + "\" : {\n" +
+                "            \"" + dto.getField() + "\" : {\n" +
+                "                \"query\" : \"" + dto.getValue() + "\"\n" +
+                "            }\n" +
+                "           \n" +
+                "        }\n" +
+                "    },\n" +
+                "    \"highlight\" : {\n" +
+                "        \"fields\" : {\n" +
+                "            \"" + dto.getField() + "\" : {\n" +
+                "            \t\"type\":\"plain\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
 
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonquery = objectMapper.readTree(query);
@@ -263,21 +412,8 @@ public class SciencePaperESService {
     public List<SciencePaperESDTO> getRetVal(JsonNode node,String highlight) {
         List<SciencePaperESDTO> retVal=new ArrayList<>();
         for(int i=0;i<node.size();i++){
-            SciencePaperESDTO dto = new SciencePaperESDTO();
-            Long paperId=Long.parseLong(node.get(i).path("_source").path("id").asText());
-            NaucniRad rd = naucniRadService.findOneById(paperId);
-            dto.setPrice(rd.getPrice());
-            dto.setCurrency(rd.getCurrency());
-            dto.setAuthor(node.get(i).path("_source").path("author").asText());
-            dto.setId(paperId);
-            dto.setMagazineName(node.get(i).path("_source").path("magazineName").asText());
-            if(rd.getMagazine().getClanarina().equals("autori")) {
-                dto.setOpenAcess(true);
-            } else {
-                dto.setOpenAcess(false);
-            }
-            dto.setTitle(node.get(i).path("_source").path("title").asText());
-            dto.setPaperAbstract(node.get(i).path("_source").path("paperAbstract").asText());
+            SciencePaperESDTO dto = getInfoFromNode(node, i);
+
             System.out.println(node.get(i).path("highlight").path(highlight).toString());
             String highText="";
             for(int j=0;j<node.get(i).path("highlight").path(highlight).size();j++){
@@ -292,21 +428,8 @@ public class SciencePaperESService {
     public List<SciencePaperESDTO> getRetValAdvanced(JsonNode node) {
         List<SciencePaperESDTO> retVal=new ArrayList<>();
         for(int i=0;i<node.size();i++){
-            SciencePaperESDTO dto=new SciencePaperESDTO();
-            Long paperId=Long.parseLong(node.get(i).path("_source").path("id").asText());
-            NaucniRad rd = naucniRadService.findOneById(paperId);
-            dto.setPrice(rd.getPrice());
-            dto.setCurrency(rd.getCurrency());
-            dto.setAuthor(node.get(i).path("_source").path("author").asText());
-            dto.setId(paperId);
-            dto.setMagazineName(node.get(i).path("_source").path("magazineName").asText());
-            if(rd.getMagazine().getClanarina().equals("autori")) {
-                dto.setOpenAcess(true);
-            } else {
-                dto.setOpenAcess(false);
-            }
-            dto.setTitle(node.get(i).path("_source").path("title").asText());
-            dto.setPaperAbstract(node.get(i).path("_source").path("paperAbstract").asText());
+            SciencePaperESDTO dto=getInfoFromNode(node, i);
+
             String highText=node.get(i).path("highlight").toString();
 
             highText=highText.replace("\"","");
@@ -314,10 +437,27 @@ public class SciencePaperESService {
             highText=highText.replace("}"," ");
             highText=highText.replace("["," ");
             highText=highText.replace("]"," ");
-            highText=highText.replace("\r\n"," ");
+            highText=highText.replace("\\r\\n","");
             dto.setHighlight(highText);
             retVal.add(dto);
         }
         return retVal;
+    }
+
+    public SciencePaperESDTO getInfoFromNode(JsonNode node, int i) {
+        SciencePaperESDTO dto = new SciencePaperESDTO();
+        dto.setPrice(Double.parseDouble(node.get(i).path("_source").path("price").asText()));
+        dto.setCurrency(node.get(i).path("_source").path("currency").asText());
+        dto.setAuthor(node.get(i).path("_source").path("author").asText());
+        dto.setId(Long.parseLong(node.get(i).path("_source").path("id").asText()));
+        dto.setMagazineName(node.get(i).path("_source").path("magazineName").asText());
+        if(node.get(i).path("_source").path("openAccess").asText().equals("yes")) {
+            dto.setOpenAcess(true);
+        } else {
+            dto.setOpenAcess(false);
+        }
+        dto.setTitle(node.get(i).path("_source").path("title").asText());
+        dto.setPaperAbstract(node.get(i).path("_source").path("paperAbstract").asText());
+        return dto;
     }
 }

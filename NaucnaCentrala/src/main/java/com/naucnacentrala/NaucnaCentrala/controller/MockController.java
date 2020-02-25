@@ -130,6 +130,13 @@ public class MockController {
             autori+=", "+coAuthor.getIme()+" "+coAuthor.getPrezime();
         }
         sciencePaperES.setAuthor(autori);
+        sciencePaperES.setPrice(String.valueOf(sciencePaper.getPrice()));
+        sciencePaperES.setCurrency(sciencePaper.getCurrency());
+        if(sciencePaper.getMagazine().getClanarina().equals("autori")) {
+            sciencePaperES.setOpenAccess("yes");
+        } else {
+            sciencePaperES.setOpenAccess("no");
+        }
 
         sciencePaperES = sciencePaperESService.save(sciencePaperES);
 
@@ -138,6 +145,8 @@ public class MockController {
         sciencePaperDTO.setTitle(sciencePaperES.getTitle());
         sciencePaperDTO.setKeyTerm(sciencePaperES.getKeyTerms());
         sciencePaperDTO.setPaperAbstract(sciencePaperES.getPaperAbstract());
+        sciencePaperDTO.setCurrency(sciencePaperES.getCurrency());
+        sciencePaperDTO.setPrice(Double.parseDouble(sciencePaperES.getPrice()));
 
         return new ResponseEntity<>(sciencePaperDTO, HttpStatus.OK);
     }
@@ -154,9 +163,9 @@ public class MockController {
 
     @RequestMapping(value = "/saveReviewers", method = RequestMethod.POST, produces = "application/json")
     private ResponseEntity<List<UserInfoDTO>> saveReviewers() throws UnsupportedEncodingException {
-        ArrayList<User> recenzenti = korisnikService.findRecenzente();
+        ArrayList<Recenzent> recenzenti = korisnikService.findRecenzente();
         List<UserInfoDTO> ret = new ArrayList<>();
-        for(User reviewer: recenzenti) {
+        for(Recenzent reviewer: recenzenti) {
             ReviewerES reviewerES = new ReviewerES();
             reviewerES.setScienceFields(reviewer.getNaucneOblasti());
             reviewerES.setFirstName(reviewer.getIme());
@@ -165,6 +174,13 @@ public class MockController {
             reviewerES.setId(reviewer.getUsername());
             CoordsFromAdressUtil coords = new CoordsFromAdressUtil(reviewer.getGrad());
             reviewerES.setLocation(new GeoPoint(coords.getLat(), coords.getLon()));
+            List<NaucniRad> radovi = reviewer.getNaucniRadovi();
+            String njegoviRadovi = "";
+            njegoviRadovi += radovi.get(0).getTitle();
+            for(int i=1; i< radovi.size(); i++) {
+                njegoviRadovi += ", " + radovi.get(i).getTitle();
+            }
+            reviewerES.setSciencePapers(njegoviRadovi);
             reviewerESService.save(reviewerES);
             UserInfoDTO dto = new UserInfoDTO();
             dto.setUsername(reviewer.getUsername());

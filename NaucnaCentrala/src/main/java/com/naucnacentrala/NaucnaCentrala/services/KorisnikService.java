@@ -94,8 +94,8 @@ public class KorisnikService {
         return username;
     }
 
-    public ArrayList<User> findRecenzente() {
-        ArrayList<User> recenzenti = new ArrayList<>();
+    public ArrayList<Recenzent> findRecenzente() {
+        ArrayList<Recenzent> recenzenti = new ArrayList<>();
         ArrayList<User> users = (ArrayList) korRepo.findAll();
         for(User u : users) {
             if(u instanceof Recenzent) {

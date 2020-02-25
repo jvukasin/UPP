@@ -35,7 +35,7 @@ insert into user (type, username, active, drzava, email, grad, ime, password, pr
 
 insert into user (type, username, active, drzava, email, grad, ime, password, prezime, titula) values
 ('Recenzent','duca', 1, 'Srbija', 'flylivedrive@gmail.com', 'Niš', 'Dušan', '$2y$10$SGFVmCA7YE01W01k4QcfseAInEAjvP6Rcc2egPAZ11zyWBkgxULa.', 'Kenjić', ''),
-('Recenzent','deki', 1, 'Srbija', 'flylivedrive@gmail.com', 'Bečej', 'Dejan', '$2y$10$dA.GXUojvHwGr2CMlZaSqeQIIzjnytLvxJwc2oDe.k9KtHjgtjy.y', 'Bordjoski', '');
+('Recenzent','deki', 1, 'Srbija', 'flylivedrive@gmail.com', 'Vranje', 'Dejan', '$2y$10$dA.GXUojvHwGr2CMlZaSqeQIIzjnytLvxJwc2oDe.k9KtHjgtjy.y', 'Bordjoski', '');
 
 
 insert into user_roles values ('vlada', 2);
@@ -59,12 +59,14 @@ insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registe
 insert into casopis (id, naziv, aktivan, issn, clanarina, urednik_id, is_registered, seller_id) values (2, "Test za autore", 1, "222", "autori", "djo", false, null);
 
 insert into casopis_nobl (naucna_oblast_sifra, casopisi_id) values (1,1), (2,1), (3,1);
-insert into casopis_recenzenti (recenzent_username, casopisi_id) values ("milica", 1), ("mace", 1);
+insert into casopis_recenzenti (recenzent_username, casopisi_id) values ("milica", 1), ("mace", 1), ("duca", 1), ("deki", 1);
 
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (2, 'Kako prihvatiti odgovornost?', 'Kljucni pojam', 'Abstrakt', 20, 'USD', 1, 1, 'Naucna Centrala.pdf', 'pera');
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (1, 'Mape uma', 'Kljucni pojam', 'Abstrakt', 10, 'USD', 1, 1, 'Naucna Centrala.pdf', 'pera');
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (3, 'Svet fizike i nečega', 'kljucni kljucni pojam', 'Abstrakt za svet fizike', 19, 'USD', 1, 2, 'Naucna Centrala.pdf', 'pera');
 insert into naucni_rad (id, title, key_term, paper_abstract, price, currency, magazine_id, science_field_sifra, pdf_name, autor_id) values (4, 'Moj naučni rad', 'rad, lorem, ipsum', 'Ovaj rad sadrži specifičan lorem ipsum tekst', 21, 'USD', 1, 3, 'Moj naucni rad.pdf', 'pera');
+insert into naucni_rad (id, currency, key_term, paper_abstract, pdf_name, price, title, autor_id, magazine_id, science_field_sifra) values (5, NULL, NULL, NULL, 'Miks radova.pdf', '0', NULL, 'pera', NULL, NULL);
+
 
 insert into clanarina values ('4', '1', '2020-02-26', 'vule', '1');
 insert into koautor (id, drzava, email, grad, ime, prezime, naucni_rad_id) values (1, 'Srbija', 'flylivedrive@gmail.com', 'Novi Sad', 'Vukašin', 'Jović', 2);

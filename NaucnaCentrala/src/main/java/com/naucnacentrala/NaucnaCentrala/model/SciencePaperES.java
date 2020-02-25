@@ -16,34 +16,43 @@ public class SciencePaperES {
     @Field(type = FieldType.Text, store = true)
     private String doi;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String title;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String magazineName;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String keyTerms;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String paperAbstract;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String scienceField;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String text;
 
     @Field(type = FieldType.Text, store = true)
     private String filePath;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String author;
+
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
+    private String price;
+
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
+    private String currency;
+
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
+    private String openAccess;
 
     public SciencePaperES() {
     }
 
-    public SciencePaperES(String id, String doi, String title, String magazineName, String keyTerms, String paperAbstract, String scienceField, String text, String filePath, String author) {
+    public SciencePaperES(String id, String doi, String title, String magazineName, String keyTerms, String paperAbstract, String scienceField, String text, String filePath, String author, String price, String currency, String openAccess) {
         this.id = id;
         this.doi = doi;
         this.title = title;
@@ -54,6 +63,9 @@ public class SciencePaperES {
         this.text = text;
         this.filePath = filePath;
         this.author = author;
+        this.price = price;
+        this.currency = currency;
+        this.openAccess = openAccess;
     }
 
     public String getId() {
@@ -137,5 +149,29 @@ public class SciencePaperES {
             this.text = "";
         }
         this.text = text;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getOpenAccess() {
+        return openAccess;
+    }
+
+    public void setOpenAccess(String openAccess) {
+        this.openAccess = openAccess;
     }
 }

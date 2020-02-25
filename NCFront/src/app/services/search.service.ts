@@ -19,4 +19,12 @@ export class SearchService {
     return this.http.post('/api/elastic/advancedSearch', search);
   }
 
+  moreLikeThis(pid) {
+    return this.http.get('/api/elastic/getReviewersMoreLikeThis/'.concat(pid));
+  }
+
+  geoDistance(pid) {
+    return this.http.get('/api/elastic/getReviewersByLocation/'.concat(pid));
+  }
+
 }

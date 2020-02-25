@@ -17,10 +17,10 @@ public class ReviewerES {
     @Field(type = FieldType.Text, index = false, store = true)
     private String id;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String firstName;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private String lastName;
 
     @Field(type = FieldType.Text, store = true)
@@ -29,20 +29,24 @@ public class ReviewerES {
     @GeoPointField
     private GeoPoint location;
 
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
     private List<String> scienceFields = new ArrayList<>();
+
+    @Field(type = FieldType.Text, searchAnalyzer = "serbian", analyzer = "serbian", store = true)
+    private String sciencePapers;
 
     public ReviewerES() {
 
     }
 
-    public ReviewerES(String id, String firstName, String lastName, String email, GeoPoint location, List<String> scienceFields) {
+    public ReviewerES(String id, String firstName, String lastName, String email, GeoPoint location, List<String> scienceFields, String sciencePapers) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.location = location;
         this.scienceFields = scienceFields;
+        this.sciencePapers = sciencePapers;
     }
 
     public String getId() {
@@ -93,5 +97,13 @@ public class ReviewerES {
         for(NaucnaOblast scienceField: scienceFields){
             this.scienceFields.add(scienceField.getNaziv());
         }
+    }
+
+    public String getSciencePapers() {
+        return sciencePapers;
+    }
+
+    public void setSciencePapers(String sciencePapers) {
+        this.sciencePapers = sciencePapers;
     }
 }

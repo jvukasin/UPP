@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -234,7 +235,11 @@ public class CasopisController {
         List<FormField> properties = tfd.getFormFields();
 
         String user = korisnikService.getUsernameFromRequest(request);
-        ArrayList<User> recenzentiBaza = korisnikService.findRecenzente();
+        ArrayList<Recenzent> recenzentiBaz = korisnikService.findRecenzente();
+        ArrayList<User> recenzentiBaza = new ArrayList<>();
+        for(Recenzent r : recenzentiBaz) {
+            recenzentiBaza.add(new User(r));
+        }
         ArrayList<User> uredniciBaza = korisnikService.findUrednike(user);
 
         Long casopisID = (Long) runtimeService.getVariable(pid, "casopisID");
